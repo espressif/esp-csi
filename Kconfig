@@ -1,0 +1,7 @@
+menu "ESP Wi-Fi Rader Configuration"
+    config CSI_PACK_NUM
+        int "Number of data packets in one analysis"
+        default 50
+        help
+            Number of data packets in one analysis
+endmenu
