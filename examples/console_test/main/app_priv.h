@@ -19,8 +19,6 @@ extern "C"
 {
 #endif
 
-void wifi_init(void);
-
 bool mac_str2hex(const char *mac_str, uint8_t *mac_hex);
 float avg(const float *array, size_t len);
 float max(const float *array, size_t len, float percent);
@@ -29,6 +27,8 @@ float trimmean(const float *array, size_t len, float percent);
 void cmd_register_ping(void);
 void cmd_register_system(void);
 void cmd_register_wifi(void);
+void cmd_register_csi(void);
+void cmd_register_detect(void);
 
 #ifdef __cplusplus
 }

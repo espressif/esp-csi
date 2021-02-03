@@ -65,23 +65,6 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
     }
 }
 
-void wifi_init(void)
-{
-    s_wifi_event_group = xEventGroupCreate();
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-
-    ESP_ERROR_CHECK(esp_netif_init());
-    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-    ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
-    ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
-
-    ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
-    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_NULL));
-    ESP_ERROR_CHECK(esp_wifi_start());
-}
-
 typedef struct {
     struct arg_str *ssid;
     struct arg_str *password;
@@ -102,6 +85,12 @@ static int wifi_cmd_sta(int argc, char **argv)
     const char *password = sta_args.password->sval[0];
     wifi_config_t wifi_config = { 0 };
     static esp_netif_t *s_netif_sta = NULL;
+
+    if(!s_wifi_event_group){
+        s_wifi_event_group = xEventGroupCreate();
+        ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
+        ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
+    }
 
     if (!s_netif_sta) {
         s_netif_sta = esp_netif_create_default_wifi_sta();
@@ -154,8 +143,13 @@ static int wifi_cmd_ap(int argc, char **argv)
 
     const char *ssid = ap_args.ssid->sval[0];
     const char *password = ap_args.password->sval[0];
-
     static esp_netif_t *s_netif_ap = NULL;
+
+    if(!s_wifi_event_group){
+        s_wifi_event_group = xEventGroupCreate();
+        ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
+        ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
+    }
 
     if (!s_netif_ap) {
         s_netif_ap = esp_netif_create_default_wifi_ap();
@@ -171,12 +165,9 @@ static int wifi_cmd_ap(int argc, char **argv)
             return ESP_FAIL;
         }
 
-        strlcpy((char *) wifi_config.ap.password, password, sizeof(wifi_config.ap.password));
         wifi_config.ap.authmode = WIFI_AUTH_WPA2_PSK;
-
-        ESP_LOGE(TAG, "=================password: %s", password);
+        strlcpy((char *) wifi_config.ap.password, password, sizeof(wifi_config.ap.password));
     }
-
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
     ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config));
