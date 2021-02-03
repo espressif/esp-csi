@@ -1,6 +1,6 @@
 # CSI Test Example
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+(See the [README.md](../../README.md) file directory for more information about examples.)
 
 ## Introduction
 
@@ -28,6 +28,7 @@ I (6409) wifi_cmd: Starting SoftAP SSID: csi_softap, Password:
 I (8159) wifi:new:<13,2>, old:<13,2>, ap:<13,2>, sta:<255,255>, prof:13
 I (8159) wifi:station: 30:ae:a4:80:5c:cc join, AID=1, bgn, 40D
 ```
+> Note: If you use the mode of receiving router Ping packets, you don't need to add a new device A, just let device B connect to the router
 
 2. Configure device B to ESP32 Sta mode
 ```shell
@@ -48,12 +49,13 @@ I (69724) wifi:AP's beacon interval = 102400 us, DTIM period = 2
 I (70634) esp_netif_handlers: sta ip: 192.168.4.2, mask: 255.255.255.0, gw: 192.168.4.1
 ```
 
-3. Configure device B to send a Ping packet to the ip gateway of device A
+3. Configure device B to send a ping packet to the ip gateway of device A or router
 ```shell
 csi> ping 192.168.4.1
 ```
+> Note: Trigger device A or router to send a `ping response` to device B, by obtaining CSI information from `ping response`
 
-4. Configure the filter condition of the CSI data packet of device B, the byte of the CSI data packet is: 384, and the filtered device is: device A
+4. Configure the filter condition of the CSI data packet of device B, the byte of the CSI data packet is: 384, and the filtered device is: device A or router
 
 ```shell
 csi> csi -l 384 -m 30:ae:a4:00:4b:91
@@ -76,6 +78,18 @@ W (1270104) app_main: Someone is moving
 I (1270104) app_main: <713> time: 1170 ms, rssi: -27, corr: 0.920, std: 0.047, std_avg: 0.009, std_max: 0.018, threshold: 0.017/1.500, trigger: 1/0, free_heap: 100672/137168
 ```
 
+> Note:
+> 1. Since the CSI for human detection in different environments is different, you need to configure the CSI threshold according to the actual test environment
+> 2. Property description:
+>    - **time:** Time to get the result of a Wi-Fi rader,
+>    - **rssi:** signal strength between two devices,
+>    - **corr:** correlation coefficient between subcarriers
+>    - **std:** covariance between subcarriers
+>    - **std_avg:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation
+>    - **std_max:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation
+>    - **threshold:** The first absolute threshold, the second is a relative threshold.
+>    When `std` > absolute threshold or `std`  > relative threshold * `std_avg`, human movement detection will be triggered. When human movement is detected, a log will be printed: `Someone is moving` and the LED light is on
+
 6. You can also print the original CSI data
 ```
 csi> csi -o
@@ -85,3 +99,6 @@ CSI_DATA,1,30:ae:a4:00:4b:91,-27,11,1,7,1,1,1,1,0,0,0,-89,1,13,2,1827007808,0,67
 CSI_DATA,2,30:ae:a4:00:4b:91,-27,11,1,7,1,1,1,1,0,0,0,-89,1,13,2,1827121360,0,67,0,384,1,[ 67 48 4 0 0 0 0 0 0 0 1 -3 7 -12 7 -12 7 -12 6 -12 6 -12 6 -12 6 -12 5 -13 5 -13 5 -13 5 -13 5 -13 5 -13 4 -13 4 -14 4 -14 4 -14 3 -14 3 -14 3 -14 3 -14 3 -15 2 -14 2 -15 2 -15 2 -15 1 -8 1 -16 1 -16 1 -17 1 -17 1 -17 1 -17 1 -17 1 -18 1 -18 1 -18 1 -19 1 -19 1 -19 1 -20 2 -20 2 -20 2 -20 3 -20 3 -21 3 -21 4 -21 5 -21 5 -21 6 -21 6 -21 7 -21 1 -6 0 0 0 0 0 0 0 0 0 -1 3 -4 18 -19 17 -19 17 -19 17 -19 15 -21 14 -21 14 -21 14 -22 14 -22 13 -22 13 -22 12 -22 12 -23 12 -23 11 -23 11 -24 10 -24 10 -24 10 -25 10 -25 9 -25 9 -25 8 -25 8 -26 8 -26 7 -26 7 -27 6 -27 6 -28 6 -28 8 -29 5 -29 5 -30 5 -30 5 -31 5 -31 4 -32 4 -32 4 -33 4 -33 4 -34 5 -35 5 -36 5 -36 6 -36 6 -37 7 -37 7 -38 8 -38 9 -38 10 -38 11 -38 12 -38 13 -38 14 -38 15 -38 16 -38 5 -12 1 -3 -1 0 -1 1 -1 -1 0 0 0 0 -1 -1 -1 -1 -1 -1 3 5 12 23 11 23 11 24 10 24 9 24 9 25 8 25 8 25 7 25 6 24 6 24 6 24 6 24 5 24 5 24 5 24 4 24 4 23 4 23 4 23 4 22 5 22 5 22 5 22 5 22 5 21 4 21 6 21 6 21 6 20 7 20 7 19 8 19 8 19 8 19 8 19 9 18 9 18 10 19 11 18 11 18 11 18 12 18 12 18 13 17 13 17 13 17 14 17 14 17 15 17 15 17 15 17 16 17 15 18 15 18 16 18 16 18 1 2 ]
 CSI_DATA,3,30:ae:a4:00:4b:91,-27,11,1,7,1,1,1,1,0,0,0,-89,1,13,2,1827137218,0,67,0,384,1,[ 67 48 4 0 0 0 0 0 0 0 2 3 8 12 8 12 8 12 9 12 9 12 9 11 9 11 10 11 10 11 10 11 11 11 11 10 11 10 11 10 11 10 11 10 12 9 12 9 12 9 12 9 13 9 13 8 13 8 13 8 14 8 14 8 7 4 15 7 15 7 16 7 16 7 16 7 17 7 17 7 17 7 18 7 18 7 18 8 19 8 19 8 19 8 19 9 20 9 20 9 20 10 20 10 20 11 20 11 20 12 20 13 20 13 19 14 19 15 4 3 0 0 0 0 0 0 0 0 0 1 2 4 15 23 16 23 16 23 17 23 16 22 17 22 17 22 17 22 17 22 18 22 18 21 19 21 19 21 20 20 20 20 21 19 21 19 22 19 22 18 23 18 23 17 23 17 24 17 24 16 25 16 25 16 26 15 26 15 27 15 28 14 29 13 29 13 29 13 30 13 31 13 31 13 32 13 33 13 34 13 34 13 35 14 36 14 36 14 37 14 37 15 38 16 38 16 38 17 38 18 39 19 39 20 39 21 39 22 38 24 38 25 37 26 37 26 11 8 1 1 -1 -1 -2 -1 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -8 0 -31 1 -31 1 -31 0 -31 0 -31 -2 -31 -3 -31 -3 -31 -4 -31 -5 -30 -5 -29 -4 -29 -5 -29 -5 -29 -5 -29 -5 -28 -6 -28 -5 -29 -5 -29 -5 -29 -6 -27 -6 -25 -6 -27 -6 -28 -3 -27 -2 -27 -2 -28 -1 -27 -2 -26 -2 -25 -2 -25 -1 -25 0 -26 0 -26 0 -26 0 -27 1 -26 2 -25 3 -25 4 -26 5 -25 5 -25 5 -25 6 -25 6 -25 7 -25 7 -25 8 -26 8 -25 9 -26 9 -25 10 -25 10 -25 11 -24 12 -24 13 -25 13 -26 13 -4 1 ]
 ```
+> Note:
+> 1. If you need to print raw data for analysis, please configure the serial port baud rate to `1152000`, otherwise too much log printing will trigger the watchdog
+> 2. Save the obtained log to `csi_raw_data.log`, and run `csi_amplitude_plot.py` to get all CSI raw data charts

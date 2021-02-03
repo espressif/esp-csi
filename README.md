@@ -46,7 +46,7 @@ Use CSI's high sensitivity to environmental changes to recognize human movements
 - **Disadvantage:** Depends on the Wi-Fi protocol supported by the router, environment
 - **Applicable scenario:** There must be more than two ESP32s in the environment
 
-### 3.2 Get CSI
+### 3.2 Get CSI specific devices
 
 <img src="docs/_static/get_broadcast_csi.png" width="550">
 
@@ -55,7 +55,12 @@ Use CSI's high sensitivity to environmental changes to recognize human movements
 - **Disadvantages:** In addition to the ordinary ESP32, it is also necessary to add a special package issuing equipment, the cost is the same and higher
 - **Applicable scenarios:** Suitable for scenarios that require high accuracy and multi-device cluster positioning
 
-## 4 related resources
+
+## 4  note
+1. The effect of external IPEX antenna is better than PCB antenna, PCB antenna has directivity
+2. Test in an unmanned environment. Avoid the influence of other people's activities on test results
+
+## 5 related resources
 * [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/zh_CN/stable/index.html) is the documentation for the Espressif IoT development framework.
 * [ESP-WIFI-CSI Guide](https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/api-guides/wifi.html#id54) is the use of ESP-WIFI-CSI Description.
 * If you find a bug or have a feature request, you can submit it on [Issues](https://github.com/espressif/esp-csi/issues) on GitHub. Please check to see if your question already exists in the existing Issues before submitting it.
