@@ -1,6 +1,6 @@
 # CSI Test Example
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+(See the [README.md](../../README.md) file directory for more information about examples.)
 
 ## Introduction
 
@@ -22,7 +22,7 @@ This example can be build in esp-idf version higher than 4.3.
 This example can run on any ESP32 development board. At least two development boards should be prepared, and the two development boards should be placed perpendicular to the ground during testing.
 If you only have one device, you can use the router to act as device A.
 
-### Demo steps to test
+### How to use
 
 1. Compile the project (This project only support CMAKE).
 1. Download the firmware to two ESP32 devices separately.
@@ -89,6 +89,20 @@ If you only have one device, you can use the router to act as device A.
     W (1270104) app_main: Someone is moving
     I (1270104) app_main: <713> time: 1170 ms, rssi: -27, corr: 0.920, std: 0.047, std_avg: 0.009, std_max: 0.018, threshold: 0.017/1.500, trigger: 1/0, free_heap: 100672/137168
     ```
+
+    Note:
+
+    1. Since the CSI for human detection in different environments is different, you need to configure the CSI threshold according to the actual test environment
+    2. Property description:
+
+        * **time:** Time to get the result of a Wi-Fi rader,
+        * **rssi:** signal strength between two devices,
+        * **corr:** correlation coefficient between subcarriers
+        * **std:** covariance between subcarriers
+        * **std_avg:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation
+        * **std_max:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation
+        * **threshold:** The first absolute threshold, the second is a relative threshold.
+        When `std` > absolute threshold or `std`  > relative threshold * `std_avg`, human movement detection will be triggered. When human movement is detected, a log will be printed: `Someone is moving` and the LED light is on
 
 1. You can also print the original CSI raw data if you want.
     > The default baudrate can not carry such a large amount of data, See **How to change esp32 console baudrate**
