@@ -117,3 +117,4 @@ if __name__ == '__main__':
 
     f_src.close()
     f_dst.close()
+    print(f"Saved csi data to {dst_file}")
