@@ -15,6 +15,8 @@ You can control/interact with the interactive shell running on the ESP32 through
 
 ## How to use examples
 
+This example can be build in esp-idf version higher than 4.3.
+
 ### Hardware Required
 
 This example can run on any ESP32 development board. At least two development boards should be prepared, and the two development boards should be placed perpendicular to the ground during testing.
