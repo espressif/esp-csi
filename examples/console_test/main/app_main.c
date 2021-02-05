@@ -60,27 +60,33 @@ static void wifi_init(void)
 
 void wifi_csi_raw_cb(void *ctx, wifi_csi_info_t *info)
 {
+    static char buff[2048];
+    size_t len = 0;
     wifi_pkt_rx_ctrl_t *rx_ctrl = &info->rx_ctrl;
     static uint32_t s_count = 0;
 
     if (!s_count) {
-        ets_printf("type,id,mac,rssi,rate,sig_mode,mcs,bandwidth,smoothing,not_sounding,aggregation,stbc,fec_coding,sgi,noise_floor,ampdu_cnt,channel,secondary_channel,local_timestamp,ant,sig_len,rx_state,len,first_word,data\n");
+        // ets_printf("type,id,mac,rssi,rate,sig_mode,mcs,bandwidth,smoothing,not_sounding,aggregation,stbc,fec_coding,sgi,noise_floor,ampdu_cnt,channel,secondary_channel,local_timestamp,ant,sig_len,rx_state,len,first_word,data\n");
+        len += snprintf(buff, sizeof(buff),"type,id,mac,rssi,rate,sig_mode,mcs,bandwidth,smoothing,not_sounding,aggregation,stbc,fec_coding,sgi,noise_floor,ampdu_cnt,channel,secondary_channel,local_timestamp,ant,sig_len,rx_state,len,first_word,data\n");
     }
 
-    ets_printf("CSI_DATA,%d," MACSTR ",%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+    len += snprintf(buff + len, sizeof(buff) - len,"CSI_DATA,%d," MACSTR ",%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
                s_count++, MAC2STR(info->mac), rx_ctrl->rssi, rx_ctrl->rate, rx_ctrl->sig_mode,
                rx_ctrl->mcs, rx_ctrl->cwb, rx_ctrl->smoothing, rx_ctrl->not_sounding,
                rx_ctrl->aggregation, rx_ctrl->stbc, rx_ctrl->fec_coding, rx_ctrl->sgi,
                rx_ctrl->noise_floor, rx_ctrl->ampdu_cnt, rx_ctrl->channel, rx_ctrl->secondary_channel,
                rx_ctrl->timestamp, rx_ctrl->ant, rx_ctrl->sig_len, rx_ctrl->rx_state);
 
-    ets_printf(",%d,%d,[ ", info->len, info->first_word_invalid);
+    len += snprintf(buff + len, sizeof(buff) - len, ",%d,%d,\"[", info->len, info->first_word_invalid);
 
-    for (int i = 0; i < info->len; i++) {
-        ets_printf("%d ", info->buf[i]);
+    int i = 0;
+    for (; i < info->len - 1; i++) {
+        len += snprintf(buff + len, sizeof(buff) - len, "%d,", info->buf[i]);
     }
+    len += snprintf(buff + len, sizeof(buff) - len, "%d",info->buf[i]);
 
-    ets_printf("]\n");
+    len += snprintf(buff + len, sizeof(buff) - len, "]\"\n");
+    ets_printf("%s",buff);
 }
 
 
