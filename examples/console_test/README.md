@@ -19,7 +19,7 @@ This example can be build in esp-idf version higher than 4.3.
 
 ### Hardware Required
 
-This example can run on any ESP32 development board. At least two development boards should be prepared, and the two development boards should be placed perpendicular to the ground during testing.
+This example can run on any ESP32 development board. At least two development boards should be prepared, and the attenna should be placed perpendicular to the ground during testing.
 If you only have one device, you can use the router to act as device A.
 
 ### How to use
