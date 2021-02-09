@@ -1,17 +1,15 @@
 # CSI Test Example
 
-(See the [README.md](../../README.md) file directory for more information about examples.)
-
 ## Introduction
 
 You can control/interact with the interactive shell running on the ESP32 through the serial port (UART) to test the CSI. Here are the functions of this example.
 
 1. Provide CSI information.
-1. Output CSI raw data
-1. Configuration for human movement detection
+1. Output CSI raw data.
+1. Human movement detection.
 
-> * CSI data can be obtained from any wifi packet which carried csi information. **For best experience, we strongly recommand you use ESP32 serial device rather than router in csi demo.**
-> * For the usage of creating an interactive shell on the ESP32, see: [Console Component](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/console.html#console)
+> * CSI data can be obtained from any wifi packet which carried CSI information. **For best experience, we strongly recommand you use ESP32 serial device rather than router in CSI demo.**
+> * For the usage of creating an interactive shell on the ESP32, see: [Console Component](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/console.html#console).
 
 ## How to use examples
 
@@ -40,7 +38,7 @@ If you only have one device, you can use the router to act as device A.
     I (8159) wifi:station: 30:ae:a4:80:5c:cc join, AID=1, bgn, 40D
     ```
 
-1. Set device B to Sta mode and make it connect to device A
+1. Set device B to Sta mode and make it connect to device A.
 
     ```shell
     csi> sta csi_softap
@@ -76,7 +74,7 @@ If you only have one device, you can use the router to act as device A.
     I (529544) app_main: <4> time: 900 ms, rssi: -26, corr: 0.940, std: 0.013, std_avg: 0.000, std_max: 0.000, threshold: 0.300/1.500, trigger: 0/0, free_heap: 134164/137240
     ```
 
-1. Configure device B's human body movement threshold. When `std` is greater than the threshold, human body movement will be triggered
+1. Configure device B's human body movement threshold. When `std` is greater than the threshold, human body movement will be triggered.
 
     ```shell
     I (1263704) app_main: <707> time: 1140 ms, rssi: -26, corr: 0.969, std: 0.006, std_avg: 0.009, std_max: 0.016, threshold: 0.018/1.500, trigger: 0/0, free_heap: 100672/137084
@@ -92,22 +90,22 @@ If you only have one device, you can use the router to act as device A.
 
     Note:
 
-    1. Since the CSI for human detection in different environments is different, you need to configure the CSI threshold according to the actual test environment
+    1. Since the CSI for human detection in different environments is different, you need to configure the CSI threshold according to the actual test environment.
     2. Property description:
 
-        * **time:** Time to get the result of a Wi-Fi rader,
-        * **rssi:** signal strength between two devices,
-        * **corr:** correlation coefficient between subcarriers
-        * **std:** covariance between subcarriers
-        * **std_avg:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation
-        * **std_max:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation
+        * **time:** Time to get the result of a Wi-Fi rader.
+        * **rssi:** signal strength between two devices.
+        * **corr:** correlation coefficient between subcarriers.
+        * **std:** covariance between subcarriers.
+        * **std_avg:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation.
+        * **std_max:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation.
         * **threshold:** The first absolute threshold, the second is a relative threshold.
-        When `std` > absolute threshold or `std`  > relative threshold * `std_avg`, human movement detection will be triggered. When human movement is detected, a log will be printed: `Someone is moving` and the LED light is on
+        When `std` > absolute threshold or `std`  > relative threshold * `std_avg`, human movement detection will be triggered. When human movement is detected, a log will be printed: `Someone is moving` and the LED light is on.
 
 1. You can also print the original CSI raw data if you want.
     > The default baudrate can not carry such a large amount of data, See **How to change esp32 console baudrate**
     > If you want to save device log to file, press "CTRL+t", "CTRL+l". See [IDF Monitor](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/tools/idf-monitor.html)
-    > The csi raw data can be analyzed by some python scripts in tools folder. See [tools/README.md](tools/README.md)
+    > The CSI raw data can be analyzed by python scripts in tools folder. See [tools/README.md](tools/README.md)
 
     ```shell
     csi> csi -o
