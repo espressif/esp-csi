@@ -1,0 +1,4 @@
+[submodule "examples/connect_qcloud/components/esp_qcloud"]
+	path = examples/connect_qcloud/components/esp_qcloud
+	url = ssh://git@gitlab.espressif.cn:27227/esp-components/esp-qcloud.git
+

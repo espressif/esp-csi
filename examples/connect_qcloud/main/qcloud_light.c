@@ -24,7 +24,7 @@
 #include "utils.h"
 
 
-static const char *TAG = "app_main";
+static const char *TAG = "qcloud_light";
 
 /* Callback to handle commands received from the QCloud cloud */
 static esp_err_t light_get_param(const char *id, esp_qcloud_param_val_t *val)

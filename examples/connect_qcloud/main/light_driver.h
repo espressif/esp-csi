@@ -16,7 +16,7 @@
 
 #include "led_pwm.h"
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -53,35 +53,38 @@ typedef struct {
 } light_driver_config_t;
 
 #ifdef CONFIG_LIGHT_TYPE_MESHKIT
-#define COFNIG_LIGHT_TYPE_DEFAULT() { \
-        .type            = "meshlight",\
-                           .gpio_red        = GPIO_NUM_4,\
-                                              .gpio_green      = GPIO_NUM_16,\
-                                                      .gpio_blue       = GPIO_NUM_5,\
-                                                              .gpio_cold       = GPIO_NUM_23,\
-                                                                      .gpio_warm       = GPIO_NUM_19,\
-                                                                              .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
-                                                                                      .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+#define COFNIG_LIGHT_TYPE_DEFAULT()                      \
+    {                                                    \
+        .type = "meshlight",                             \
+        .gpio_red = GPIO_NUM_4,                          \
+        .gpio_green = GPIO_NUM_16,                       \
+        .gpio_blue = GPIO_NUM_5,                         \
+        .gpio_cold = GPIO_NUM_23,                        \
+        .gpio_warm = GPIO_NUM_19,                        \
+        .fade_period_ms = CONFIG_LIGHT_FADE_PERIOD_MS,   \
+        .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS, \
     }
 #elif CONFIG_LIGHT_TYPE_MOONLIGHT
-#define COFNIG_LIGHT_TYPE_DEFAULT() { \
-        .type            = "moonlight",\
-                           .gpio_red        = GPIO_NUM_16,\
-                                              .gpio_green      = GPIO_NUM_4,\
-                                                      .gpio_blue       = GPIO_NUM_17,\
-                                                              .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
-                                                                      .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+#define COFNIG_LIGHT_TYPE_DEFAULT()                      \
+    {                                                    \
+        .type = "moonlight",                             \
+        .gpio_red = GPIO_NUM_16,                         \
+        .gpio_green = GPIO_NUM_4,                        \
+        .gpio_blue = GPIO_NUM_17,                        \
+        .fade_period_ms = CONFIG_LIGHT_FADE_PERIOD_MS,   \
+        .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS, \
     }
 #else
-#define COFNIG_LIGHT_TYPE_DEFAULT() {\
-        .type            = "light",\
-                           .gpio_red        = 1,\
-                                              .gpio_green      = 2,\
-                                                      .gpio_blue       = 3,\
-                                                              .gpio_cold       = 4,\
-                                                                      .gpio_warm       = 5,\
-                                                                              .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
-                                                                                      .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+#define COFNIG_LIGHT_TYPE_DEFAULT()                      \
+    {                                                    \
+        .type = "light",                                 \
+        .gpio_red = CONFIG_LIGHT_GPIO_RED,               \
+        .gpio_green = CONFIG_LIGHT_GPIO_GREEN,           \
+        .gpio_blue = CONFIG_LIGHT_GPIO_BLUE,             \
+        .gpio_cold = -1,                                 \
+        .gpio_warm = -1,                                 \
+        .fade_period_ms = CONFIG_LIGHT_FADE_PERIOD_MS,   \
+        .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS, \
     }
 #endif /**< LIGHT_TYPE_DEFAULT */
 
@@ -279,7 +282,6 @@ uint8_t light_driver_get_mode(void);
  * @return Pointer to type.
  */
 char *light_driver_get_type(void);
-
 
 /**
  * @brief  Used to indicate the operating mode, such as configuring the network mode, upgrading mode.
