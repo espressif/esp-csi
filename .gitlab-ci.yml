@@ -1,0 +1,117 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  BATCH_BUILD: "1"
+  V: "0"
+  MAKEFLAGS: "-j5 --no-keep-going"
+  IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+  IDF_CI_BUILD: "1"
+
+before_script:
+  # add gitlab ssh key
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
+  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - git --version
+  - git submodule update --init --recursive
+  - git clone --recursive --branch master $GITLAB_SSH_SERVER/espressif/esp-idf.git
+  - export PATH="$IDF_PATH/tools:$PATH"
+  - cd esp-idf
+  - git checkout 6e776946d01ec0d081d09000c36d23ec1d318c06
+  - git submodule update --init --recursive
+  - source tools/ci/setup_python.sh
+  - source tools/ci/configure_ci_environment.sh
+  - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
+  - cd ..
+
+.build_examples_template: &build_examples_template
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  tags:
+    - build
+  # Artifacts are not used temporarily
+  # artifacts:
+  #   when: always
+  #   paths:
+  #     - $LOG_PATH
+  #   expire_in: 1 week
+  # variables:
+  #   LOG_PATH: "$CI_PROJECT_DIR/log_examples"
+
+# build_demo_make:
+#   <<: *build_examples_template
+#   script:
+#     - cd examples/led_light
+#     - make defconfig && make -j5
+#     - cd ../../
+
+build_demo_cmake:
+  <<: *build_examples_template
+  script:
+    - cd examples/console_test
+    - idf.py set-target esp32
+    - idf.py build
+    - cd ../../
+
+# build_docs:
+#     stage: build
+#     image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+#     tags:
+#         - build_docs
+#     artifacts:
+#         when: always
+#         paths:
+#             # English version of documentation
+#             - docs/en/sphinx-warning-log.txt
+#             - docs/en/_build/html
+#             # Chinese version of documentation
+#             - docs/zh_CN/sphinx-warning-log.txt
+#             - docs/zh_CN/_build/html
+#         expire_in: 1 week
+#     before_script:
+#       - echo "skip default before_script"
+#     script:
+#       - cd docs
+#       # make English version of documentation
+#       - cd en/
+#       - make clean && make html
+#       - cd ../
+#       # make Chinese version of documentation
+#       - cd zh_CN/
+#       - make clean && make html
+#       - cd ../
+
+
+push_master_to_github:
+  stage: deploy
+  only:
+    - master
+    - /^release\/v/
+#  when: on_success
+  image: $CI_DOCKER_REGISTRY/esp32-ci-env
+  variables:
+    GIT_STRATEGY: clone
+    GITHUB_PUSH_REFS: refs/remotes/origin/release refs/remotes/origin/master
+  before_script:
+    - echo "skip default before_script"
+  script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -n $GH_PUSH_KEY >> ~/.ssh/id_rsa_base64
+    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - git remote add github git@github.com:espressif/esp-csi.git
+    # What the next line of script does: goes through the list of refs for all branches we push to github,
+    # generates a snippet of shell which is evaluated. The snippet checks CI_BUILD_REF against the SHA
+    # (aka objectname) at tip of each branch, and if any SHAs match then it checks out the local branch
+    # and then pushes that ref to a corresponding github branch
+    #
+    # NB: In gitlab 9.x, CI_BUILD_REF was deprecated. New name is CI_COMMIT_REF. If below command suddenly
+    # generates bash syntax errors, this is probably why.
+    - eval $(git for-each-ref --shell bash --format 'if [ $CI_BUILD_REF == %(objectname) ]; then git checkout -B %(refname:strip=3); git push --follow-tags github %(refname:strip=3); fi;' $GITHUB_PUSH_REFS)

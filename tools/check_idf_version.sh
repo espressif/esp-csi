@@ -1,7 +1,6 @@
 #!/bin/sh
 
 EXPECT_IDF_VERSION=$1
-ESP_IDF_PATH=$2
 
 CUR_IDF_VERSION=`git -C ${IDF_PATH} show -s --pretty=format:'%H'`
 echo "Currect esp-idf version is ${CUR_IDF_VERSION}"
