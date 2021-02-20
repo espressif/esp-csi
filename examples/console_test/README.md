@@ -93,12 +93,12 @@ If you only have one device, you can use the router to act as device A.
     1. Since the CSI for human detection in different environments is different, you need to configure the CSI threshold according to the actual test environment.
     2. Property description:
 
-        * **time:** Time to get the result of a Wi-Fi rader.
+        * **time:** Time to get the result of a Wi-Fi radar.
         * **rssi:** signal strength between two devices.
         * **corr:** correlation coefficient between subcarriers.
         * **std:** covariance between subcarriers.
-        * **std_avg:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation.
-        * **std_max:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi rader will start calculation.
+        * **std_avg:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi radar will start calculation.
+        * **std_max:** The average value of the sub-carrier covariance per unit time, only after 50 Wi-Fi radar will start calculation.
         * **threshold:** The first absolute threshold, the second is a relative threshold.
         When `std` > absolute threshold or `std`  > relative threshold * `std_avg`, human movement detection will be triggered. When human movement is detected, a log will be printed: `Someone is moving` and the LED light is on.
 
