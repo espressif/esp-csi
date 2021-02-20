@@ -1,4 +1,4 @@
-# ESP-RADER
+# ESP-CSI
 
 The main purpose of this project is to show the use of ESP-WIFI-CSI. The human body detection algorithm is still being optimized. You can get more accurate results through machine learning, neural network and other algorithms based on the original CSI data.
 
@@ -85,3 +85,8 @@ The Getting Started project can be found in the [examples/console_test](./exampl
 - [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/index.html) is the documentation for the Espressif IoT development framework.
 - [ESP-WIFI-CSI Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/wifi.html#wi-fi-channel-state-information) is the use of ESP-WIFI-CSI Description.
 - If you find a bug or have a feature request, you can submit it on [Issues](https://github.com/espressif/esp-csi/issues) on GitHub. Please check to see if your question already exists in the existing Issues before submitting it.
+
+## reference
+
+* [1]杨 铮，刘云浩.Wi-Fi雷达：从RSSI到CSI[J].中国计算机学会通讯,2014年11月,10(11):55-60.
+* [2]谈青青.基于 Wi-Fi 的被动式室内入侵检测与定位技术研究[D].南京:南京邮电大学,2019年4月.
