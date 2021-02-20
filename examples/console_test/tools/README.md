@@ -1,28 +1,28 @@
 # CSI analysis tools
 
-There are some python script that can be used to analysis the csi data from devices.
+There are some python script that can be used to analysis the CSI data from devices.
 
 ## extract_csidata.py
 
-filter_csidata.py is used for extract CSI_DATA from device log.
+extract_csidata.py is used for extract CSI_DATA from device log.
 
 ### How to use extract_csidata.py
 
 Before you use it, you should prepare correct device log file and the file should contain some strings begin with "CSI_DATA".
 
-1. extract csidata from "file.txt" and save it to "file.csv":
+1. extract CSI data from "file.txt" and save it to "file.csv".
 
     ```bash
     $ ./extract_csidata.py --src ../log.console_test.20210205155636.txt
-    Saved csi data to log.console_test.20210205155636.csv
+    Saved CSI data to log.console_test.20210205155636.csv
     ```
 
-    if you want to save csv to another file, you can run like this:
+    if you want to save csv to another file, you can run like this.
 
     ```bash
     $ ./extract_csidata.py --src ../log.console_test.20210205155636.txt --dst csi_data.csv
-    Saved csi data to csi_data.csv
-    ``` 
+    Saved CSI data to csi_data.csv
+    ```
 
     The output file would be look like this:
 
@@ -35,16 +35,16 @@ Before you use it, you should prepare correct device log file and the file shoul
 
 ## analisys_csi_data.py
 
-analisys_csi_data.py is used for plot csi waveform.
+analisys_csi_data.py is used for plot CSI waveform.
 
 ### How to use analisys_csi_data.py
 
 You must pass the csi_data which is outputed from extract_csidata.py.
 
-1. plot rssi and subcarrier waveform
+1. plot rssi and subcarrier waveform.
 
     ```bash
-    $ ./analisys_csi_data.py --src log.console_test.20210205155636.csv
+    ./analisys_csi_data.py --src log.console_test.20210205155636.csv
     ```
 
     it will open 2 windows and display the waveform.
