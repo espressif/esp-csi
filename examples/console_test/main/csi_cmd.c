@@ -27,7 +27,7 @@
 #include "lwip/netdb.h"
 #include "lwip/sockets.h"
 
-#include "esp_rader.h"
+#include "esp_radar.h"
 #include "app_priv.h"
 
 static const char *TAG  = "csi_cmd";
@@ -50,8 +50,8 @@ static int wifi_cmd_csi(int argc, char **argv)
         return ESP_FAIL;
     }
 
-    wifi_rader_config_t rader_config = {0};
-    esp_wifi_rader_get_config(&rader_config);
+    wifi_radar_config_t radar_config = {0};
+    esp_wifi_radar_get_config(&radar_config);
 
     if (csi_args.len->count) {
         if (csi_args.len->ival[0] != 0 && csi_args.len->ival[0] != 128
@@ -61,11 +61,11 @@ static int wifi_cmd_csi(int argc, char **argv)
             return ESP_FAIL;
         }
 
-        rader_config.filter_len = csi_args.len->ival[0];
+        radar_config.filter_len = csi_args.len->ival[0];
     }
 
     if (csi_args.mac->count) {
-        if (!mac_str2hex(csi_args.mac->sval[0], rader_config.filter_mac)) {
+        if (!mac_str2hex(csi_args.mac->sval[0], radar_config.filter_mac)) {
             ESP_LOGE(TAG, "The format of the address is incorrect."
                      "Please enter the format as xx:xx:xx:xx:xx:xx");
             return ESP_FAIL;
@@ -73,10 +73,10 @@ static int wifi_cmd_csi(int argc, char **argv)
     }
 
     if (csi_args.output_raw_data->count) {
-        rader_config.wifi_csi_raw_cb = wifi_csi_raw_cb;
+        radar_config.wifi_csi_raw_cb = wifi_csi_raw_cb;
     }
 
-    esp_wifi_rader_set_config(&rader_config);
+    esp_wifi_radar_set_config(&radar_config);
 
     return 0;
 }

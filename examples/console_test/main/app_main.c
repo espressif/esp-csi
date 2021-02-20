@@ -25,7 +25,7 @@
 #include "lwip/netdb.h"
 #include "lwip/sockets.h"
 
-#include "esp_rader.h"
+#include "esp_radar.h"
 #include "app_priv.h"
 
 #define CONFIG_CSI_BUF_SIZE          50
@@ -90,17 +90,17 @@ void wifi_csi_raw_cb(void *ctx, wifi_csi_info_t *info)
 }
 
 
-static void wifi_rader_cb(const wifi_rader_info_t *info, void *ctx)
+static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
 {
     static int s_count = 0;
-    wifi_rader_config_t rader_config = {0};
+    wifi_radar_config_t radar_config = {0};
     static float s_amplitude_std_list[CONFIG_CSI_BUF_SIZE];
     bool trigger_relative_flag = false;
 
-    esp_wifi_rader_get_config(&rader_config);
+    esp_wifi_radar_get_config(&radar_config);
 
-    float amplitude_std  = avg(info->amplitude_std, rader_config.filter_len / 128);
-    float amplitude_corr = avg(info->amplitude_corr, rader_config.filter_len / 128);
+    float amplitude_std  = avg(info->amplitude_std, radar_config.filter_len / 128);
+    float amplitude_corr = avg(info->amplitude_corr, radar_config.filter_len / 128);
     float amplitude_std_max = 0;
     float amplitude_std_avg = 0;
     s_amplitude_std_list[s_count % CONFIG_CSI_BUF_SIZE] = amplitude_std;
@@ -145,8 +145,8 @@ static void wifi_rader_cb(const wifi_rader_info_t *info, void *ctx)
 
 void app_main(void)
 {
-    wifi_rader_config_t rader_config = {
-        .wifi_rader_cb = wifi_rader_cb,
+    wifi_radar_config_t radar_config = {
+        .wifi_radar_cb = wifi_radar_cb,
         // .filter_len = 384,
         // .filter_mac = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
         // .wifi_csi_raw_cb = wifi_csi_raw_cb,
@@ -163,9 +163,9 @@ void app_main(void)
      * @brief Initialize Wi-Fi radar
      */
     wifi_init();
-    esp_wifi_rader_init();
-    esp_wifi_rader_set_config(&rader_config);
-    esp_wifi_rader_start();
+    esp_wifi_radar_init();
+    esp_wifi_radar_set_config(&radar_config);
+    esp_wifi_radar_start();
 
     /**
      * @brief Register serial command
