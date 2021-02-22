@@ -41,7 +41,7 @@ static EventGroupHandle_t s_wifi_event_group;
 
 /* Event handler for catching system events */
 static void wifi_event_handler(void *arg, esp_event_base_t event_base,
-                               int event_id, void *event_data)
+                               int32_t event_id, void *event_data)
 {
     if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         xEventGroupClearBits(s_wifi_event_group, WIFI_DISCONNECTED_BIT);
