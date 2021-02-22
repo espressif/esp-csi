@@ -56,6 +56,8 @@ build_demo_cmake:
     - cd examples/console_test
     - idf.py set-target esp32
     - idf.py build
+    - idf.py set-target esp32c3
+    - idf.py build
     - cd ../../
 
 # build_docs:
