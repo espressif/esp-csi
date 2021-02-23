@@ -208,6 +208,9 @@ void app_main(void)
         wifi_ap_record_t ap_info;
         esp_wifi_sta_get_ap_info(&ap_info);
         memcpy(rader_config.filter_mac, ap_info.bssid, sizeof(ap_info.bssid));
+        ESP_LOGI(TAG, "Using router as the source of csi data");
+    } else {
+        ESP_LOGI(TAG, "Using " MACSTR " as the source of csi data", MAC2STR(rader_config.filter_mac));
     }
 
     esp_wifi_rader_ping_start();
@@ -224,7 +227,9 @@ void app_main(void)
         },
     };
 
-    esp_netif_create_default_wifi_ap();
+    if(!esp_netif_get_handle_from_ifkey("WIFI_AP_DEF")) {
+        esp_netif_create_default_wifi_ap();
+    }
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
     ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config));

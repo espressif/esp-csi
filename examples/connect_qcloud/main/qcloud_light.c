@@ -118,13 +118,13 @@ static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *v
     } else if (!strcmp(id, "wifi_rader_status")) {
         wifi_rader_data.status_enable = val->b;
     } else if (!strcmp(id, "wifi_rader_data_mac")) {
-        // wifi_rader_config_t rader_config = {0};
-        // esp_wifi_rader_get_config(&rader_config);
-        // mac_str2hex(val->s, rader_config.filter_mac);
-        // esp_wifi_rader_set_config(&rader_config);
+        wifi_rader_config_t rader_config = {0};
+        esp_wifi_rader_get_config(&rader_config);
+        mac_str2hex(val->s, rader_config.filter_mac);
+        esp_wifi_rader_set_config(&rader_config);
 
-        // esp_qcloud_storage_set("filter_mac", rader_config.filter_mac,
-        //                        sizeof(rader_config.filter_mac));
+        esp_qcloud_storage_set("filter_mac", rader_config.filter_mac,
+                               sizeof(rader_config.filter_mac));
     } else {
         ESP_LOGW(TAG, "This parameter is not supported");
     }
