@@ -59,6 +59,10 @@ build_demo_cmake:
     - idf.py set-target esp32c3
     - idf.py build
     - cd ../../
+    - cd examples/connect_qcloud
+    - idf.py set-target esp32
+    - idf.py build
+    - cd ../../
 
 # build_docs:
 #     stage: build
