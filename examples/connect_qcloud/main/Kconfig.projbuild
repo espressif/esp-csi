@@ -10,6 +10,10 @@ menu "ESP QCloud Example Configuration"
                 bool "ESP32 moonlight"
             config LIGHT_TYPE_MESHKIT
                 bool "ESP32-MeshKit Light"
+            config LIGHT_TYPE_C3_lighting
+                bool "ESP32-C3 Light"
+            config LIGHT_TYPE_S2_lighting
+                bool "ESP32-S2 Light"
             config LIGHT_TYPE_CUSTOM
                 bool "Custom"
         endchoice

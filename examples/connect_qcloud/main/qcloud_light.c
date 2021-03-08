@@ -7,6 +7,7 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 
+#include <assert.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -15,6 +16,7 @@
 #include "esp_qcloud_storage.h"
 #include "esp_qcloud_iothub.h"
 #include "esp_qcloud_prov.h"
+#include "esp_ota_ops.h"
 
 #include "esp_radar.h"
 
@@ -22,6 +24,10 @@
 #include "qcloud_light.h"
 
 #include "utils.h"
+
+#if defined (CONFIG_LIGHT_TYPE_C3_lighting) || defined (CONFIG_LIGHT_TYPE_S2_lighting)
+#define SUPPORT_HIGH_POWER 1
+#endif
 
 
 static const char *TAG = "qcloud_light";
@@ -46,7 +52,7 @@ static esp_err_t light_get_param(const char *id, esp_qcloud_param_val_t *val)
     } else if (!strcmp(id, "wifi_rader_adjust_threshold")) {
         val->b = wifi_radar_data.threshold_adjust;
     } else if (!strcmp(id, "wifi_rader_human_move")) {
-        val->f = wifi_radar_data.move_relative_threshold;
+        val->f = wifi_radar_data.move_absolute_threshold;
     } else if (!strcmp(id, "wifi_rader_human_detect")) {
         val->f = wifi_radar_data.threshold_human_detect;
     } else if (!strcmp(id, "wifi_rader_room_status")) {
@@ -99,12 +105,18 @@ static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *v
 
         if (wifi_radar_data.threshold_adjust) {
             wifi_radar_data.awake_count = 0;
+#ifdef SUPPORT_HIGH_POWER
+            light_driver_set_hsv(0,0,100);
+#endif
             light_driver_breath_start(255, 200, 0);
         } else {
             wifi_radar_data.move_absolute_threshold += wifi_radar_data.move_absolute_threshold * 0.1;
             wifi_radar_data.move_relative_threshold += wifi_radar_data.move_relative_threshold * 0.1;
             wifi_radar_data.threshold_human_detect -= wifi_radar_data.threshold_human_detect * 0.1;
             light_driver_breath_stop();
+#ifdef SUPPORT_HIGH_POWER
+            light_driver_set_ctb(50,100);
+#endif
             esp_qcloud_storage_set("move_absolute", &wifi_radar_data.move_absolute_threshold, sizeof(float));
             esp_qcloud_storage_set("move_relative", &wifi_radar_data.move_relative_threshold, sizeof(float));
             esp_qcloud_storage_set("human_detect", &wifi_radar_data.threshold_human_detect, sizeof(float));
@@ -174,8 +186,10 @@ static esp_err_t get_wifi_config(wifi_config_t *wifi_cfg, uint32_t wait_ms)
     ESP_QCLOUD_PARAM_CHECK(wifi_cfg);
 
     if (esp_qcloud_storage_get("wifi_config", wifi_cfg, sizeof(wifi_config_t)) == ESP_OK) {
+#if CONFIG_BT_ENABLE
 #include "esp_bt.h"
         esp_bt_mem_release(ESP_BT_MODE_BTDM);
+#endif
         return ESP_OK;
     }
 
@@ -300,22 +314,27 @@ esp_err_t qcloud_light_init(void)
     /**< Create and configure device authentication information */
     ESP_ERROR_CHECK(esp_qcloud_create_device());
     /**< Configure the version of the device, and use this information to determine whether to OTA */
-    ESP_ERROR_CHECK(esp_qcloud_device_add_fw_version("0.0.1"));
+    const esp_app_desc_t *app_desc_ptr = esp_ota_get_app_description();
+    assert(app_desc_ptr);
+    ESP_ERROR_CHECK(esp_qcloud_device_add_fw_version(app_desc_ptr->version));
+
     /**< Register the properties of the device */
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("power_switch", QCLOUD_VAL_TYPE_BOOLEAN));
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("hue", QCLOUD_VAL_TYPE_INTEGER));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("saturation", QCLOUD_VAL_TYPE_INTEGER));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("value", QCLOUD_VAL_TYPE_INTEGER));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("hue", QCLOUD_VAL_TYPE_INTEGER));
 
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_status", QCLOUD_VAL_TYPE_BOOLEAN));
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_awake_count", QCLOUD_VAL_TYPE_INTEGER));
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_radar_data", QCLOUD_VAL_TYPE_STRING));
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_radar_data_mac", QCLOUD_VAL_TYPE_STRING));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_data", QCLOUD_VAL_TYPE_STRING));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_adjust_threshold", QCLOUD_VAL_TYPE_BOOLEAN));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_room_status", QCLOUD_VAL_TYPE_BOOLEAN));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_awake_count", QCLOUD_VAL_TYPE_INTEGER));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_status", QCLOUD_VAL_TYPE_BOOLEAN));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_data_mac", QCLOUD_VAL_TYPE_STRING));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("mac", QCLOUD_VAL_TYPE_STRING));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("ap_bssid", QCLOUD_VAL_TYPE_STRING));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_human_move", QCLOUD_VAL_TYPE_FLOAT));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_human_detect", QCLOUD_VAL_TYPE_FLOAT));
 
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_room_status", QCLOUD_VAL_TYPE_BOOLEAN));
 
     /**< The processing function of the communication between the device and the server */
     ESP_ERROR_CHECK(esp_qcloud_device_add_property_cb(light_get_param, light_set_param));
@@ -349,5 +368,8 @@ esp_err_t qcloud_light_init(void)
                                        true, NULL, qcloud_light_report_status);
     xTimerStart(timer, 0);
 
+#ifdef SUPPORT_HIGH_POWER
+    ESP_ERROR_CHECK(light_driver_set_ctb(50, 100));
+#endif
     return ESP_OK;
 }

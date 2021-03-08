@@ -53,40 +53,60 @@ typedef struct {
 } light_driver_config_t;
 
 #ifdef CONFIG_LIGHT_TYPE_MESHKIT
-#define COFNIG_LIGHT_TYPE_DEFAULT()                      \
-    {                                                    \
-        .type = "meshlight",                             \
-        .gpio_red = GPIO_NUM_4,                          \
-        .gpio_green = GPIO_NUM_16,                       \
-        .gpio_blue = GPIO_NUM_5,                         \
-        .gpio_cold = GPIO_NUM_23,                        \
-        .gpio_warm = GPIO_NUM_19,                        \
-        .fade_period_ms = CONFIG_LIGHT_FADE_PERIOD_MS,   \
-        .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS, \
-    }
+#define COFNIG_LIGHT_TYPE_DEFAULT() { \
+            .type            = "meshlight",\
+            .gpio_red        = GPIO_NUM_4,\
+            .gpio_green      = GPIO_NUM_16,\
+            .gpio_blue       = GPIO_NUM_5,\
+            .gpio_cold       = GPIO_NUM_23,\
+            .gpio_warm       = GPIO_NUM_19,\
+            .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
+            .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+        }
 #elif CONFIG_LIGHT_TYPE_MOONLIGHT
-#define COFNIG_LIGHT_TYPE_DEFAULT()                      \
-    {                                                    \
-        .type = "moonlight",                             \
-        .gpio_red = GPIO_NUM_16,                         \
-        .gpio_green = GPIO_NUM_4,                        \
-        .gpio_blue = GPIO_NUM_17,                        \
-        .fade_period_ms = CONFIG_LIGHT_FADE_PERIOD_MS,   \
-        .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS, \
-    }
+#define COFNIG_LIGHT_TYPE_DEFAULT() { \
+            .type            = "moonlight",\
+            .gpio_red        = GPIO_NUM_16,\
+            .gpio_green      = GPIO_NUM_4,\
+            .gpio_blue       = GPIO_NUM_17,\
+            .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
+            .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+        }
+#elif CONFIG_LIGHT_TYPE_C3_lighting
+#define COFNIG_LIGHT_TYPE_DEFAULT() { \
+            .type            = "C3_light",\
+            .gpio_red        = GPIO_NUM_10,\
+            .gpio_green      = GPIO_NUM_6,\
+            .gpio_blue       = GPIO_NUM_7,\
+            .gpio_cold       = GPIO_NUM_4,\
+            .gpio_warm       = GPIO_NUM_5,\
+            .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
+            .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+        }
+#elif CONFIG_LIGHT_TYPE_S2_lighting
+#define COFNIG_LIGHT_TYPE_DEFAULT() { \
+            .type            = "S2_light",\
+            .gpio_red        = GPIO_NUM_36,\
+            .gpio_green      = GPIO_NUM_34,\
+            .gpio_blue       = GPIO_NUM_35,\
+            .gpio_cold       = GPIO_NUM_21,\
+            .gpio_warm       = GPIO_NUM_33,\
+            .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
+            .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+        }
 #else
-#define COFNIG_LIGHT_TYPE_DEFAULT()                      \
-    {                                                    \
-        .type = "light",                                 \
-        .gpio_red = CONFIG_LIGHT_GPIO_RED,               \
-        .gpio_green = CONFIG_LIGHT_GPIO_GREEN,           \
-        .gpio_blue = CONFIG_LIGHT_GPIO_BLUE,             \
-        .gpio_cold = -1,                                 \
-        .gpio_warm = -1,                                 \
-        .fade_period_ms = CONFIG_LIGHT_FADE_PERIOD_MS,   \
-        .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS, \
-    }
+#define COFNIG_LIGHT_TYPE_DEFAULT() {\
+            .type            = "light",\
+            .gpio_red        = CONFIG_LIGHT_GPIO_RED,\
+            .gpio_green      = CONFIG_LIGHT_GPIO_GREEN,\
+            .gpio_blue       = CONFIG_LIGHT_GPIO_BLUE,\
+            .gpio_cold       = CONFIG_LIGHT_GPIO_COLD,\
+            .gpio_warm       = CONFIG_LIGHT_GPIO_WARM,\
+            .fade_period_ms  = CONFIG_LIGHT_FADE_PERIOD_MS,\
+            .blink_period_ms = CONFIG_LIGHT_BLINK_PERIOD_MS,\
+        }
 #endif /**< LIGHT_TYPE_DEFAULT */
+
 
 /**
  * @brief Light initialize.

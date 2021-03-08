@@ -35,6 +35,7 @@
 #define CONFIG_CSI_BUF_SIZE         32
 #define CONFIG_GPIO_LED_MOVE_STATUS GPIO_NUM_18
 #define CSI_SAFTAP_SSID             "qcloud_csi_test"
+#define CSI_MOVE_DETECT_EFFECTIVE_TIME ( 60 * 5 )
 
 static const char *TAG                     = "app_main";
 static wifi_radar_data_t g_wifi_radar_data = {
@@ -144,7 +145,7 @@ static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
         s_last_move_time = xTaskGetTickCount() * (1000 / configTICK_RATE_HZ);
     }
 
-    if (s_last_move_time && xTaskGetTickCount() * (1000 / configTICK_RATE_HZ) - s_last_move_time > 3 * 1000) {
+    if (s_last_move_time && xTaskGetTickCount() * (1000 / configTICK_RATE_HZ) - s_last_move_time > CSI_MOVE_DETECT_EFFECTIVE_TIME * 1000) {
         s_last_move_time              = 0;
         g_wifi_radar_data.room_status = false;
         light_driver_set_switch(false);
@@ -233,4 +234,6 @@ void app_main(void)
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
     ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config));
+
+    ESP_ERROR_CHECK(esp_qcloud_iothub_report_all_property());
 }
