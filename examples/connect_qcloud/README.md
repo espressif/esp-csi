@@ -4,12 +4,12 @@
 
 ## 简介
 
-这是一个人体运动感应的示例，命名为 Wi-Fi 雷达，可以运行在[ESP32-Moonlight 开发板上](https://docs.espressif.com/projects/espressif-esp-moonlight/zh_CN/latest/introduction.html#id2)。当有人运动后，灯会亮起，无人运动后，灯会自行熄灭。在该示例中，您可以通过腾讯连连小程序查看 Wi-Fi 雷达运行状态，调整运行参数，同时也可以直接控制灯光状态。如下：
+这是一个人体运动感应的示例，命名为 Wi-Fi 雷达，可以运行在[ESP32-Moonlight 开发板上](https://docs.espressif.com/projects/espressif-esp-moonlight/zh_CN/latest/introduction.html#id2)。当有人运动后，灯会亮起，无人运动后，灯会自行熄灭。在该示例中，您可以通过乐鑫连连小程序查看 Wi-Fi 雷达运行状态，调整运行参数，同时也可以直接控制灯光状态。如下：
 
 <table>
     <tr>
-        <td><img src="../../docs/_static/light-control.jpg" width=200>
-        <td><img src="../../docs/_static/wifi-radar.jpg" width=200>
+        <td><img src="../../docs/_static/b73e7d4c-e63b-4fc7-bd58-5127d7c28fa1.jpg" width=200>
+        <td><img src="../../docs/_static/ef6adf57-2140-4c19-9cb6-cd3de475838e.jpg" width=200>
     </tr>
 </table>
 
@@ -25,10 +25,9 @@
 
 ## 软件准备
 
-1. 准备好 wifi_rader_light 产品的数据模板，见 [wifi_rader_light 数据模板](./data_template_wifi_rader_light.json)。
-1. 在您的腾讯云物联网开发平台下创建 wifi_rader_light 产品，在**数据模板页**，使用 [wifi_rader_light 数据模板](./data_template_wifi_rader_light.json)。详细过程参考 [QCloud SmartLight](https://github.com/espressif/esp-qcloud/tree/master/examples/led_light#smart-light)。
 1. 进入 example/connect_qcloud 目录，设置好您的 ESP-IDF 编译环境。
 1. 运行 idf.py menuconfig，进入 `ESP QCloud Mass Manufacture`，配置三元组信息。您可以直接填入三元组信息，或者烧录事先准备好的 fctry 分区 bin，更多信息参考：[QCloud 构建&烧录&运行工程](https://github.com/espressif/esp-qcloud#3-%E6%9E%84%E5%BB%BA%E7%83%A7%E5%BD%95%E8%BF%90%E8%A1%8C%E5%B7%A5%E7%A8%8B)。
+    > [devices_list.csv](devices_list.csv)里准备了若干个三元组，您可以随机选择若干有效的三元组，烧录到测试设备里。这些三元组数据仅用于测试，可能会有冲突产生，请勿长期使用测试三元组。
 1. 编译并烧录 connect_qcloud 固件。
 1. 进入 console_test 目录，编译一份 console_test 固件，并烧录到 ESP32 开发板备用[可选]。
 
@@ -39,31 +38,16 @@
     1. 确保路由器正常工作，能够访问外网。
     1. 将烧录好固件的月球灯放置于桌面上，上电。
 
-1. ~~配网~~
+1. 配网
     1. 月球灯处于黄色呼吸状态，代表是配网模式。
-    1. 微信搜索 “腾讯连连” 小程序，点击小程序下发 “ + ” 号，扫描下方二维码开始配网。
+    1. 微信搜索 “乐鑫连连” 小程序，点击小程序下发 “ + ” 号，扫描下方二维码开始配网。
         <table>
             <tr>
-                <td><img src="../../docs/_static/e4285355-762d-4a32-8a83-5aefd37dfbb8.jpg"</td>
-                <td><img src="../../docs/_static/a70f30ad-c44b-4241-b93e-e27f779fcac4.jpg"</td>
-                <td><img src="../../docs/_static/qcloud_prov_qrcode.png"</td>
+                <td><img src="../../docs/_static/57389a61-835b-45bb-a476-7b8102e7f87e.jpg" width=200</td>
+                <td><img src="../../docs/_static/1b5b4877-60b4-4e2f-8034-452b8ed39196.jpg" width=200</td>
+                <td><img src="../../docs/_static/a6294ee5-f4d1-4dc1-8bd8-004496d700c3.jpg" width=200</td>
             </tr>
         </table>
-    1. 勾选我已确认上述操作，点击下一步
-        <table><tr>
-            <td><img src="../../docs/_static/958d405a-0ab2-4033-a24c-038cffa1b33b.jpg" width=200>
-        </tr></table>
-    1. 选择家庭 WiFi 并输入密码，点击下一步，再点击下一步，再点击下一步，弹出确认对话框、点击加入
-        <table><tr>
-            <td><img src="../../docs/_static/667c1c69-7180-4ec6-a1f8-1a4dd23f39a8.jpg" width=200>
-            <td><img src="../../docs/_static/adeeea8a-1d85-4520-af46-d0dffcf7c7a5.jpg" width=200>
-        </tr></table>
-    1. 等待配网过程完成，点击完成，随后返回主页，将会出现刚刚配网成功的设备
-        <table><tr>
-            <td><img src="../../docs/_static/77c0273a-f2f8-49a4-8de2-4127aee9ec14.jpg">
-            <td><img src="../../docs/_static/ce6b81f1-954a-42b5-964b-d6bbb28f8c2c.jpg">
-            <td><img src="../../docs/_static/feb89ebc-e793-4f36-bc56-340eb1972ea9.jpg">
-        </tr></table>
 
 1. 检查 wifi-rader-light 工作状态[可选]
     1. 使用 micro-usb 线缆将 moonlight 接入 PC，查看串口输出。配完网后，如果 wifi-radar-light csi 功能正常运行，会有如下 log 产生。
@@ -115,11 +99,10 @@
     W (196125) wifi:<ba-add>idx:0 (ifx:0, 8c:aa:b5:b8:d7:d1), tid:0, ssn:0, winSize:64
     ```
 
-1. 打开腾讯连连小程序，打开 wifi-rader-light 主页的 Wi-Fi 雷达页面，设置 Wi-Fi 雷达数据来源为自定义，输入开发板的 STA 的 MAC 地址。
+1. 打开乐鑫连连小程序，打开 wifi-rader-light 主页的 Wi-Fi 雷达页面，设置 Wi-Fi 雷达数据来源为自定义，输入开发板的 STA 的 MAC 地址。
     <table>
         <tr>
-            <img src="../../docs/_static/9d0c9c80-2b71-4d96-a0b7-9a3aea0128bd.jpg" width=200>
-            <img src="../../docs/_static/wifi-radar-source.jpg" width=200>
+            <img src="../../docs/_static/0ffb1b8f-05d5-47db-bfb5-48d92dc53799.jpg" width=200>
         </tr>
     </table>
 
@@ -127,4 +110,9 @@
 
 1. 如何重置设备
 
-    重复开关 3 次即可重置设备，重新进入配网模式
+    重复开关 3 次即可重置设备，重新进入配网模式。或者乐鑫连连小程序里，长按设备图标，弹出对话框后点击重置设备。
+    <table>
+        <tr>
+            <img src="../../docs/_static/03ad08e0-5e56-470b-bcd2-f3ff3e0bba8e.jpg" width=200>
+        </tr>
+    </table>
