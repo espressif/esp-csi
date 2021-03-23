@@ -16,7 +16,7 @@
 #include "esp_qcloud_iothub.h"
 #include "esp_qcloud_prov.h"
 
-#include "esp_rader.h"
+#include "esp_radar.h"
 
 #include "light_driver.h"
 #include "qcloud_light.h"
@@ -30,8 +30,8 @@ static const char *TAG = "qcloud_light";
 static esp_err_t light_get_param(const char *id, esp_qcloud_param_val_t *val)
 {
     char tmp_buf[32] = {0};
-    wifi_rader_data_t wifi_rader_data = {0};
-    wifi_rader_get_data(&wifi_rader_data);
+    wifi_radar_data_t wifi_radar_data = {0};
+    wifi_radar_get_data(&wifi_radar_data);
 
     if (!strcmp(id, "power_switch")) {
         val->b = light_driver_get_switch();
@@ -44,22 +44,22 @@ static esp_err_t light_get_param(const char *id, esp_qcloud_param_val_t *val)
     } else if (!strcmp(id, "wifi_rader_data")) {
         val->s = "[]";
     } else if (!strcmp(id, "wifi_rader_adjust_threshold")) {
-        val->b = wifi_rader_data.threshold_adjust;
+        val->b = wifi_radar_data.threshold_adjust;
     } else if (!strcmp(id, "wifi_rader_human_move")) {
-        val->f = wifi_rader_data.move_relative_threshold;
+        val->f = wifi_radar_data.move_relative_threshold;
     } else if (!strcmp(id, "wifi_rader_human_detect")) {
-        val->f = wifi_rader_data.threshold_human_detect;
+        val->f = wifi_radar_data.threshold_human_detect;
     } else if (!strcmp(id, "wifi_rader_room_status")) {
-        val->b = wifi_rader_data.room_status;
+        val->b = wifi_radar_data.room_status;
     } else if (!strcmp(id, "wifi_rader_awake_count")) {
-        val->i = wifi_rader_data.awake_count;
+        val->i = wifi_radar_data.awake_count;
     } else if (!strcmp(id, "wifi_rader_status")) {
-        val->b = wifi_rader_data.status_enable;
+        val->b = wifi_radar_data.status_enable;
     } else if (!strcmp(id, "wifi_rader_data_mac")) {
         val->s = tmp_buf;
-        wifi_rader_config_t rader_config = {0};
-        esp_wifi_rader_get_config(&rader_config);
-        sprintf(tmp_buf, MACSTR, MAC2STR(rader_config.filter_mac));
+        wifi_radar_config_t radar_config = {0};
+        esp_wifi_radar_get_config(&radar_config);
+        sprintf(tmp_buf, MACSTR, MAC2STR(radar_config.filter_mac));
     } else if (!strcmp(id, "mac")) {
         val->s = tmp_buf;
         uint8_t mac[6];
@@ -81,8 +81,8 @@ static esp_err_t light_get_param(const char *id, esp_qcloud_param_val_t *val)
 static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *val)
 {
     esp_err_t err = ESP_OK;
-    wifi_rader_data_t wifi_rader_data = {0};
-    wifi_rader_get_data(&wifi_rader_data);
+    wifi_radar_data_t wifi_radar_data = {0};
+    wifi_radar_get_data(&wifi_radar_data);
 
     ESP_LOGI(TAG, "Received id: %s, val: %d", id, val->i);
 
@@ -95,41 +95,41 @@ static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *v
     } else if (!strcmp(id, "saturation")) {
         err = light_driver_set_saturation(val->i);
     } else if (!strcmp(id, "wifi_rader_adjust_threshold")) {
-        wifi_rader_data.threshold_adjust = val->b;
+        wifi_radar_data.threshold_adjust = val->b;
 
-        if (wifi_rader_data.threshold_adjust) {
-            wifi_rader_data.awake_count = 0;
+        if (wifi_radar_data.threshold_adjust) {
+            wifi_radar_data.awake_count = 0;
             light_driver_breath_start(255, 200, 0);
         } else {
-            wifi_rader_data.move_absolute_threshold += wifi_rader_data.move_absolute_threshold * 0.1;
-            wifi_rader_data.move_relative_threshold += wifi_rader_data.move_relative_threshold * 0.1;
-            wifi_rader_data.threshold_human_detect -= wifi_rader_data.threshold_human_detect * 0.1;
+            wifi_radar_data.move_absolute_threshold += wifi_radar_data.move_absolute_threshold * 0.1;
+            wifi_radar_data.move_relative_threshold += wifi_radar_data.move_relative_threshold * 0.1;
+            wifi_radar_data.threshold_human_detect -= wifi_radar_data.threshold_human_detect * 0.1;
             light_driver_breath_stop();
-            esp_qcloud_storage_set("move_absolute", &wifi_rader_data.move_absolute_threshold, sizeof(float));
-            esp_qcloud_storage_set("move_relative", &wifi_rader_data.move_relative_threshold, sizeof(float));
-            esp_qcloud_storage_set("human_detect", &wifi_rader_data.threshold_human_detect, sizeof(float));
+            esp_qcloud_storage_set("move_absolute", &wifi_radar_data.move_absolute_threshold, sizeof(float));
+            esp_qcloud_storage_set("move_relative", &wifi_radar_data.move_relative_threshold, sizeof(float));
+            esp_qcloud_storage_set("human_detect", &wifi_radar_data.threshold_human_detect, sizeof(float));
         }
     } else if (!strcmp(id, "wifi_rader_human_move")) {
-        wifi_rader_data.move_absolute_threshold = val->f;
-        esp_qcloud_storage_set("move_absolute", &wifi_rader_data.move_absolute_threshold, sizeof(float));
+        wifi_radar_data.move_absolute_threshold = val->f;
+        esp_qcloud_storage_set("move_absolute", &wifi_radar_data.move_absolute_threshold, sizeof(float));
     } else if (!strcmp(id, "wifi_rader_human_detect")) {
-        wifi_rader_data.threshold_human_detect = val->f;
-        esp_qcloud_storage_set("human_detect", &wifi_rader_data.threshold_human_detect, sizeof(float));
+        wifi_radar_data.threshold_human_detect = val->f;
+        esp_qcloud_storage_set("human_detect", &wifi_radar_data.threshold_human_detect, sizeof(float));
     } else if (!strcmp(id, "wifi_rader_status")) {
-        wifi_rader_data.status_enable = val->b;
+        wifi_radar_data.status_enable = val->b;
     } else if (!strcmp(id, "wifi_rader_data_mac")) {
-        wifi_rader_config_t rader_config = {0};
-        esp_wifi_rader_get_config(&rader_config);
-        mac_str2hex(val->s, rader_config.filter_mac);
-        esp_wifi_rader_set_config(&rader_config);
+        wifi_radar_config_t radar_config = {0};
+        esp_wifi_radar_get_config(&radar_config);
+        mac_str2hex(val->s, radar_config.filter_mac);
+        esp_wifi_radar_set_config(&radar_config);
 
-        esp_qcloud_storage_set("filter_mac", rader_config.filter_mac,
-                               sizeof(rader_config.filter_mac));
+        esp_qcloud_storage_set("filter_mac", radar_config.filter_mac,
+                               sizeof(radar_config.filter_mac));
     } else {
         ESP_LOGW(TAG, "This parameter is not supported");
     }
 
-    wifi_rader_set_data(&wifi_rader_data);
+    wifi_radar_set_data(&wifi_radar_data);
 
     return err;
 }
@@ -228,27 +228,27 @@ static esp_err_t get_wifi_config(wifi_config_t *wifi_cfg, uint32_t wait_ms)
 
 void qcloud_light_report_status(void *avg)
 {
-    wifi_rader_data_t wifi_rader_data = {0};
+    wifi_radar_data_t wifi_radar_data = {0};
 
-    wifi_rader_get_data(&wifi_rader_data);
+    wifi_radar_get_data(&wifi_radar_data);
 
-    if (!wifi_rader_data.awake_count) {
+    if (!wifi_radar_data.awake_count) {
         return;
     }
 
     esp_qcloud_method_t *report = esp_qcloud_iothub_create_report();
 
-    esp_qcloud_iothub_param_add_int(report, "wifi_rader_awake_count", wifi_rader_data.awake_count);
-    esp_qcloud_iothub_param_add_float(report, "wifi_rader_room_status", wifi_rader_data.room_status);
+    esp_qcloud_iothub_param_add_int(report, "wifi_rader_awake_count", wifi_radar_data.awake_count);
+    esp_qcloud_iothub_param_add_float(report, "wifi_rader_room_status", wifi_radar_data.room_status);
 
     esp_qcloud_iothub_post_method(report);
     esp_qcloud_iothub_destroy_report(report);
 
-    ESP_LOGW(TAG, "awake_count: %d", wifi_rader_data.awake_count);
+    ESP_LOGW(TAG, "awake_count: %d", wifi_radar_data.awake_count);
 
-    wifi_rader_data.awake_count = 0;
+    wifi_radar_data.awake_count = 0;
 
-    wifi_rader_set_data(&wifi_rader_data);
+    wifi_radar_set_data(&wifi_radar_data);
 }
 
 esp_err_t qcloud_light_init(void)
@@ -309,8 +309,8 @@ esp_err_t qcloud_light_init(void)
 
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_status", QCLOUD_VAL_TYPE_BOOLEAN));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_awake_count", QCLOUD_VAL_TYPE_INTEGER));
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_data", QCLOUD_VAL_TYPE_STRING));
-    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_data_mac", QCLOUD_VAL_TYPE_STRING));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_radar_data", QCLOUD_VAL_TYPE_STRING));
+    ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_radar_data_mac", QCLOUD_VAL_TYPE_STRING));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_adjust_threshold", QCLOUD_VAL_TYPE_BOOLEAN));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_human_move", QCLOUD_VAL_TYPE_FLOAT));
     ESP_ERROR_CHECK(esp_qcloud_device_add_property("wifi_rader_human_detect", QCLOUD_VAL_TYPE_FLOAT));

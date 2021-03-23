@@ -29,7 +29,7 @@ CSI is a physical layer characteristic.Compared with other indicators, CSI ampli
 
 ## 2 CSI Application
 
-### 2.1 Human activity detection and recognition
+### 2.1 Intruder detection
 
 Select high-sensitivity sub-carrier combinations and signals from non-line-of-sight path directions in different multipath propagation environments, thereby enhancing the sensitivity of passive person detection and expanding the detection range. This method can form "no blind spot" intruder detection in security applications. The multipath propagation characteristics of wireless signals indoors make wireless perception have natural advantages in sensing range and directionality.
 

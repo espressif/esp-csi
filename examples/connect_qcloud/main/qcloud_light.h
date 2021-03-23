@@ -30,11 +30,11 @@ typedef struct {
     };
 
     bool status_enable;
-} wifi_rader_data_t;
+} wifi_radar_data_t;
 
 esp_err_t qcloud_light_init(void);
 
 void qcloud_light_report_status(void *avg);
 
-esp_err_t wifi_rader_get_data(wifi_rader_data_t *data);
-esp_err_t wifi_rader_set_data(const wifi_rader_data_t *data);
+esp_err_t wifi_radar_get_data(wifi_radar_data_t *data);
+esp_err_t wifi_radar_set_data(const wifi_radar_data_t *data);
