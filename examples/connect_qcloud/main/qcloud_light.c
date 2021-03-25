@@ -29,8 +29,11 @@
 #define SUPPORT_HIGH_POWER 1
 #endif
 
+#define REPORT_TIME_CYCLE 100
+
 
 static const char *TAG = "qcloud_light";
+static xTimerHandle g_report_timer;
 
 /* Callback to handle commands received from the QCloud cloud */
 static esp_err_t light_get_param(const char *id, esp_qcloud_param_val_t *val)
@@ -83,6 +86,16 @@ static esp_err_t light_get_param(const char *id, esp_qcloud_param_val_t *val)
     return ESP_OK;
 }
 
+static void report_timer_cb(xTimerHandle timer)
+{
+    esp_err_t err = esp_qcloud_iothub_report_all_property();
+
+    if (err != ESP_OK) {
+        ESP_LOGW(TAG, "report all property failed, reason %s", esp_err_to_name(err));
+    }
+
+}
+
 /* Callback to handle commands received from the QCloud cloud */
 static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *val)
 {
@@ -91,6 +104,12 @@ static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *v
     wifi_radar_get_data(&wifi_radar_data);
 
     ESP_LOGI(TAG, "Received id: %s, val: %d", id, val->i);
+
+    if (! xTimerIsTimerActive(g_report_timer)) {
+        xTimerStart(g_report_timer, 0);
+    } else {
+        xTimerReset(g_report_timer, 0);
+    }
 
     if (!strcmp(id, "power_switch")) {
         err = light_driver_set_switch(val->b);
@@ -106,7 +125,7 @@ static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *v
         if (wifi_radar_data.threshold_adjust) {
             wifi_radar_data.awake_count = 0;
 #ifdef SUPPORT_HIGH_POWER
-            light_driver_set_hsv(0,0,100);
+            light_driver_set_hsv(0, 0, 100);
 #endif
             light_driver_breath_start(255, 200, 0);
         } else {
@@ -115,7 +134,7 @@ static esp_err_t light_set_param(const char *id, const esp_qcloud_param_val_t *v
             wifi_radar_data.threshold_human_detect -= wifi_radar_data.threshold_human_detect * 0.1;
             light_driver_breath_stop();
 #ifdef SUPPORT_HIGH_POWER
-            light_driver_set_ctb(50,100);
+            light_driver_set_ctb(50, 100);
 #endif
             esp_qcloud_storage_set("move_absolute", &wifi_radar_data.move_absolute_threshold, sizeof(float));
             esp_qcloud_storage_set("move_relative", &wifi_radar_data.move_relative_threshold, sizeof(float));
@@ -280,6 +299,12 @@ esp_err_t qcloud_light_init(void)
      * CONFIG_LOG_DEFAULT_LEVEL setting in menuconfig.
      */
     esp_log_level_set("*", ESP_LOG_VERBOSE);
+    g_report_timer = xTimerCreate("report_tim", pdMS_TO_TICKS(REPORT_TIME_CYCLE), pdFALSE, NULL, report_timer_cb);
+
+    if (!g_report_timer) {
+        return ESP_ERR_NO_MEM;
+    }
+
 
 #ifdef CONFIG_LIGHT_DEBUG
     ESP_ERROR_CHECK(esp_qcloud_console_init());
