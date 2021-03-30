@@ -89,7 +89,7 @@ menu "ESP QCloud Example Configuration"
 menu "Light provisioning network selection"
         config LIGHT_PROVISIONING_SMARTCONFIG
             bool "Enable SmartConfig's smart network configuration method"
-            default y
+            default n
             help
                 Enable SmartConfig's smart network configuration method
         

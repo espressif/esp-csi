@@ -26,9 +26,10 @@
 ## 软件准备
 
 1. 进入 example/connect_qcloud 目录，设置好您的 ESP-IDF 编译环境。
-1. 运行 idf.py menuconfig，进入 `ESP QCloud Mass Manufacture`，配置三元组信息。您可以直接填入三元组信息，或者烧录事先准备好的 fctry 分区 bin，更多信息参考：[QCloud 构建&烧录&运行工程](https://github.com/espressif/esp-qcloud#3-%E6%9E%84%E5%BB%BA%E7%83%A7%E5%BD%95%E8%BF%90%E8%A1%8C%E5%B7%A5%E7%A8%8B)。
+1. 运行 idf.py menuconfig，进入 `ESP QCloud Configuration`，配置三元组信息。更多信息参考：[QCloud 构建&烧录&运行工程](https://github.com/espressif/esp-qcloud#3-%E6%9E%84%E5%BB%BA%E7%83%A7%E5%BD%95%E8%BF%90%E8%A1%8C%E5%B7%A5%E7%A8%8B)。
     > [devices_list.csv](devices_list.csv)里准备了若干个三元组，您可以随机选择若干有效的三元组，烧录到测试设备里。这些三元组数据仅用于测试，可能会有冲突产生，请勿长期使用测试三元组。
 1. 编译并烧录 connect_qcloud 固件。
+    > 编译固件时需要使用[CMakeLists.txt](../../CMakeLists.txt)指定的 IDF commit id。否则可能无法编译成功。
 1. 进入 console_test 目录，编译一份 console_test 固件，并烧录到 ESP32 开发板备用[可选]。
 
 ## 开始使用
@@ -40,17 +41,19 @@
 
 1. 配网
     1. 月球灯处于黄色呼吸状态，代表是配网模式。
-    1. 微信搜索 “乐鑫连连” 小程序，点击小程序下发 “ + ” 号，扫描下方二维码开始配网。
+    1. 微信搜索 “ESP-CSI” 小程序，或者扫描下方小程序的二维码，打开小程序。
+        <img src="../../docs/_static/esp-csi-applets.jpg" width=200>
+    1. 点击小程序中央的 “扫码添加”，扫描下方二维码开始配网。**请勿扫描设备端串口输出的二维码**。
         <table>
             <tr>
-                <td><img src="../../docs/_static/57389a61-835b-45bb-a476-7b8102e7f87e.jpg" width=200</td>
-                <td><img src="../../docs/_static/1b5b4877-60b4-4e2f-8034-452b8ed39196.jpg" width=200</td>
-                <td><img src="../../docs/_static/a6294ee5-f4d1-4dc1-8bd8-004496d700c3.jpg" width=200</td>
+                <td><img src="../../docs/_static/57389a61-835b-45bb-a476-7b8102e7f87e.jpg" width=200>
+                <td><img src="../../docs/_static/1b5b4877-60b4-4e2f-8034-452b8ed39196.jpg" width=200>
+                <td><img src="../../docs/_static/a6294ee5-f4d1-4dc1-8bd8-004496d700c3.jpg" width=200>
             </tr>
         </table>
 
-1. 检查 wifi-rader-light 工作状态[可选]
-    1. 使用 micro-usb 线缆将 moonlight 接入 PC，查看串口输出。配完网后，如果 wifi-radar-light csi 功能正常运行，会有如下 log 产生。
+1. 检查设备是否能够正常工作[可选]
+    1. 使用 micro-usb 线缆将 moonlight 接入 PC，查看串口输出。配完网后，如果设备的 csi 功能正常运行，会有如下 log 产生。
 
         ```txt
         I (69900) esp_qcloud_iothub: property_callback, topic: $thing/down/property/AVGLQX7FYB/hf_moonlight_2, payload: {"method":"report_reply","clientToken":"hf_moonlight_2-82979","code":406,"status":"checkReportData fail"}
@@ -70,41 +73,29 @@
 
 1. 设置
 
-    1. 点击 wifi_rader_light 产品，进入详情页面
+    1. 点击小程序主页里设备列表里的设备，进入该设备的详情页面。
     1. 确认 Wi-Fi 雷达数据来源，默认情况下是路由器的 MAC 地址。
     1. 通过调整 Wi-Fi 雷达人体活动阈值，可以达到最佳效果（减小阈值提高灵敏度，但容易误触发，最优值取决与实际使用环境）
+        <table>
+            <tr>
+                <td><img src="../../docs/_static/7866858b-d8b8-4b39-9b49-3c621f6b5899.jpg" width=200>
+                <td><img src="../../docs/_static/wiif-radar-status.jpg" width=200>
+            </tr>
+        </table>
 
 ## 备选方案
 
 如果您的路由器提供的 CSI 数据无法满足 wifi-rader-light 需求，那么您可以使用以下的备选方案。原理是用 ESP32 开发板来提供 CSI 数据。wifi-rader-light 本身会同时处于 STA 和 AP 模式，AP 模式下默认的 ssid 是 “qcloud_csi_test”,没有密码。使用另一块开发板，然后连接到 wifi-rader-light 的 AP 上，并不停的发出 ping 包给 wifi-rader-light，此时，wifi-rader-light 就能获取到满足要求的 CSI，具体操作步骤如下：
 
-1. 取出烧录有 [console_test](../console_test) 固件的开发板，运行以下命令。
+1. 取出烧录有 [console_test](../console_test) 固件的开发板，依次运行以下命令。
 
     ```shell
-    csi> sta qcloud_csi_test
-    I (14155) wifi_cmd: sta connecting to 'qcloud_csi_test'
-    I (14155) wifi:mode : sta (40:f5:20:71:da:78)
-    I (14165) wifi:enable tsf
-    I (14535) wifi:new:<4,1>, old:<1,1>, ap:<255,255>, sta:<4,1>, prof:1
-    I (14535) wifi:state: init -> auth (b0)
-    I (14535) wifi:state: auth -> assoc (0)
-    I (14545) wifi:state: assoc -> run (10)
-    I (14555) wifi:connected with qcloud_csi_test, aid = 1, channel 4, 40U, bssid = 8c:aa:b5:b8:d7:d1
-    I (14555) wifi:security: Open Auth, phy: bgn, rssi: -45
-    I (14565) wifi:pm start, type: 
-    I (14565) wifi_cmd: Connected to qcloud_csi_test (bssid: 8c:aa:b5:b8:d7:d1, channel: 4)
-    I (14565) wifi:AP's beacon interval = 102400 us, DTIM period = 2
-    I (15605) esp_netif_handlers: sta ip: 192.168.4.2, mask: 255.255.255.0, gw: 192.168.4.1
-    csi> ping 192.168.4.1
-    W (196125) wifi:<ba-add>idx:0 (ifx:0, 8c:aa:b5:b8:d7:d1), tid:0, ssn:0, winSize:64
+    sta qcloud_csi_test # 连接到 qcloud_csi_test ap 上
+    ping 192.168.4.1 # 开始发 ping 包
     ```
 
-1. 打开乐鑫连连小程序，打开 wifi-rader-light 主页的 Wi-Fi 雷达页面，设置 Wi-Fi 雷达数据来源为自定义，输入开发板的 STA 的 MAC 地址。
-    <table>
-        <tr>
-            <img src="../../docs/_static/0ffb1b8f-05d5-47db-bfb5-48d92dc53799.jpg" width=200>
-        </tr>
-    </table>
+1. 打开乐鑫连连小程序，打开设备的 Wi-Fi 雷达页面，设置 Wi-Fi 雷达数据来源为自定义，然后输入开发板的 STA 的 MAC 地址。
+    <img src="../../docs/_static/0ffb1b8f-05d5-47db-bfb5-48d92dc53799.jpg" width=200>
 
 ## 常见问题
 
@@ -116,3 +107,7 @@
             <img src="../../docs/_static/03ad08e0-5e56-470b-bcd2-f3ff3e0bba8e.jpg" width=200>
         </tr>
     </table>
+
+1. 设备反复打印 `wifi:unknown csi bug!`.
+
+    这是一个已知问题，可以使用备选方案，然后忽略这些打印。或者尝试更换路由器后在进行测试。
