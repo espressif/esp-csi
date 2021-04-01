@@ -1,0 +1,131 @@
+menu "ESP QCloud Example Configuration"
+    menu "Light development board selection "
+        choice LIGHT_TYPE
+            prompt "light hardware type"
+            default LIGHT_TYPE_MOONLIGHT
+            help
+                Choose different types of lamp development boards.
+    
+            config LIGHT_TYPE_MOONLIGHT
+                bool "ESP32 moonlight"
+            config LIGHT_TYPE_MESHKIT
+                bool "ESP32-MeshKit Light"
+            config LIGHT_TYPE_C3_lighting
+                bool "ESP32-C3 Light"
+            config LIGHT_TYPE_S2_lighting
+                bool "ESP32-S2 Light"
+            config LIGHT_TYPE_CUSTOM
+                bool "Custom"
+        endchoice
+
+        config LIGHT_GPIO_RED
+            int "Light red pin GPIO number"
+            depends on LIGHT_TYPE_CUSTOM
+            range 0 46
+            default 25
+            help
+                There are more enumerations like that
+                up to GPIO39, excluding GPIO20, GPIO24 and GPIO28..31.
+                They are not shown here to reduce redundant information.
+                @note GPIO34..39 are input mode only.
+        
+        config LIGHT_GPIO_GREEN
+            int "Light green pin GPIO number"
+            depends on LIGHT_TYPE_CUSTOM
+            range 0 46
+            default 26
+            help
+                There are more enumerations like that
+                up to GPIO39, excluding GPIO20, GPIO24 and GPIO28..31.
+                They are not shown here to reduce redundant information.
+                @note GPIO34..39 are input mode only.
+        
+        config LIGHT_GPIO_BLUE
+            int "Light blue pin GPIO number"
+            depends on LIGHT_TYPE_CUSTOM
+            range 0 46
+            default 27
+            help
+                There are more enumerations like that
+                up to GPIO39, excluding GPIO20, GPIO24 and GPIO28..31.
+                They are not shown here to reduce redundant information.
+                @note GPIO34..39 are input mode only.
+        
+        config LIGHT_GPIO_COLD
+            int "Light cold color pin GPIO number"
+            depends on LIGHT_TYPE_CUSTOM
+            range 0 46
+            default 23
+            help
+                There are more enumerations like that
+                up to GPIO39, excluding GPIO20, GPIO24 and GPIO28..31.
+                They are not shown here to reduce redundant information.
+                @note GPIO34..39 are input mode only.
+        
+        config LIGHT_GPIO_WARM
+            int "Light warm color pin GPIO number"
+            depends on LIGHT_TYPE_CUSTOM
+            range 0 46
+            default 19
+            help
+                There are more enumerations like that
+                up to GPIO39, excluding GPIO20, GPIO24 and GPIO28..31.
+                They are not shown here to reduce redundant information.
+                @note GPIO34..39 are input mode only.
+        
+        config LIGHT_FADE_PERIOD_MS
+            int "The time from the current color to the next color"
+            default 500
+            help
+                The time from the current color to the next color.
+        
+        config LIGHT_BLINK_PERIOD_MS
+            int "Period of blinking lights"
+            default 3000
+            help
+                Period of blinking lights.
+    endmenu
+
+menu "Light provisioning network selection"
+        config LIGHT_PROVISIONING_SMARTCONFIG
+            bool "Enable SmartConfig's smart network configuration method"
+            default n
+            help
+                Enable SmartConfig's smart network configuration method
+        
+        config LIGHT_PROVISIONING_SOFTAPCONFIG
+            bool "Enable SoftAP's network configuration method"
+            default y
+            help
+                "Enable SoftAP's network configuration method"
+
+        config LIGHT_PROVISIONING_SOFTAPCONFIG_SSID
+            depends on LIGHT_PROVISIONING_SOFTAPCONFIG
+            string "SoftAP ssid"
+            default "tcloud_XXX"
+            help
+                SSID (network name) for the phone to connect to.
+
+        config LIGHT_PROVISIONING_SOFTAPCONFIG_PASSWORD
+            depends on LIGHT_PROVISIONING_SOFTAPCONFIG
+            string "SoftAP password"
+            default ""
+            help
+                WiFi password (WPA or WPA2) for the example to use.
+                Can be left blank if the network has no security set.
+    endmenu
+
+    config LIGHT_REBOOT_UNBROKEN_COUNT_RESET
+        int "More than this number of continuous uninterrupted restarts triggers a reset of the device"
+        range 3 15
+        default 5
+        help
+            Devices without buttons trigger a device reset through continuous restart.
+
+    config LIGHT_DEBUG
+        bool "The device will be in debug mode"
+        default n
+        help
+            Debug mode device performance is only used during development.
+
+endmenu
