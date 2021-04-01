@@ -4,7 +4,9 @@
 
 ## 简介
 
-这是一个人体运动感应的示例，命名为 Wi-Fi 雷达，可以运行在[ESP32-Moonlight 开发板上](https://docs.espressif.com/projects/espressif-esp-moonlight/zh_CN/latest/introduction.html#id2)。当有人运动后，灯会亮起，无人运动后，灯会自行熄灭。在该示例中，您可以通过乐鑫连连小程序查看 Wi-Fi 雷达运行状态，调整运行参数，同时也可以直接控制灯光状态。如下：
+这是一个人体运动感应的示例，命名为 Wi-Fi 雷达，可以运行在[ESP32-Moonlight 开发板上](https://docs.espressif.com/projects/espressif-esp-moonlight/zh_CN/latest/introduction.html#id2)。当有人运动后，灯会亮起，无人运动后，灯会自行熄灭。在该示例中，您可以通过 ESP-CSI 小程序查看 Wi-Fi 雷达运行状态，调整运行参数，同时也可以直接控制灯光状态。如下：
+
+> ESP-CSI 小程序源码已开源，您可以将其应用在自己的产品里。点击 [ESP-CSI-WeChat](https://github.com/EspressifApps/ESP-CSI-WeChat) 跳转到小程序源码。
 
 <table>
     <tr>
@@ -94,14 +96,14 @@
     ping 192.168.4.1 # 开始发 ping 包
     ```
 
-1. 打开乐鑫连连小程序，打开设备的 Wi-Fi 雷达页面，设置 Wi-Fi 雷达数据来源为自定义，然后输入开发板的 STA 的 MAC 地址。
+1. 打开 ESP-CSI 小程序，打开设备的 Wi-Fi 雷达页面，设置 Wi-Fi 雷达数据来源为自定义，然后输入开发板的 STA 的 MAC 地址。
     <img src="../../docs/_static/0ffb1b8f-05d5-47db-bfb5-48d92dc53799.jpg" width=200>
 
 ## 常见问题
 
 1. 如何重置设备
 
-    重复开关 3 次即可重置设备，重新进入配网模式。或者乐鑫连连小程序里，长按设备图标，弹出对话框后点击重置设备。
+    重复开关 3 次即可重置设备，重新进入配网模式。或者 ESP-CSI 小程序里，长按设备图标，弹出对话框后点击重置设备。
     <table>
         <tr>
             <img src="../../docs/_static/03ad08e0-5e56-470b-bcd2-f3ff3e0bba8e.jpg" width=200>
