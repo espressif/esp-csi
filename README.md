@@ -75,18 +75,18 @@ The Getting Started project can be found in the [examples/console_test](./exampl
 - **Disadvantages:** In addition to the ordinary ESP32, it is also necessary to add a special package issuing equipment, the cost is the same and higher.
 - **Applicable scenarios:** Suitable for scenarios that require high accuracy and multi-device cluster positioning.
 
-## 5  note
+## 5 Note
 
 1. The effect of external IPEX antenna is better than PCB antenna, PCB antenna has directivity.
 2. Test in an unmanned environment. Avoid the influence of other people's activities on test results.
 
-## 6 related resources
+## 6 Related resources
 
 - [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/index.html) is the documentation for the Espressif IoT development framework.
 - [ESP-WIFI-CSI Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/wifi.html#wi-fi-channel-state-information) is the use of ESP-WIFI-CSI Description.
 - If you find a bug or have a feature request, you can submit it on [Issues](https://github.com/espressif/esp-csi/issues) on GitHub. Please check to see if your question already exists in the existing Issues before submitting it.
 
-## reference
+## Reference
 
 * [1]杨 铮，刘云浩.Wi-Fi雷达：从RSSI到CSI[J].中国计算机学会通讯,2014年11月,10(11):55-60.
 * [2]谈青青.基于 Wi-Fi 的被动式室内入侵检测与定位技术研究[D].南京:南京邮电大学,2019年4月.
