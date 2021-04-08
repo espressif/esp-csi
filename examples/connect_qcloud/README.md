@@ -1,4 +1,6 @@
-# CSI Demo Example(Wi-Fi 雷达)
+# CSI Demo Example(Wi-Fi radar)
+
+> The CSI demo example and mobile App are currently available for the Chinese market only. We will release internationally after developing web side. Thanks for your keen interest in ESP-WIFI-CSI.
 
 (See the [README.md](../../README.md) file directory for more information about examples.)
 
@@ -44,7 +46,12 @@
 1. 配网
     1. 月球灯处于黄色呼吸状态，代表是配网模式。
     1. 微信搜索 “ESP-CSI” 小程序，或者扫描下方小程序的二维码，打开小程序。
-        <img src="../../docs/_static/esp-csi-applets.jpg" width=200>
+        <table>
+            <tr>
+            <td><img src="../../docs/_static/esp-csi-applets.jpg" width=200>
+            </tr>
+        </table>
+        
     1. 点击小程序中央的 “扫码添加”，扫描下方二维码开始配网。**请勿扫描设备端串口输出的二维码**。
         <table>
             <tr>
