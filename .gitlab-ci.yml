@@ -17,6 +17,7 @@ before_script:
   - ./install.sh
   - . ./export.sh
   - cd -
+  - git submodule update --init --recursive
 
 build_template_cmake: &build_template
   stage: build
