@@ -6,52 +6,28 @@ variables:
   BATCH_BUILD: "1"
   V: "0"
   MAKEFLAGS: "-j5 --no-keep-going"
-  IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+  ESPNOW_PATH: "$CI_PROJECT_DIR"
   IDF_CI_BUILD: "1"
 
 before_script:
-  # add gitlab ssh key
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
-  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-  - git --version
+  - cd $IDF_PATH
+  - git checkout release/v4.4
+  - git pull
   - git submodule update --init --recursive
-  - git clone --recursive --branch master $GITLAB_SSH_SERVER/espressif/esp-idf.git
-  - export PATH="$IDF_PATH/tools:$PATH"
-  - cd esp-idf
-  - git checkout 6e776946d01ec0d081d09000c36d23ec1d318c06
-  - git submodule update --init --recursive
-  - source tools/ci/setup_python.sh
-  - source tools/ci/configure_ci_environment.sh
-  - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
-  - cd ..
+  - ./install.sh
+  - . ./export.sh
+  - cd -
 
-.build_examples_template: &build_examples_template
+build_template_cmake: &build_template
   stage: build
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  image: espressif/idf:release-v4.4
   tags:
     - build
-  # Artifacts are not used temporarily
-  # artifacts:
-  #   when: always
-  #   paths:
-  #     - $LOG_PATH
-  #   expire_in: 1 week
-  # variables:
-  #   LOG_PATH: "$CI_PROJECT_DIR/log_examples"
-
-# build_demo_make:
-#   <<: *build_examples_template
-#   script:
-#     - cd examples/led_light
-#     - make defconfig && make -j5
-#     - cd ../../
-
-build_demo_cmake:
-  <<: *build_examples_template
+  variables:
+    ARTIFACTS_NAME: "default"
+    DEFAULT_CONFIG: ""
+    BATCH_BUILD: "1"
+    V: "0"
   script:
     - cd examples/console_test
     - idf.py set-target esp32
@@ -64,34 +40,15 @@ build_demo_cmake:
     - idf.py build
     - cd ../../
 
-# build_docs:
-#     stage: build
-#     image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
-#     tags:
-#         - build_docs
-#     artifacts:
-#         when: always
-#         paths:
-#             # English version of documentation
-#             - docs/en/sphinx-warning-log.txt
-#             - docs/en/_build/html
-#             # Chinese version of documentation
-#             - docs/zh_CN/sphinx-warning-log.txt
-#             - docs/zh_CN/_build/html
-#         expire_in: 1 week
-#     before_script:
-#       - echo "skip default before_script"
-#     script:
-#       - cd docs
-#       # make English version of documentation
-#       - cd en/
-#       - make clean && make html
-#       - cd ../
-#       # make Chinese version of documentation
-#       - cd zh_CN/
-#       - make clean && make html
-#       - cd ../
+    - cd examples/get-started/csi_send
+    - idf.py set-target esp32-c3
+    - idf.py build
+    - cd ../../../
 
+    - cd examples/get-started/csi_recv
+    - idf.py set-target esp32-c3
+    - idf.py build
+    - cd ../../../
 
 push_master_to_github:
   stage: deploy
