@@ -62,7 +62,7 @@ if __name__ == '__main__':
         csi_raw_data = json.loads(csi['data'])
         for y in range(0, len(csi_raw_data), 2):
             array_csi[x][y //
-                         2] = complex(csi_raw_data[y], csi_raw_data[y + 1])
+                         2] = complex(csi_raw_data[y + 1], csi_raw_data[y])
 
     array_csi_modulus = abs(array_csi)
     columns = [f"subcarrier{i}" for i in range(0, size_y)]
