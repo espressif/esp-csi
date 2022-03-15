@@ -28,7 +28,7 @@ In order to ensure the perception effect of CSI, please do your best to meet the
     # csi_recv
     cd esp-csi/examples/get-started/csi_recv
     idf.py set-target esp32c3
-    idf.py flash -b 921600 -p /dev/ttyUSB1 monitor
+    idf.py flash -b 921600 -p /dev/ttyUSB1
     ```
 
 2. Run `csi_data_read_parse.py` in `csi_recv` for data analysis, Please close `idf.py monitor` before running
@@ -37,7 +37,7 @@ In order to ensure the perception effect of CSI, please do your best to meet the
     cd esp-csi-gitlab/examples/get-started/tools
 
     # Install python related dependencies
-    pip install -r requirement.txt
+    pip install -r requirements.txt
 
     # Graphical display
     python csi_data_read_parse.py -p /dev/ttyUSB1

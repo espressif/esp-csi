@@ -42,25 +42,26 @@ import time
 
 # Remove invalid subcarriers
 csi_vaid_subcarrier_index = []
-csi_vaid_subcarrier_index += [i for i in range(4, 27)]    # 23  red
-csi_vaid_subcarrier_index += [i for i in range(39, 60)]   # 21  green
-csi_vaid_subcarrier_index += [i for i in range(68, 90)]   # 22  blue
-csi_vaid_subcarrier_index += [i for i in range(101, 124)] # 23  White
+csi_vaid_subcarrier_index += [i for i in range(4, 27)]     # 23  red
+csi_vaid_subcarrier_index += [i for i in range(39, 60)]    # 21  green
+csi_vaid_subcarrier_index += [i for i in range(68, 90)]    # 22  blue
+csi_vaid_subcarrier_index += [i for i in range(101, 124)]  # 23  White
 
-CSI_DATA_INDEX     = 200 # buffer size
-CSI_DATA_COLUMNS   = len(csi_vaid_subcarrier_index)
-DATA_COLUMNS_NAMES = ["type","id","mac","rssi","rate","sig_mode","mcs","bandwidth","smoothing","not_sounding","aggregation","stbc","fec_coding","sgi","noise_floor","ampdu_cnt","channel","secondary_channel","local_timestamp","ant","sig_len","rx_state","len","first_word","data"]
-csi_data_array = np.zeros([CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.complex64)
+CSI_DATA_INDEX = 200  # buffer size
+CSI_DATA_COLUMNS = len(csi_vaid_subcarrier_index)
+DATA_COLUMNS_NAMES = ["type", "id", "mac", "rssi", "rate", "sig_mode", "mcs", "bandwidth", "smoothing", "not_sounding", "aggregation", "stbc", "fec_coding",
+                      "sgi", "noise_floor", "ampdu_cnt", "channel", "secondary_channel", "local_timestamp", "ant", "sig_len", "rx_state", "len", "first_word", "data"]
+csi_data_array = np.zeros(
+    [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.complex64)
 
 
 class csi_data_graphical_window(QWidget):
     def __init__(self):
         super().__init__()
 
-        # self.showFullScreen()
         self.resize(1280, 720)
         self.plotWidget_ted = PlotWidget(self)
-        self.plotWidget_ted.setGeometry(QtCore.QRect(0,0,1280,720))
+        self.plotWidget_ted.setGeometry(QtCore.QRect(0, 0, 1280, 720))
 
         self.plotWidget_ted.setYRange(-20, 100)
         self.plotWidget_ted.addLegend()
@@ -70,8 +71,8 @@ class csi_data_graphical_window(QWidget):
 
         for i in range(CSI_DATA_COLUMNS):
             r = 0
-            g = 0;
-            b = 0;
+            g = 0
+            b = 0
 
             if i < 23:
                 r = i * 8 + 55
@@ -84,7 +85,8 @@ class csi_data_graphical_window(QWidget):
                 g = (i - (23 + 22 + 21)) * 8 + 55
                 b = (i - (23 + 22 + 21)) * 8 + 55
 
-            curve = self.plotWidget_ted.plot(self.csi_phase_array[:, i], name=str(i), pen=(r, g, b))
+            curve = self.plotWidget_ted.plot(
+                self.csi_phase_array[:, i], name=str(i), pen=(r, g, b))
             self.curve_list.append(curve)
 
         self.timer = pq.QtCore.QTimer()
@@ -99,7 +101,8 @@ class csi_data_graphical_window(QWidget):
 
 
 def csi_data_read_parse(port: str, csv_writer):
-    ser = serial.Serial(port=port, baudrate=921600, bytesize=8, parity='N', stopbits=1)
+    ser = serial.Serial(port=port, baudrate=921600,
+                        bytesize=8, parity='N', stopbits=1)
     if ser.isOpen():
         print("open success")
     else:
@@ -140,24 +143,27 @@ def csi_data_read_parse(port: str, csv_writer):
         csi_data_array[:-1] = csi_data_array[1:]
 
         for i in range(CSI_DATA_COLUMNS):
-            csi_data_array[-1][i] = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2], csi_raw_data[csi_vaid_subcarrier_index[i] * 2 - 1])
+            csi_data_array[-1][i] = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2],
+                                            csi_raw_data[csi_vaid_subcarrier_index[i] * 2 - 1])
 
     ser.close()
     return
 
 
-class SubThread (QThread):  
+class SubThread (QThread):
     def __init__(self, serial_port, save_file_name):
         super().__init__()
         self.serial_port = serial_port
-        
+
         save_file_fd = open(save_file_name, 'w')
         self.csv_writer = csv.writer(save_file_fd)
         self.csv_writer.writerow(DATA_COLUMNS_NAMES)
-    def run(self):                
+
+    def run(self):
         csi_data_read_parse(self.serial_port, self.csv_writer)
+
     def __del__(self):
-        self.wait() 
+        self.wait()
 
 
 if __name__ == '__main__':
@@ -165,18 +171,21 @@ if __name__ == '__main__':
         print(" Python version should >= 3.6")
         exit()
 
-    parser = argparse.ArgumentParser(description="Read CSI data from serial port and display it graphically")
+    parser = argparse.ArgumentParser(
+        description="Read CSI data from serial port and display it graphically")
     parser.add_argument('-p', '--port', dest='port', action='store', required=True,
                         help="Serial port number of csv_recv device")
+    parser.add_argument('-s', '--store', dest='store_file', action='store', default='./csi_data.csv',
+                        help="Save the data printed by the serial port to a file")
+
     args = parser.parse_args()
     serial_port = args.port
+    file_name = args.store_file
 
     app = QApplication(sys.argv)
 
-    subthread = SubThread(serial_port, "./csi_data.csv")
+    subthread = SubThread(serial_port, file_name)
     subthread.start()
-
-    time.sleep(1)
 
     window = csi_data_graphical_window()
     window.show()
