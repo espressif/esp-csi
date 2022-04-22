@@ -61,8 +61,3 @@ In order to ensure the perception effect of CSI, please do your best to meet the
     ````
 - **Reason**: PYQT takes up a lot of CPU when drawing, causing the PC to be unable to read the serial port buffer queue in time, resulting in data confusion
 - **Solution**: Advance the baud rate of the serial port
-
-### 3. Interface changes slowly
-- **Phenomenon**: CSI display interface does not update at 100Hz
-- **Reason**: Improper use of the function during PYQT5 processing
-- **Solved**: After zooming in and out, the interface will return to normal. If you find the cause of the bug, please report it
