@@ -40,12 +40,27 @@ import pyqtgraph as pq
 import threading
 import time
 
+CSI_VAID_SUBCARRIER_INTERVAL = 3
+
 # Remove invalid subcarriers
+# secondary channel : below, HT, 40 MHz, non STBC, v, HT-LFT: 0~63, -64~-1, 384
 csi_vaid_subcarrier_index = []
-csi_vaid_subcarrier_index += [i for i in range(4, 27)]     # 23  red
-csi_vaid_subcarrier_index += [i for i in range(39, 60)]    # 21  green
-csi_vaid_subcarrier_index += [i for i in range(68, 90)]    # 22  blue
-csi_vaid_subcarrier_index += [i for i in range(101, 124)]  # 23  White
+csi_vaid_subcarrier_color = []
+color_step = 255 // (28 // CSI_VAID_SUBCARRIER_INTERVAL + 1)
+
+# LLTF: 52
+csi_vaid_subcarrier_index += [i for i in range(6, 32, CSI_VAID_SUBCARRIER_INTERVAL)]     # 26  red
+csi_vaid_subcarrier_color += [(i * color_step, 0, 0) for i in range(1,  26 // CSI_VAID_SUBCARRIER_INTERVAL + 2)]
+csi_vaid_subcarrier_index += [i for i in range(33, 59, CSI_VAID_SUBCARRIER_INTERVAL)]    # 26  green
+csi_vaid_subcarrier_color += [(0, i * color_step, 0) for i in range(1,  26 // CSI_VAID_SUBCARRIER_INTERVAL + 2)]
+
+# HT-LFT: 56 + 56
+csi_vaid_subcarrier_index += [i for i in range(66, 94, CSI_VAID_SUBCARRIER_INTERVAL)]    # 28  blue
+csi_vaid_subcarrier_color += [(0, 0, i * color_step) for i in range(1,  28 // CSI_VAID_SUBCARRIER_INTERVAL + 2)]
+csi_vaid_subcarrier_index += [i for i in range(95, 123, CSI_VAID_SUBCARRIER_INTERVAL)]   # 28  White
+csi_vaid_subcarrier_color += [(i * color_step, i * color_step, i * color_step) for i in range(1,  28 // CSI_VAID_SUBCARRIER_INTERVAL + 2)]
+# csi_vaid_subcarrier_index += [i for i in range(124, 162)]  # 28  White
+# csi_vaid_subcarrier_index += [i for i in range(163, 191)]  # 28  White
 
 CSI_DATA_INDEX = 200  # buffer size
 CSI_DATA_COLUMNS = len(csi_vaid_subcarrier_index)
@@ -53,7 +68,6 @@ DATA_COLUMNS_NAMES = ["type", "id", "mac", "rssi", "rate", "sig_mode", "mcs", "b
                       "sgi", "noise_floor", "ampdu_cnt", "channel", "secondary_channel", "local_timestamp", "ant", "sig_len", "rx_state", "len", "first_word", "data"]
 csi_data_array = np.zeros(
     [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.complex64)
-
 
 class csi_data_graphical_window(QWidget):
     def __init__(self):
@@ -69,24 +83,12 @@ class csi_data_graphical_window(QWidget):
         self.csi_phase_array = np.abs(csi_data_array)
         self.curve_list = []
 
+        print(f"csi_vaid_subcarrier_color, len: {len(csi_vaid_subcarrier_color)}, {csi_vaid_subcarrier_color}")
+        print(CSI_DATA_COLUMNS)
+
         for i in range(CSI_DATA_COLUMNS):
-            r = 0
-            g = 0
-            b = 0
-
-            if i < 23:
-                r = i * 8 + 55
-            elif i < 23 + 21:
-                g = (i - 23) * 8 + 55
-            elif i < 23 + 21 + 22:
-                b = (i - (23 + 21)) * 8 + 40
-            else:
-                r = (i - (23 + 22 + 21)) * 8 + 55
-                g = (i - (23 + 22 + 21)) * 8 + 55
-                b = (i - (23 + 22 + 21)) * 8 + 55
-
             curve = self.plotWidget_ted.plot(
-                self.csi_phase_array[:, i], name=str(i), pen=(r, g, b))
+                self.csi_phase_array[:, i], name=str(i), pen=csi_vaid_subcarrier_color[i])
             self.curve_list.append(curve)
 
         self.timer = pq.QtCore.QTimer()
@@ -133,8 +135,8 @@ def csi_data_read_parse(port: str, csv_writer):
             print(f"data is not incomplete")
             continue
 
-        if len(csi_raw_data) != 256:
-            print("element number is not equal")
+        if len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
+            print(f"element number is not equal: {len(csi_raw_data)}")
             continue
 
         csv_writer.writerow(csi_data)
