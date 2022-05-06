@@ -31,14 +31,23 @@ extern "C"
   *
   */
 typedef struct {
-    uint32_t time_start;     /**< Start time detection. unit: microsecond */
-    uint32_t time_end;       /**< Stop time detection. unit: microsecond */
-    int8_t rssi_avg;         /**< Received Signal Strength Indicator(RSSI) of packet. unit: dBm */
-    float rssi_std;          /**< Received Signal Strength Indicator(RSSI) of packet. unit: dBm */
-    float amplitude_corr[3]; /**< Average value between sub-carriers */
-    float amplitude_std[3];  /**< Standard deviation between sub-carriers. 
-                                  Subcarrier: lltf(6 ~ 31,33 ~ 58), htltf(66 ~ 122), stbc_htltf(123 ~ 191)*/
+    uint32_t time_spent;
+    float amplitude_corr;
+    float amplitude_corr_min;
+    float amplitude_corr_max;
 } wifi_radar_info_t;
+
+#define CSI_LLFT_LEN           52
+#define CSI_HT_LFT_LEN         56
+#define CSI_STBC_HT_LFT_LEN    56
+typedef struct {
+    wifi_pkt_rx_ctrl_t rx_ctrl; /**< received packet radio metadata header of the CSI data */
+    uint8_t mac[6];             /**< source MAC address of the CSI data */
+    uint16_t raw_len;
+    int8_t *raw_data;
+    int16_t valid_len;
+    int8_t valid_data[0];
+} wifi_csi_filtered_info_t;
 
 /**
   * @brief The RX callback function of Wi-Fi radar data.
@@ -51,6 +60,9 @@ typedef struct {
   */
 typedef void (*wifi_radar_cb_t)(const wifi_radar_info_t *info, void *ctx);
 
+
+typedef void (*wifi_csi_filtered_cb_t)(const wifi_csi_filtered_info_t *info, void *ctx);
+
 /**
   * @brief Wi-Fi radar configuration type
   */
@@ -58,9 +70,9 @@ typedef struct {
     uint8_t filter_mac[6];                 /**< Get the mac of the specified device, no filtering: [0xff:0xff:0xff:0xff:0xff:0xff] */
     uint16_t filter_len;                   /**< source MAC address of the CSI data, no filtering: 0 */
     wifi_radar_cb_t wifi_radar_cb;         /**< Register the callback function of Wi-Fi radar data */
-    wifi_radar_cb_t wifi_radar_cb_ctx;     /**< Context argument, passed to callback function of Wi-Fi radar */
-    wifi_csi_cb_t wifi_csi_raw_cb;         /**< Register the callback function of Wi-Fi CSI data */
-    wifi_radar_cb_t wifi_csi_cb_ctx;       /**< Context argument, passed to callback function of Wi-Fi CSI */
+    void *wifi_radar_cb_ctx;               /**< Context argument, passed to callback function of Wi-Fi radar */
+    wifi_csi_filtered_cb_t wifi_csi_filtered_cb;         /**< Register the callback function of Wi-Fi CSI data */
+    void *wifi_csi_cb_ctx;                 /**< Context argument, passed to callback function of Wi-Fi CSI */
     wifi_promiscuous_cb_t wifi_sniffer_cb; /**< The RX callback function in the promiscuous mode */
 } wifi_radar_config_t;
 
@@ -121,6 +133,31 @@ esp_err_t esp_wifi_radar_init(void);
   *    - ESP_FAIL
   */
 esp_err_t esp_wifi_radar_deinit(void);
+
+
+typedef enum {
+    RADAR_ACTION_UNKNOWN, 
+    RADAR_ACTION_NONE, 
+    RADAR_ACTION_SOMEONE, 
+    RADAR_ACTION_STATIC, 
+    RADAR_ACTION_MOVE, 
+    RADAR_ACTION_FRONT, 
+    RADAR_ACTION_AFTER, 
+    RADAR_ACTION_LEFT, 
+    RADAR_ACTION_RIGHT, 
+    RADAR_ACTION_GO,
+    RADAR_ACTION_JUMP, 
+    RADAR_ACTION_SITDOWN, 
+    RADAR_ACTION_STANDUP,
+    RADAR_ACTION_CLIMBUP, 
+    RADAR_ACTION_WAVE, 
+    RADAR_ACTION_APPLAUSE,
+    RADAR_ACTION_NUM,
+} radar_action_type_t;
+
+esp_err_t esp_radar_action_calibrate_start(radar_action_type_t action);
+
+esp_err_t esp_radar_action_calibrate_stop(radar_action_type_t action);
 
 #ifdef __cplusplus
 }

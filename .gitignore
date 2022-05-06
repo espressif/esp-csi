@@ -19,7 +19,6 @@
 
 # Libraries
 *.lib
-*.a
 *.la
 *.lo
 
@@ -71,6 +70,8 @@ dkms.conf
 **/sdkconfig.old
 **/build
 **/*.bin
+**/log
+**/data
 
 # node_modules
 docs/docusaurus/website/node_modules
