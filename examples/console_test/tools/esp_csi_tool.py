@@ -353,9 +353,13 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         # self.textBrowser_log.moveCursor(self.textBrowser_log.textCursor().End)
 
     def closeEvent(self, event):
+        self.serial_queue_write.put("exit")
+        time.sleep(0.5)
+
         event.accept()
+
         try:
-            os._exit(5) 
+            os._exit(0)
         except Exception as e:
             print(f"GUI closeEvent: {e}")
 
@@ -444,17 +448,18 @@ class DataHandleThread(QThread):
 def serial_handle(queue_read, queue_write, port):
     try:
         ser = serial.Serial(port=port, baudrate=921600,
-                    bytesize=8, parity='N', stopbits=1)
+                    bytesize=8, parity='N', stopbits=1, timeout=0.1)
     except Exception as e:
         print(f"serial_handle: {e}")
         data_series = pd.Series(index = ['type', 'data'],
-                                data= ['FAIL_EVENT',"Failed to open serial port"])
+                                data = ['FAIL_EVENT',"Failed to open serial port"])
         queue_read.put(data_series)
         sys.exit()
         return
 
+    print("open serial port: ", port)
+
     # Wait a second to let the port initialize
-    time.sleep(0.5)
     ser.flushInput()
 
     folder_list = ['log', 'data']
@@ -477,27 +482,31 @@ def serial_handle(queue_read, queue_write, port):
     log_data_writer = open("log/log_data.txt", 'w+')
     action_data_writer = 'null'
     action_last = '0'
+    action_id_last = '0'
 
     while True:
         if not queue_write.empty():
             command = queue_write.get()
+            if command == "exit":
+                sys.exit()
+
             command = command + "\r\n"
-            print("queue write: ", command)
-            ser.write(command.encode('utf-8')) 
+            print("serial write: ", command)
+            ser.write(command.encode('utf-8'))
 
         try:
             strings = str(ser.readline())
+
+            if not strings:
+               continue
         except Exception as e:
             data_series = pd.Series(index = ['type', 'data'],
                                     data  = ['FAIL_EVENT',"Failed to read serial"])
             queue_read.put(data_series)
             sys.exit()
 
-        if not strings:
-           continue
-
         strings = strings.lstrip('b\'').rstrip('\\r\\n\'')
-        
+
         for data_valid in data_valid_list.iloc:
             index = strings.find(data_valid['type'])
             if index >= 0:
@@ -520,7 +529,7 @@ def serial_handle(queue_read, queue_write, port):
                             break
 
                         if data_series['action'] != '0':
-                            if data_series['action'] != action_last:
+                            if data_series['action'] != action_last or data_series['action_id'] != action_id_last:
                                 folder = f"data/{CSI_DATA_ACTIONS[int(data_series['action'])]}"
                                 if not path.exists(folder):
                                     mkdir(folder)
@@ -532,6 +541,7 @@ def serial_handle(queue_read, queue_write, port):
                             action_data_writer.writerow(csi_raw_data)
 
                         action_last = data_series['action']
+                        action_id_last = data_series['action_id']
 
                     if queue_read.full():
                         # print('============== queue_full ==========')
@@ -578,24 +588,20 @@ if __name__ == '__main__':
     signal_key.signal(signal_key.SIGINT, quit)                                
     signal_key.signal(signal_key.SIGTERM, quit)
 
-    try:
-        serial_handle_process = Process(target=serial_handle, args=(serial_queue_read, serial_queue_write, serial_port))
-        serial_handle_process.start()
+    serial_handle_process = Process(target=serial_handle, args=(serial_queue_read, serial_queue_write, serial_port))
+    serial_handle_process.start()
 
-        app = QApplication(sys.argv)
-        app.setWindowIcon(QIcon('../../../docs/_static/icon.png'))
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon('../../../docs/_static/icon.png'))
 
-        window = DataGraphicalWindow(serial_queue_write)
-        data_handle_thread = DataHandleThread(serial_queue_read)
-        data_handle_thread.signal_log_msg.connect(window.textBrowser_log_show)
-        data_handle_thread.signal_progressBar_radar_status.connect(window.progressBar_radar_status_show)
-        data_handle_thread.signal_lcdNumber_radar_count.connect(window.lcdNumber_radar_count_show)
-        data_handle_thread.signal_exit.connect(window.close)
-        data_handle_thread.start()
+    window = DataGraphicalWindow(serial_queue_write)
+    data_handle_thread = DataHandleThread(serial_queue_read)
+    data_handle_thread.signal_log_msg.connect(window.textBrowser_log_show)
+    data_handle_thread.signal_progressBar_radar_status.connect(window.progressBar_radar_status_show)
+    data_handle_thread.signal_lcdNumber_radar_count.connect(window.lcdNumber_radar_count_show)
+    data_handle_thread.signal_exit.connect(window.close)
+    data_handle_thread.start()
 
-        window.show()
-        sys.exit(app.exec())
-    except Exception as e:
-        print('main: ', e)
-        sys.exit(0)
-        serial_handle_process.join()
+    window.show()
+    sys.exit(app.exec())
+    serial_handle_process.join()
