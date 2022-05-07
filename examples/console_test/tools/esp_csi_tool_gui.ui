@@ -64,7 +64,7 @@
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <layout class="QVBoxLayout" name="verticalLayout_7" stretch="16,1,1">
             <property name="spacing">
              <number>0</number>
@@ -216,7 +216,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0">
             <property name="spacing">
              <number>0</number>
@@ -298,11 +298,6 @@
                     </item>
                     <item>
                      <property name="text">
-                      <string>help</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
                       <string>restart</string>
                      </property>
                     </item>
@@ -347,7 +342,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout" stretch="16,1">
         <item>
          <widget class="QGroupBox" name="groupBox_analysis">
@@ -705,7 +700,7 @@
                       <time>
                        <hour>0</hour>
                        <minute>0</minute>
-                       <second>10</second>
+                       <second>30</second>
                       </time>
                      </property>
                     </widget>
@@ -1441,7 +1436,7 @@
                          <number>10</number>
                         </property>
                         <property name="value">
-                         <number>100</number>
+                         <number>500</number>
                         </property>
                         <property name="displayIntegerBase">
                          <number>10</number>

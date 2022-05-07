@@ -160,9 +160,11 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         self.timer_curve_radar.timeout.connect(self.show_curve_radar)
         self.timer_curve_radar.start(200)
 
+        self.label_number         = self.spinBox_label_number.value()
         self.timer_label_duration = QTimer()
         self.timer_label_duration.timeout.connect(self.spinBox_label_number_show)
 
+        self.label_delay  = self.timeEdit_label_delay.time()
         self.timer_label_delay    = QTimer()
         self.timer_label_delay.setInterval(1000) 
         self.timer_label_delay.timeout.connect(self.timeEdit_label_delay_show)
@@ -229,9 +231,11 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         if self.pushButton_ping_start.text() == "start":
             commmand = "ping --interval " + str(self.spinBox_ping_interval.text()) + " --count " + str(self.spinBox_ping_count.text())
             self.pushButton_ping_start.setText("stop")
+            self.pushButton_ping_start.setStyleSheet("color: red")
         else:
             commmand = "ping --abort"
             self.pushButton_ping_start.setText("start")
+            self.pushButton_ping_start.setStyleSheet("color: black")
         self.serial_queue_write.put(commmand)
 
     def command_custom(self):
@@ -248,14 +252,18 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
 
     def spinBox_label_number_show(self):
         number = self.spinBox_label_number.value()
-        if number > 1:
+        if number >= 1:
             self.spinBox_label_number.setValue(number - 1)
             self.timer_label_duration.start()
             self.command_label_action_start()
         else:
-            self.spinBox_label_number.setValue(number - 1)
             self.timer_label_duration.stop()
             self.command_label_action_stop()
+
+            self.spinBox_label_number.setValue(self.label_number)
+            self.timeEdit_label_delay.setTime(self.label_delay)
+            self.pushButton_label_start.setStyleSheet("color: black")
+            self.spinBox_label_number.setStyleSheet("color: black")
             self.pushButton_label_start.setText("start")
 
     def timeEdit_label_delay_show(self):
@@ -271,6 +279,8 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.timer_label_duration.setInterval(duration) 
             self.timer_label_duration.start()
             self.command_label_action_start()
+            self.spinBox_label_number.setStyleSheet("color: red")
+            self.timeEdit_label_delay.setStyleSheet("color: black")
 
     def pushButton_label_show(self):
         if self.pushButton_label_start.text() == "start":
@@ -283,12 +293,20 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
                 return
 
             self.pushButton_label_start.setText("stop")
+            self.pushButton_label_start.setStyleSheet("color: red")
+            self.timeEdit_label_delay.setStyleSheet("color: red")
             self.timer_label_delay.start()
+            self.label_number = self.spinBox_label_number.value()
+            self.label_delay  = self.timeEdit_label_delay.time()
         else:
-            self.pushButton_label_start.setText("start")
+            self.spinBox_label_number.setValue(self.label_number)
+            self.timeEdit_label_delay.setTime(self.label_delay)
+            self.spinBox_label_number.setStyleSheet("color: black")
+            self.pushButton_label_start.setStyleSheet("color: black")
             self.timer_label_delay.stop()
             self.timer_label_duration.stop()
             self.command_label_action_stop()
+            self.pushButton_label_start.setText("start")
 
     def command_calibrate_action_start(self):
         action =  self.comboBox_calibrate_action.currentText()
@@ -310,7 +328,9 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.command_calibrate_action_stop()
             self.timeEdit_calibrate_delay.setTime(self.calibrate_delay)
             self.timeEdit_calibrate_duration.setTime(self.calibrate_duration)
+            self.timeEdit_calibrate_duration.setStyleSheet("color: black")
             self.pushButton_calibrate_start.setText("start")
+            self.pushButton_calibrate_start.setStyleSheet("color: black")
 
     def timeEdit_calibrate_delay_show(self):
         time_temp = self.timeEdit_calibrate_delay.time()
@@ -322,13 +342,18 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.timer_calibrate_delay.stop()
             self.command_calibrate_action_start()
             self.spinBox_calibrate_duration_show()
+            self.timeEdit_calibrate_duration.setStyleSheet("color: red")
+            self.timeEdit_calibrate_delay.setStyleSheet("color: black")
 
     def pushButton_calibrate_show(self):
         if self.pushButton_calibrate_start.text() == "start":
-            self.timer_calibrate_delay.start()
             self.calibrate_delay    = self.timeEdit_calibrate_delay.time()
             self.calibrate_duration = self.timeEdit_calibrate_duration.time()
             self.pushButton_calibrate_start.setText("stop")
+            self.pushButton_calibrate_start.setStyleSheet("color: red")
+            self.timeEdit_calibrate_delay.setStyleSheet("color: red")
+
+            self.timeEdit_calibrate_delay_show();
         else:
             self.timer_calibrate_delay.stop()
             self.timer_calibrate_duration.stop()
@@ -336,6 +361,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.timeEdit_calibrate_delay.setTime(self.calibrate_delay)
             self.timeEdit_calibrate_duration.setTime(self.calibrate_duration)
             self.pushButton_calibrate_start.setText("start")
+            self.pushButton_calibrate_start.setStyleSheet("color: black")
 
     def comboBox_command_show(self):
         self.lineEdit_command.setText(self.comboBox_command.currentText())
