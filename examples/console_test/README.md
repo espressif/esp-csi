@@ -16,6 +16,18 @@ This example provides a test platform for Wi Fi CSI, which includes functions su
 This example provides two working modes of `esp32-s3 development board` and `router` as Wi-Fi CSI contracting equipment. Using `esp32-s3 development board` as contracting equipment has better adjustment effect on contracting rate, RF size and channel
 
 ![esp_csi_device](../../docs/_static/esp_csi_device.png)
+
+
+## esp-idf
+The esp-idf version of the current project is [v4.4.1](https://github.com/espressif/esp-idf/releases/tag/v4.4.1)
+
+```shell
+cd esp-idf
+git checkout v4.4.1
+git git submodule update --init --recursive
+./install.sh
+. ./export.sh
+```
 ### CSI Send
 - `esp32-s3`: Burn csi send project
     ```shell
