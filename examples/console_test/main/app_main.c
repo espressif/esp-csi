@@ -26,6 +26,7 @@
 
 #include "driver/gpio.h"
 #include "driver/rmt.h"
+#include "hal/uart_ll.h"
 #include "led_strip.h"
 
 #include "esp_radar.h"
@@ -283,6 +284,12 @@ void app_main(void)
     esp_console_dev_uart_config_t uart_config = ESP_CONSOLE_DEV_UART_CONFIG_DEFAULT();
     repl_config.prompt = "csi>";
     ESP_ERROR_CHECK(esp_console_new_repl_uart(&uart_config, &repl_config, &repl));
+
+#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S2
+    /**< Fix serial port garbled code due to high baud rate */
+    uart_ll_set_sclk(UART_LL_GET_HW(CONFIG_ESP_CONSOLE_UART_NUM), UART_SCLK_APB);
+    uart_ll_set_baudrate(UART_LL_GET_HW(CONFIG_ESP_CONSOLE_UART_NUM), CONFIG_ESP_CONSOLE_UART_BAUDRATE);
+#endif
 
     cmd_register_system();
     cmd_register_ping();
