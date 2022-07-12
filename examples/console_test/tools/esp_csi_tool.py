@@ -508,7 +508,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
     def show_router_auto_connect(self):
         with open("./config/gui_config.json", "r") as file:
             gui_config = json.load(file)
-            gui_config['display_radar_model'] = self.checkBox_router_auto_connect.isChecked()
+            gui_config['router_auto_connect'] = self.checkBox_router_auto_connect.isChecked()
         with open("./config/gui_config.json", "w") as file:
             json.dump(gui_config, file)
 
@@ -724,9 +724,9 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
 
     def command_predict_config(self):
         command = (f"radar --predict_sameone_threshold {self.doubleSpinBox_predict_sameone_threshold.value()}" +
-                   f"--predict_move_threshold {self.doubleSpinBox_predict_move_threshold.value()}" +
-                   f"--predict_buff_size {self.spinBox_predict_buffer_size.text()}" +
-                   f"--predict_outliers_number {self.spinBox_predict_outliers_number.text()}")
+                   f" --predict_move_threshold {self.doubleSpinBox_predict_move_threshold.value()}" +
+                   f" --predict_buff_size {self.spinBox_predict_buffer_size.text()}" +
+                   f" --predict_outliers_number {self.spinBox_predict_outliers_number.text()}")
         self.serial_queue_write.put(command)
 
     def command_router_connect(self):
@@ -900,15 +900,15 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.pushButton_train_start.setStyleSheet("color: black")
 
     def pushButton_evaluate_csi_start_show(self):
-        if self.pushButton_evaluate_csi_start.text() == "csi start":
-            self.pushButton_evaluate_csi_start.setText("csi stop")
-            self.pushButton_evaluate_csi_start.setStyleSheet("color: red")
+        if self.pushButton_evaluate_csi_start.text() == "csi stop":
+            self.pushButton_evaluate_csi_start.setText("csi start")
+            self.pushButton_evaluate_csi_start.setStyleSheet("color: black")
 
             command = "radar --csi_stop"
             self.serial_queue_write.put(command)
         else:
-            self.pushButton_evaluate_csi_start.setText("csi start")
-            self.pushButton_evaluate_csi_start.setStyleSheet("color: black")
+            self.pushButton_evaluate_csi_start.setText("csi stop")
+            self.pushButton_evaluate_csi_start.setStyleSheet("color: red")
 
             command = "radar --csi_start"
             self.serial_queue_write.put(command)
@@ -933,9 +933,8 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
 
         folder_path = self.lineEdit_evaluate_open_folder.text()
 
-        if self.pushButton_evaluate_csi_start.text() == 'csi start':
+        if self.pushButton_evaluate_csi_start.text() == 'csi stop':
             self.pushButton_evaluate_csi_start_show()
-            time.sleep(1)
 
         self.QWidget_evaluate_info.show()
         self.timer_evaluate_statistics.start()

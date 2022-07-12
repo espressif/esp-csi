@@ -1010,7 +1010,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox_spinBox_predict_outliers_number">
+                     <widget class="QSpinBox" name="spinBox_predict_outliers_number">
                       <property name="minimum">
                        <number>1</number>
                       </property>
@@ -1636,7 +1636,7 @@
                  <item>
                   <widget class="QPushButton" name="pushButton_evaluate_csi_start">
                    <property name="text">
-                    <string>csi start</string>
+                    <string>csi stop</string>
                    </property>
                   </widget>
                  </item>
