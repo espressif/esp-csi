@@ -12,6 +12,7 @@
   </property>
   <property name="font">
    <font>
+    <pointsize>14</pointsize>
     <stylestrategy>PreferAntialias</stylestrategy>
    </font>
   </property>
@@ -22,13 +23,75 @@
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout_17" stretch="1,128">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
-     <widget class="QSplitter" name="splitter">
+     <layout class="QHBoxLayout" name="horizontalLayout_11">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>display:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox_raw_data">
+        <property name="text">
+         <string>Raw data</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox_radar_model">
+        <property name="text">
+         <string>Radar model</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QSplitter" name="splitter_display">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QGroupBox" name="groupBox_display">
+      <widget class="QGroupBox" name="groupBox_raw_data">
        <property name="font">
         <font>
          <pointsize>14</pointsize>
@@ -38,12 +101,12 @@
         </font>
        </property>
        <property name="title">
-        <string extracomment="Real time display of received CSI information">Display</string>
+        <string extracomment="Real time display of received CSI information">Raw data</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_16">
+       <layout class="QVBoxLayout" name="verticalLayout_8" stretch="128">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -60,7 +123,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QSplitter" name="splitter_2">
+         <widget class="QSplitter" name="splitter_4">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -104,6 +167,28 @@
                <property name="bottomMargin">
                 <number>0</number>
                </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_wave_filtering">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                     <stylestrategy>PreferAntialias</stylestrategy>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>wave filtering</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
                <item>
                 <widget class="PlotWidget" name="graphicsView_subcarrier"/>
                </item>
@@ -163,9 +248,9 @@
                </font>
               </property>
               <property name="title">
-               <string>radio metadata header</string>
+               <string>info</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
+              <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,2">
                <property name="spacing">
                 <number>0</number>
                </property>
@@ -181,6 +266,36 @@
                <property name="bottomMargin">
                 <number>0</number>
                </property>
+               <item>
+                <widget class="QTableView" name="tableView_device_info">
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                   <stylestrategy>PreferAntialias</stylestrategy>
+                  </font>
+                 </property>
+                 <property name="autoScrollMargin">
+                  <number>10</number>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>false</bool>
+                 </property>
+                 <attribute name="horizontalHeaderMinimumSectionSize">
+                  <number>12</number>
+                 </attribute>
+                 <attribute name="verticalHeaderMinimumSectionSize">
+                  <number>10</number>
+                 </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>20</number>
+                 </attribute>
+                 <attribute name="verticalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                </widget>
+               </item>
                <item>
                 <widget class="QTableView" name="tableView_radioHeader">
                  <property name="font">
@@ -216,13 +331,90 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="layoutWidget">
-           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0">
+          <widget class="QGroupBox" name="groupBox_13">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <stylestrategy>PreferAntialias</stylestrategy>
+            </font>
+           </property>
+           <property name="title">
+            <string>log</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_13">
             <property name="spacing">
              <number>0</number>
             </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
-             <widget class="QGroupBox" name="groupBox_13">
+             <widget class="QTextBrowser" name="textBrowser_log">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_16">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <stylestrategy>PreferAntialias</stylestrategy>
+            </font>
+           </property>
+           <property name="title">
+            <string>Command</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QGroupBox" name="groupBox_11">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="font">
                <font>
                 <pointsize>10</pointsize>
@@ -232,9 +424,247 @@
                </font>
               </property>
               <property name="title">
-               <string>log</string>
+               <string>router</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_17" stretch="16,1">
+              <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="1,4,1,4,1,2">
+               <property name="spacing">
+                <number>6</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_delay_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>ssid </string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_router_ssid"/>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_duration_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>password</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit_router_password"/>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_router_auto_connect">
+                 <property name="text">
+                  <string>atuto connect</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_router_connect">
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                   <stylestrategy>PreferAntialias</stylestrategy>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>connect</string>
+                 </property>
+                 <property name="autoDefault">
+                  <bool>false</bool>
+                 </property>
+                 <property name="default">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,8,3,2">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                  <stylestrategy>PreferAntialias</stylestrategy>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>custom</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_command">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                  <stylestrategy>PreferAntialias</stylestrategy>
+                 </font>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_command">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                  <stylestrategy>PreferAntialias</stylestrategy>
+                 </font>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>NULL</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>restart</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>radar --output LLFT</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>version</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>wifi_config --info</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>wifi_scan</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>ping --abort</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_command">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                  <stylestrategy>PreferAntialias</stylestrategy>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>send</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_radar_model">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
+       <property name="title">
+        <string>Radar model</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_18">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="splitter_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,32">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QGroupBox" name="groupBox_15">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+              <property name="title">
+               <string>Train</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_25">
                <property name="spacing">
                 <number>0</number>
                </property>
@@ -251,26 +681,995 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QTextBrowser" name="textBrowser_log">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+                <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,1">
+                 <property name="spacing">
+                  <number>6</number>
                  </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>8</pointsize>
-                   <weight>50</weight>
-                   <bold>false</bold>
-                   <stylestrategy>PreferAntialias</stylestrategy>
-                  </font>
-                 </property>
-                </widget>
+                 <item>
+                  <widget class="QWidget" name="widget_25" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="0,2,3">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QWidget" name="widget_39" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_38">
+                       <property name="spacing">
+                        <number>0</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_delay_5">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>delay</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QTimeEdit" name="timeEdit_train_delay">
+                      <property name="maximumDateTime">
+                       <datetime>
+                        <hour>23</hour>
+                        <minute>59</minute>
+                        <second>59</second>
+                        <year>2000</year>
+                        <month>1</month>
+                        <day>1</day>
+                       </datetime>
+                      </property>
+                      <property name="currentSection">
+                       <enum>QDateTimeEdit::MinuteSection</enum>
+                      </property>
+                      <property name="displayFormat">
+                       <string>HH:mm:ss</string>
+                      </property>
+                      <property name="currentSectionIndex">
+                       <number>1</number>
+                      </property>
+                      <property name="time">
+                       <time>
+                        <hour>0</hour>
+                        <minute>0</minute>
+                        <second>0</second>
+                       </time>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_26" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_28" stretch="2,3">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>9</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="label_delay_6">
+                      <property name="text">
+                       <string>duration</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QTimeEdit" name="timeEdit_train_duration">
+                      <property name="maximumDateTime">
+                       <datetime>
+                        <hour>23</hour>
+                        <minute>59</minute>
+                        <second>59</second>
+                        <year>2000</year>
+                        <month>1</month>
+                        <day>1</day>
+                       </datetime>
+                      </property>
+                      <property name="currentSection">
+                       <enum>QDateTimeEdit::SecondSection</enum>
+                      </property>
+                      <property name="displayFormat">
+                       <string>HH:mm:ss</string>
+                      </property>
+                      <property name="currentSectionIndex">
+                       <number>2</number>
+                      </property>
+                      <property name="time">
+                       <time>
+                        <hour>0</hour>
+                        <minute>0</minute>
+                        <second>10</second>
+                       </time>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_train_add">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Add</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_train_start">
+                   <property name="font">
+                    <font>
+                     <pointsize>14</pointsize>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                     <stylestrategy>PreferAntialias</stylestrategy>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>start</string>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>8</width>
+                     <height>8</height>
+                    </size>
+                   </property>
+                   <property name="autoDefault">
+                    <bool>false</bool>
+                   </property>
+                   <property name="default">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_14">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+              <property name="title">
+               <string>Predict</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,64">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QWidget" name="widget_31" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_45" stretch="3,2,3,2,2,1,1,2,3">
+                    <property name="spacing">
+                     <number>6</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="label_number_3">
+                      <property name="text">
+                       <string>wander(sameone) threshold</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_sameone_threshold">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="decimals">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <double>1.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
+                      </property>
+                      <property name="value">
+                       <double>0.001000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_number_5">
+                      <property name="text">
+                       <string>jitter(move) threshold</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_move_threshold">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="decimals">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <double>1.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
+                      </property>
+                      <property name="value">
+                       <double>0.001000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_duration_7">
+                      <property name="text">
+                       <string>filter outliers</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBox_predict_buffer_size">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="value">
+                       <number>5</number>
+                      </property>
+                      <property name="displayIntegerBase">
+                       <number>10</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBox_spinBox_predict_outliers_number">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>99</number>
+                      </property>
+                      <property name="singleStep">
+                       <number>1</number>
+                      </property>
+                      <property name="value">
+                       <number>2</number>
+                      </property>
+                      <property name="displayIntegerBase">
+                       <number>10</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_display_eigenvalues_table">
+                      <property name="text">
+                       <string>display table</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_predict_config">
+                      <property name="text">
+                       <string>config</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
                </item>
                <item>
-                <widget class="QWidget" name="widget_20" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="4,1,1">
+                <widget class="QSplitter" name="splitter_eigenvalues">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <widget class="PlotWidget" name="graphicsView_eigenvalues">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                 </widget>
+                 <widget class="QWidget" name="tableView_eigenvalues" native="true">
+                  <layout class="QVBoxLayout" name="tableView_eigenvalues_QVBoxLayout">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QTableView" name="tableView_radar_data_room">
+                     <property name="font">
+                      <font>
+                       <pointsize>8</pointsize>
+                       <weight>50</weight>
+                       <bold>false</bold>
+                       <stylestrategy>PreferAntialias</stylestrategy>
+                      </font>
+                     </property>
+                     <property name="autoScrollMargin">
+                      <number>10</number>
+                     </property>
+                     <property name="sortingEnabled">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>12</number>
+                     </attribute>
+                     <attribute name="verticalHeaderMinimumSectionSize">
+                      <number>10</number>
+                     </attribute>
+                     <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>20</number>
+                     </attribute>
+                     <attribute name="verticalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTableView" name="tableView_radar_data_human">
+                     <property name="font">
+                      <font>
+                       <pointsize>8</pointsize>
+                       <weight>50</weight>
+                       <bold>false</bold>
+                       <stylestrategy>PreferAntialias</stylestrategy>
+                      </font>
+                     </property>
+                     <property name="autoScrollMargin">
+                      <number>10</number>
+                     </property>
+                     <property name="sortingEnabled">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>12</number>
+                     </attribute>
+                     <attribute name="verticalHeaderMinimumSectionSize">
+                      <number>10</number>
+                     </attribute>
+                     <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>20</number>
+                     </attribute>
+                     <attribute name="verticalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_19">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <stylestrategy>PreferAntialias</stylestrategy>
+            </font>
+           </property>
+           <property name="title">
+            <string>Statistics</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout" stretch="1,64">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <item>
+               <widget class="QWidget" name="widget_38" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_41" stretch="1,2,1,3,1,2">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_target_5">
+                   <property name="text">
+                    <string>mode</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="comboBox_statistics_mode">
+                   <item>
+                    <property name="text">
+                     <string>minute</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>hour</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>day</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_delay_9">
+                   <property name="text">
+                    <string>time</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateTimeEdit" name="dateTimeEdit_statistics_time">
+                   <property name="dateTime">
+                    <datetime>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                     <year>2022</year>
+                     <month>7</month>
+                     <day>9</day>
+                    </datetime>
+                   </property>
+                   <property name="maximumDateTime">
+                    <datetime>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                     <year>2030</year>
+                     <month>9</month>
+                     <day>14</day>
+                    </datetime>
+                   </property>
+                   <property name="minimumDateTime">
+                    <datetime>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                     <year>2022</year>
+                     <month>7</month>
+                     <day>1</day>
+                    </datetime>
+                   </property>
+                   <property name="currentSection">
+                    <enum>QDateTimeEdit::MinuteSection</enum>
+                   </property>
+                   <property name="displayFormat">
+                    <string>yyyy-MM-dd  HH:mm:ss</string>
+                   </property>
+                   <property name="calendarPopup">
+                    <bool>false</bool>
+                   </property>
+                   <property name="currentSectionIndex">
+                    <number>4</number>
+                   </property>
+                   <property name="timeSpec">
+                    <enum>Qt::LocalTime</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_statistics_auto_update">
+                   <property name="text">
+                    <string>auto update</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_statistics_config">
+                   <property name="text">
+                    <string>update</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QSplitter" name="splitter_status_record">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <widget class="PlotWidget" name="graphicsView_status_record">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+              <widget class="QTableView" name="tableView_status_record">
+               <property name="font">
+                <font>
+                 <pointsize>8</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                 <stylestrategy>PreferAntialias</stylestrategy>
+                </font>
+               </property>
+               <property name="autoScrollMargin">
+                <number>10</number>
+               </property>
+               <property name="sortingEnabled">
+                <bool>false</bool>
+               </property>
+               <attribute name="horizontalHeaderMinimumSectionSize">
+                <number>12</number>
+               </attribute>
+               <attribute name="verticalHeaderCascadingSectionResizes">
+                <bool>true</bool>
+               </attribute>
+               <attribute name="verticalHeaderMinimumSectionSize">
+                <number>5</number>
+               </attribute>
+               <attribute name="verticalHeaderDefaultSectionSize">
+                <number>20</number>
+               </attribute>
+               <attribute name="verticalHeaderStretchLastSection">
+                <bool>true</bool>
+               </attribute>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_14" stretch="1,32">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QGroupBox" name="groupBox_18">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+              <property name="title">
+               <string>Collect</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,3,1,3,1,3,1,3,1,3">
+                 <item>
+                  <widget class="QLabel" name="label_target_4">
+                   <property name="text">
+                    <string>target</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="comboBox_collect_target">
+                   <item>
+                    <property name="text">
+                     <string>unknown</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>train</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>none</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>someone</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>static</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>move</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>front</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>after</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>left</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>right</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>go</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>jump</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>sit down</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>stand up</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>climb up</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>wave</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>applause</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_delay">
+                   <property name="text">
+                    <string>delay</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QTimeEdit" name="timeEdit_collect_delay">
+                   <property name="maximumDateTime">
+                    <datetime>
+                     <hour>23</hour>
+                     <minute>59</minute>
+                     <second>59</second>
+                     <year>2000</year>
+                     <month>1</month>
+                     <day>1</day>
+                    </datetime>
+                   </property>
+                   <property name="currentSection">
+                    <enum>QDateTimeEdit::MinuteSection</enum>
+                   </property>
+                   <property name="displayFormat">
+                    <string>HH:mm:ss</string>
+                   </property>
+                   <property name="currentSectionIndex">
+                    <number>1</number>
+                   </property>
+                   <property name="time">
+                    <time>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                    </time>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_duration">
+                   <property name="text">
+                    <string>duration(ms)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spinBox_collect_duration">
+                   <property name="minimum">
+                    <number>50</number>
+                   </property>
+                   <property name="maximum">
+                    <number>100000000</number>
+                   </property>
+                   <property name="singleStep">
+                    <number>10</number>
+                   </property>
+                   <property name="value">
+                    <number>500</number>
+                   </property>
+                   <property name="displayIntegerBase">
+                    <number>10</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_number">
+                   <property name="text">
+                    <string>number</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spinBox_collect_number">
+                   <property name="minimum">
+                    <number>0</number>
+                   </property>
+                   <property name="maximum">
+                    <number>10000</number>
+                   </property>
+                   <property name="value">
+                    <number>1</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_collect_clean">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                     <stylestrategy>PreferAntialias</stylestrategy>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>clean</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_collect_start">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                     <weight>50</weight>
+                     <bold>false</bold>
+                     <stylestrategy>PreferAntialias</stylestrategy>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>start</string>
+                   </property>
+                   <property name="autoDefault">
+                    <bool>false</bool>
+                   </property>
+                   <property name="default">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_20">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+              <property name="title">
+               <string>Evaluate</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_19" stretch="1,64">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,2,16,4">
+                 <item>
+                  <widget class="QPushButton" name="pushButton_evaluate_csi_start">
+                   <property name="text">
+                    <string>csi start</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_evaluate_open_folder">
+                   <property name="text">
+                    <string>open folder</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="lineEdit_evaluate_open_folder"/>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_evaluate_start">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                     <stylestrategy>PreferAntialias</stylestrategy>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>send</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QWidget" name="QWidget_evaluate_info" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout" stretch="1">
                   <property name="spacing">
                    <number>0</number>
                   </property>
@@ -287,47 +1686,33 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_command"/>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="comboBox_command">
-                    <item>
-                     <property name="text">
-                      <string>NULL</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>restart</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>version</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>wifi_config --info</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>wifi_scan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>ping --abort</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_command">
-                    <property name="text">
-                     <string>send</string>
+                   <widget class="QTableView" name="tableView_evaluate_statistics">
+                    <property name="font">
+                     <font>
+                      <pointsize>8</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                      <stylestrategy>PreferAntialias</stylestrategy>
+                     </font>
                     </property>
+                    <property name="autoScrollMargin">
+                     <number>10</number>
+                    </property>
+                    <property name="sortingEnabled">
+                     <bool>false</bool>
+                    </property>
+                    <attribute name="horizontalHeaderMinimumSectionSize">
+                     <number>12</number>
+                    </attribute>
+                    <attribute name="verticalHeaderMinimumSectionSize">
+                     <number>10</number>
+                    </attribute>
+                    <attribute name="verticalHeaderDefaultSectionSize">
+                     <number>20</number>
+                    </attribute>
+                    <attribute name="verticalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
                    </widget>
                   </item>
                  </layout>
@@ -342,1144 +1727,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="16,1">
-        <item>
-         <widget class="QGroupBox" name="groupBox_analysis">
-          <property name="font">
-           <font>
-            <pointsize>14</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-            <stylestrategy>PreferAntialias</stylestrategy>
-           </font>
-          </property>
-          <property name="title">
-           <string>Analysis</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_18">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QGroupBox" name="groupBox_14">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-               <stylestrategy>PreferAntialias</stylestrategy>
-              </font>
-             </property>
-             <property name="title">
-              <string>radar</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,16,1">
-              <property name="spacing">
-               <number>0</number>
-              </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_6">
-                  <item>
-                   <widget class="QLabel" name="label_2">
-                    <property name="text">
-                     <string>status</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QProgressBar" name="progressBar_radar_status">
-                    <property name="value">
-                     <number>24</number>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_7">
-                  <property name="spacing">
-                   <number>6</number>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="label">
-                    <property name="text">
-                     <string>count</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLCDNumber" name="lcdNumber_radar_count">
-                    <property name="font">
-                     <font>
-                      <pointsize>10</pointsize>
-                      <weight>50</weight>
-                      <bold>false</bold>
-                      <stylestrategy>PreferAntialias</stylestrategy>
-                     </font>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="20,1">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="PlotWidget" name="graphicsView_corr">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_20">
-                  <property name="spacing">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QSlider" name="verticalSlider_corr_threshold">
-                    <property name="minimum">
-                     <number>100</number>
-                    </property>
-                    <property name="maximum">
-                     <number>150</number>
-                    </property>
-                    <property name="pageStep">
-                     <number>5</number>
-                    </property>
-                    <property name="value">
-                     <number>110</number>
-                    </property>
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="tickPosition">
-                     <enum>QSlider::TicksAbove</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_corr_threshold">
-                    <property name="text">
-                     <string>1.10</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QWidget" name="widget_24" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_25">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>9</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="label_action_3">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>action</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QComboBox" name="comboBox_calibrate_action">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <item>
-                      <property name="text">
-                       <string>static</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>none</string>
-                      </property>
-                     </item>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="widget_25" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_27">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>9</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="label_delay_5">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>delay</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QTimeEdit" name="timeEdit_calibrate_delay">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="maximumDateTime">
-                      <datetime>
-                       <hour>23</hour>
-                       <minute>59</minute>
-                       <second>59</second>
-                       <year>2000</year>
-                       <month>1</month>
-                       <day>1</day>
-                      </datetime>
-                     </property>
-                     <property name="currentSection">
-                      <enum>QDateTimeEdit::MinuteSection</enum>
-                     </property>
-                     <property name="displayFormat">
-                      <string>HH:mm:ss</string>
-                     </property>
-                     <property name="currentSectionIndex">
-                      <number>1</number>
-                     </property>
-                     <property name="time">
-                      <time>
-                       <hour>0</hour>
-                       <minute>0</minute>
-                       <second>0</second>
-                      </time>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="widget_26" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_28">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>9</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="label_delay_6">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>duration</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QTimeEdit" name="timeEdit_calibrate_duration">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="maximumDateTime">
-                      <datetime>
-                       <hour>23</hour>
-                       <minute>59</minute>
-                       <second>59</second>
-                       <year>2000</year>
-                       <month>1</month>
-                       <day>1</day>
-                      </datetime>
-                     </property>
-                     <property name="currentSection">
-                      <enum>QDateTimeEdit::SecondSection</enum>
-                     </property>
-                     <property name="displayFormat">
-                      <string>HH:mm:ss</string>
-                     </property>
-                     <property name="currentSectionIndex">
-                      <number>2</number>
-                     </property>
-                     <property name="time">
-                      <time>
-                       <hour>0</hour>
-                       <minute>0</minute>
-                       <second>30</second>
-                      </time>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_calibrate_start">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>14</pointsize>
-                    <weight>50</weight>
-                    <bold>false</bold>
-                    <stylestrategy>PreferAntialias</stylestrategy>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>start</string>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>8</width>
-                    <height>8</height>
-                   </size>
-                  </property>
-                  <property name="autoDefault">
-                   <bool>false</bool>
-                  </property>
-                  <property name="default">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_acquisition">
-          <property name="font">
-           <font>
-            <pointsize>14</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-            <stylestrategy>PreferAntialias</stylestrategy>
-           </font>
-          </property>
-          <property name="title">
-           <string>acquisition</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,2">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QGroupBox" name="groupBox_11">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-               <stylestrategy>PreferAntialias</stylestrategy>
-              </font>
-             </property>
-             <property name="title">
-              <string>router</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <property name="spacing">
-               <number>0</number>
-              </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QFrame" name="frame_2">
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_11">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QWidget" name="widget_13" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_15">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
-                    <property name="leftMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <widget class="QLabel" name="label_delay_2">
-                      <property name="text">
-                       <string>ssid </string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="lineEdit_router_ssid"/>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QWidget" name="widget_14" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_16">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
-                    <property name="leftMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <widget class="QLabel" name="label_duration_2">
-                      <property name="text">
-                       <string>password</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="lineEdit_router_password"/>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_router_connect">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                  <weight>50</weight>
-                  <bold>false</bold>
-                  <stylestrategy>PreferAntialias</stylestrategy>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>connect</string>
-                </property>
-                <property name="autoDefault">
-                 <bool>false</bool>
-                </property>
-                <property name="default">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_12">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-               <stylestrategy>PreferAntialias</stylestrategy>
-              </font>
-             </property>
-             <property name="title">
-              <string>ping</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <property name="spacing">
-               <number>0</number>
-              </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QFrame" name="frame_4">
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_15">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QWidget" name="widget_21" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_23">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
-                    <property name="leftMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <widget class="QLabel" name="label_delay_4">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>interval</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QSpinBox" name="spinBox_ping_interval">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                      <property name="maximum">
-                       <number>1000</number>
-                      </property>
-                      <property name="singleStep">
-                       <number>1</number>
-                      </property>
-                      <property name="value">
-                       <number>10</number>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QWidget" name="widget_22" native="true">
-                   <layout class="QHBoxLayout" name="horizontalLayout_24">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
-                    <property name="leftMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin">
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <widget class="QLabel" name="label_duration_4">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>count</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QSpinBox" name="spinBox_ping_count">
-                      <property name="maximum">
-                       <number>100000</number>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_ping_start">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                  <weight>50</weight>
-                  <bold>false</bold>
-                  <stylestrategy>PreferAntialias</stylestrategy>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>start</string>
-                </property>
-                <property name="autoDefault">
-                 <bool>false</bool>
-                </property>
-                <property name="default">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_15">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-               <stylestrategy>PreferAntialias</stylestrategy>
-              </font>
-             </property>
-             <property name="title">
-              <string>Label</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_14">
-              <property name="spacing">
-               <number>0</number>
-              </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QWidget" name="widget_17" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_6">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QWidget" name="widget_18" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_20">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="QLabel" name="label_action_2">
-                        <property name="text">
-                         <string>action</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QComboBox" name="comboBox_label_action">
-                        <item>
-                         <property name="text">
-                          <string>unknown</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>none</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>someone</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>static</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>move</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>front</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>after</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>left</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>right</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>go</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>jump</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>sit down</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>stand up</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>climb up</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>wave</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>applause</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_15" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_18">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="QLabel" name="label_delay_3">
-                        <property name="text">
-                         <string>delay</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QTimeEdit" name="timeEdit_label_delay">
-                        <property name="maximumDateTime">
-                         <datetime>
-                          <hour>23</hour>
-                          <minute>59</minute>
-                          <second>59</second>
-                          <year>2000</year>
-                          <month>1</month>
-                          <day>1</day>
-                         </datetime>
-                        </property>
-                        <property name="currentSection">
-                         <enum>QDateTimeEdit::MinuteSection</enum>
-                        </property>
-                        <property name="displayFormat">
-                         <string>HH:mm:ss</string>
-                        </property>
-                        <property name="currentSectionIndex">
-                         <number>1</number>
-                        </property>
-                        <property name="time">
-                         <time>
-                          <hour>0</hour>
-                          <minute>0</minute>
-                          <second>0</second>
-                         </time>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="frame_3">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_13">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QWidget" name="widget_19" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_21">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="QLabel" name="label_number_2">
-                        <property name="text">
-                         <string>number</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QSpinBox" name="spinBox_label_number">
-                        <property name="minimum">
-                         <number>0</number>
-                        </property>
-                        <property name="maximum">
-                         <number>10000</number>
-                        </property>
-                        <property name="value">
-                         <number>1</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_16" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout_19">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="QLabel" name="label_duration_3">
-                        <property name="text">
-                         <string>duration</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QSpinBox" name="spinBox_label_duration">
-                        <property name="minimum">
-                         <number>50</number>
-                        </property>
-                        <property name="maximum">
-                         <number>10000</number>
-                        </property>
-                        <property name="singleStep">
-                         <number>10</number>
-                        </property>
-                        <property name="value">
-                         <number>500</number>
-                        </property>
-                        <property name="displayIntegerBase">
-                         <number>10</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_label_start">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                  <weight>50</weight>
-                  <bold>false</bold>
-                  <stylestrategy>PreferAntialias</stylestrategy>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>start</string>
-                </property>
-                <property name="autoDefault">
-                 <bool>false</bool>
-                </property>
-                <property name="default">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -1489,7 +1736,7 @@
   <customwidget>
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
+   <header location="global">pyqtgraph</header>
   </customwidget>
  </customwidgets>
  <tabstops>
