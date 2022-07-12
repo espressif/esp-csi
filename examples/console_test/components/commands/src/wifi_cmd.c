@@ -98,7 +98,7 @@ static int wifi_cmd_sta(int argc, char **argv)
     wifi_config_t wifi_config = { 0 };
     static esp_netif_t *s_netif_sta = NULL;
 
-    if(!s_wifi_event_group){
+    if (!s_wifi_event_group) {
         s_wifi_event_group = xEventGroupCreate();
         ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
         ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
@@ -157,7 +157,7 @@ static int wifi_cmd_ap(int argc, char **argv)
     const char *password = ap_args.password->sval[0];
     static esp_netif_t *s_netif_ap = NULL;
 
-    if(!s_wifi_event_group){
+    if (!s_wifi_event_group) {
         s_wifi_event_group = xEventGroupCreate();
         ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
         ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
@@ -281,7 +281,7 @@ static int wifi_config_func(int argc, char **argv)
         return ESP_FAIL;
     }
 
-    if(!s_wifi_event_group) {
+    if (!s_wifi_event_group) {
         s_wifi_event_group = xEventGroupCreate();
         ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
         ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
@@ -305,7 +305,7 @@ static int wifi_config_func(int argc, char **argv)
     }
 
     if (wifi_config_args.bssid->count) {
-        if(!mac_str2hex(wifi_config_args.bssid->sval[0], wifi_config.sta.bssid)) {
+        if (!mac_str2hex(wifi_config_args.bssid->sval[0], wifi_config.sta.bssid)) {
             ESP_LOGE(TAG, "The format of the address is incorrect. Please enter the format as xx:xx:xx:xx:xx:xx");
             return ESP_ERR_INVALID_ARG;
         }
@@ -324,9 +324,9 @@ static int wifi_config_func(int argc, char **argv)
         s_reconnect = true;
 
         ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-    //     esp_err_t esp_wifi_internal_set_fix_rate(wifi_interface_t ifx, bool en, wifi_phy_rate_t rate);
-    //     esp_wifi_internal_set_fix_rate(ESP_IF_WIFI_STA, true, WIFI_PHY_RATE_48M);
-    // ESP_LOGW(TAG, "------- <%s, %d> ------", __func__, __LINE__);
+        //     esp_err_t esp_wifi_internal_set_fix_rate(wifi_interface_t ifx, bool en, wifi_phy_rate_t rate);
+        //     esp_wifi_internal_set_fix_rate(ESP_IF_WIFI_STA, true, WIFI_PHY_RATE_48M);
+        // ESP_LOGW(TAG, "------- <%s, %d> ------", __func__, __LINE__);
 
         // ESP_ERROR_CHECK(esp_wifi_set_bandwidth(WIFI_IF_STA, WIFI_BW_HT20));
 
@@ -370,11 +370,11 @@ static int wifi_config_func(int argc, char **argv)
 
         if (wifi_config.sta.channel > 0 && wifi_config.sta.channel <= 14) {
             ret = esp_wifi_set_channel(wifi_config.sta.channel, second);
-            
-            if(ret == ESP_OK) {
+
+            if (ret == ESP_OK) {
                 ESP_LOGI(TAG, "Set Channel, channel: %d", wifi_config.sta.channel);
             } else {
-                ESP_LOGE(TAG, "<%s> esp_wifi_set_channel", esp_err_to_name(ret));   
+                ESP_LOGE(TAG, "<%s> esp_wifi_set_channel", esp_err_to_name(ret));
                 return ESP_ERR_INVALID_ARG;
             }
         } else {
@@ -492,11 +492,11 @@ static esp_err_t wifi_scan_func(int argc, char **argv)
     }
 
     if (wifi_scan_args.bssid->count) {
-        if(!mac_str2hex(wifi_scan_args.bssid->sval[0], bssid)) {
+        if (!mac_str2hex(wifi_scan_args.bssid->sval[0], bssid)) {
             ESP_LOGE(TAG, "The format of the address is incorrect. Please enter the format as xx:xx:xx:xx:xx:xx");
             return ESP_ERR_INVALID_ARG;
         }
-        
+
         scan_config.bssid = bssid;
     }
 
@@ -515,10 +515,11 @@ static esp_err_t wifi_scan_func(int argc, char **argv)
         esp_wifi_scan_get_ap_num(&ap_number);
     } while (ap_number <= 0 && --retry_count);
 
-    if(ap_number <= 0){
+    if (ap_number <= 0) {
         ESP_LOGE(TAG, "esp_wifi_scan_get_ap_num");
         return ESP_ERR_NOT_FOUND;
     }
+
     ESP_LOGI(TAG, "Get number of APs found, number: %d", ap_number);
 
     for (int i = 0; i < ap_number; i++) {
