@@ -151,7 +151,7 @@ static struct {
     struct arg_lit *train_start;
     struct arg_lit *train_stop;
     struct arg_lit *train_add;
-    struct arg_str *predict_sameone_threshold;
+    struct arg_str *predict_someone_threshold;
     struct arg_str *predict_move_threshold;
     struct arg_int *predict_buff_size;
     struct arg_int *predict_outliers_number;
@@ -167,7 +167,7 @@ static struct {
 
 static struct console_input_config {
     bool train_start;
-    float predict_sameone_threshold;
+    float predict_someone_threshold;
     float predict_move_threshold;
     uint32_t predict_buff_size;
     uint32_t predict_outliers_number;
@@ -176,7 +176,7 @@ static struct console_input_config {
     char csi_output_type[16];
     char csi_output_format[16];
 } g_console_input_config = {
-    .predict_sameone_threshold = 0.001,
+    .predict_someone_threshold = 0.001,
     .predict_move_threshold    = 0.001,
     .predict_buff_size         = 5,
     .predict_outliers_number   = 2,
@@ -218,14 +218,14 @@ static int wifi_cmd_radar(int argc, char **argv)
     }
 
     if (radar_args.train_stop->count) {
-        esp_radar_train_stop(&g_console_input_config.predict_sameone_threshold,
+        esp_radar_train_stop(&g_console_input_config.predict_someone_threshold,
                              &g_console_input_config.predict_move_threshold);
-        g_console_input_config.predict_sameone_threshold *= 1.1;
+        g_console_input_config.predict_someone_threshold *= 1.1;
         g_console_input_config.predict_move_threshold    *= 1.1;
         g_console_input_config.train_start               = false;
 
         printf("RADAR_DADA,0,0,0,%.6f,0,0,%.6f,0\n", 
-                g_console_input_config.predict_sameone_threshold,
+                g_console_input_config.predict_someone_threshold,
                 g_console_input_config.predict_move_threshold);
     }
 
@@ -233,8 +233,8 @@ static int wifi_cmd_radar(int argc, char **argv)
         g_console_input_config.predict_move_threshold = atof(radar_args.predict_move_threshold->sval[0]);
     }
 
-    if (radar_args.predict_sameone_threshold->count) {
-        g_console_input_config.predict_sameone_threshold = atof(radar_args.predict_sameone_threshold->sval[0]);
+    if (radar_args.predict_someone_threshold->count) {
+        g_console_input_config.predict_someone_threshold = atof(radar_args.predict_someone_threshold->sval[0]);
     }
 
     if (radar_args.predict_buff_size->count) {
@@ -295,7 +295,7 @@ void cmd_register_radar(void)
     radar_args.train_stop  = arg_lit0(NULL, "train_stop", "Stop calibrating the 'Radar' algorithm");
     radar_args.train_add   = arg_lit0(NULL, "train_add", "Calibrate on the basis of saving the calibration results");
 
-    radar_args.predict_sameone_threshold = arg_str0(NULL, "predict_sameone_threshold", "<0 ~ 1.0>", "Configure the threshold for someone");
+    radar_args.predict_someone_threshold = arg_str0(NULL, "predict_someone_threshold", "<0 ~ 1.0>", "Configure the threshold for someone");
     radar_args.predict_move_threshold    = arg_str0(NULL, "predict_move_threshold", "<0 ~ 1.0>", "Configure the threshold for move");
     radar_args.predict_buff_size         = arg_int0(NULL, "predict_buff_size", "1 ~ 100", "Buffer size for filtering outliers");
     radar_args.predict_outliers_number   = arg_int0(NULL, "predict_outliers_number", "<1 ~ 100>", "The number of items in the buffer queue greater than the threshold");
@@ -419,7 +419,7 @@ static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
     }
 
     for (int i = 0; i < buff_max_size; i++) {
-        if (s_buff_wander[i] > g_console_input_config.predict_sameone_threshold) {
+        if (s_buff_wander[i] > g_console_input_config.predict_someone_threshold) {
             someone_count++;
         }
 
@@ -440,7 +440,7 @@ static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
 
     if (!s_count) {
         ESP_LOGI(TAG, "================ RADAR RECV ================");
-        ESP_LOGI(TAG, "type,sequence,timestamp,waveform_wander,sameone_threshold,someone_status,waveform_jitter,move_threshold,move_status\n");
+        ESP_LOGI(TAG, "type,sequence,timestamp,waveform_wander,someone_threshold,someone_status,waveform_jitter,move_threshold,move_status\n");
     }
 
     char timestamp_str[32] = {0};
@@ -452,11 +452,11 @@ static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
 
     printf("RADAR_DADA,%d,%s,%.6f,%.6f,%d,%.6f,%.6f,%d\n",
            s_count++, timestamp_str,
-           info->waveform_wander, g_console_input_config.predict_sameone_threshold, room_status,
+           info->waveform_wander, g_console_input_config.predict_someone_threshold, room_status,
            info->waveform_jitter, g_console_input_config.predict_move_threshold, human_status);
 
     static uint32_t s_last_move_time = 0;
-    static uint32_t s_last_sameone_time = 0;
+    static uint32_t s_last_someone_time = 0;
 
     if (g_console_input_config.train_start) {
         static bool led_status = false;
@@ -482,8 +482,8 @@ static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
             ESP_LOGI(TAG, "Someone");
         }
 
-        s_last_sameone_time = esp_log_timestamp();
-    } else if (esp_log_timestamp() - s_last_sameone_time > 3 * 1000) {
+        s_last_someone_time = esp_log_timestamp();
+    } else if (esp_log_timestamp() - s_last_someone_time > 3 * 1000) {
         if (human_status) {
             led_set(255, 0, 0);
         } else {

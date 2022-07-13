@@ -44,6 +44,9 @@
       <property name="spacing">
        <number>12</number>
       </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -106,7 +109,7 @@
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_8" stretch="128">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -123,263 +126,17 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QSplitter" name="splitter_4">
+         <widget class="QSplitter" name="splitter">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="QWidget" name="layoutWidget">
-           <layout class="QVBoxLayout" name="verticalLayout_7" stretch="16,1,1">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QGroupBox" name="groupBox_subcarrier">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-                <stylestrategy>PreferAntialias</stylestrategy>
-               </font>
-              </property>
-              <property name="title">
-               <string>subcarrier amplitude</string>
-              </property>
-              <property name="flat">
-               <bool>false</bool>
-              </property>
-              <property name="checkable">
-               <bool>false</bool>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_9">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_8">
-                 <item>
-                  <widget class="QCheckBox" name="checkBox_wave_filtering">
-                   <property name="font">
-                    <font>
-                     <pointsize>10</pointsize>
-                     <weight>50</weight>
-                     <bold>false</bold>
-                     <stylestrategy>PreferAntialias</stylestrategy>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>wave filtering</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <widget class="PlotWidget" name="graphicsView_subcarrier"/>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_rssi">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-                <stylestrategy>PreferAntialias</stylestrategy>
-               </font>
-              </property>
-              <property name="title">
-               <string>RSSI</string>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_10">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="PlotWidget" name="graphicsView_rssi">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_radioHeader">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-                <stylestrategy>PreferAntialias</stylestrategy>
-               </font>
-              </property>
-              <property name="title">
-               <string>info</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,2">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QTableView" name="tableView_device_info">
-                 <property name="font">
-                  <font>
-                   <pointsize>8</pointsize>
-                   <weight>50</weight>
-                   <bold>false</bold>
-                   <stylestrategy>PreferAntialias</stylestrategy>
-                  </font>
-                 </property>
-                 <property name="autoScrollMargin">
-                  <number>10</number>
-                 </property>
-                 <property name="sortingEnabled">
-                  <bool>false</bool>
-                 </property>
-                 <attribute name="horizontalHeaderMinimumSectionSize">
-                  <number>12</number>
-                 </attribute>
-                 <attribute name="verticalHeaderMinimumSectionSize">
-                  <number>10</number>
-                 </attribute>
-                 <attribute name="verticalHeaderDefaultSectionSize">
-                  <number>20</number>
-                 </attribute>
-                 <attribute name="verticalHeaderStretchLastSection">
-                  <bool>true</bool>
-                 </attribute>
-                </widget>
-               </item>
-               <item>
-                <widget class="QTableView" name="tableView_radioHeader">
-                 <property name="font">
-                  <font>
-                   <pointsize>8</pointsize>
-                   <weight>50</weight>
-                   <bold>false</bold>
-                   <stylestrategy>PreferAntialias</stylestrategy>
-                  </font>
-                 </property>
-                 <property name="autoScrollMargin">
-                  <number>10</number>
-                 </property>
-                 <property name="sortingEnabled">
-                  <bool>false</bool>
-                 </property>
-                 <attribute name="horizontalHeaderMinimumSectionSize">
-                  <number>12</number>
-                 </attribute>
-                 <attribute name="verticalHeaderMinimumSectionSize">
-                  <number>10</number>
-                 </attribute>
-                 <attribute name="verticalHeaderDefaultSectionSize">
-                  <number>20</number>
-                 </attribute>
-                 <attribute name="verticalHeaderStretchLastSection">
-                  <bool>true</bool>
-                 </attribute>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QGroupBox" name="groupBox_13">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-             <weight>50</weight>
-             <bold>false</bold>
-             <stylestrategy>PreferAntialias</stylestrategy>
-            </font>
-           </property>
-           <property name="title">
-            <string>log</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_13">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QTextBrowser" name="textBrowser_log">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>8</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-                <stylestrategy>PreferAntialias</stylestrategy>
-               </font>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
           <widget class="QGroupBox" name="groupBox_16">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -603,6 +360,260 @@
                </widget>
               </item>
              </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_7" stretch="32,1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QGroupBox" name="groupBox_subcarrier">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+              <property name="title">
+               <string>subcarrier amplitude</string>
+              </property>
+              <property name="flat">
+               <bool>false</bool>
+              </property>
+              <property name="checkable">
+               <bool>false</bool>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8"/>
+               </item>
+               <item>
+                <widget class="PlotWidget" name="graphicsView_subcarrier"/>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_wave_filtering">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                   <stylestrategy>PreferAntialias</stylestrategy>
+                  </font>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>wave filtering</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_rssi">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+              <property name="title">
+               <string>RSSI</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="PlotWidget" name="graphicsView_rssi">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_radioHeader">
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                   <stylestrategy>PreferAntialias</stylestrategy>
+                  </font>
+                 </property>
+                 <property name="title">
+                  <string>info</string>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="5,2">
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QTableView" name="tableView_radioHeader">
+                    <property name="font">
+                     <font>
+                      <pointsize>8</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                      <stylestrategy>PreferAntialias</stylestrategy>
+                     </font>
+                    </property>
+                    <property name="autoScrollMargin">
+                     <number>10</number>
+                    </property>
+                    <property name="sortingEnabled">
+                     <bool>false</bool>
+                    </property>
+                    <attribute name="horizontalHeaderMinimumSectionSize">
+                     <number>12</number>
+                    </attribute>
+                    <attribute name="verticalHeaderMinimumSectionSize">
+                     <number>10</number>
+                    </attribute>
+                    <attribute name="verticalHeaderDefaultSectionSize">
+                     <number>20</number>
+                    </attribute>
+                    <attribute name="verticalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTableView" name="tableView_device_info">
+                    <property name="font">
+                     <font>
+                      <pointsize>8</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                      <stylestrategy>PreferAntialias</stylestrategy>
+                     </font>
+                    </property>
+                    <property name="autoScrollMargin">
+                     <number>10</number>
+                    </property>
+                    <property name="sortingEnabled">
+                     <bool>false</bool>
+                    </property>
+                    <attribute name="horizontalHeaderMinimumSectionSize">
+                     <number>12</number>
+                    </attribute>
+                    <attribute name="verticalHeaderMinimumSectionSize">
+                     <number>10</number>
+                    </attribute>
+                    <attribute name="verticalHeaderDefaultSectionSize">
+                     <number>20</number>
+                    </attribute>
+                    <attribute name="verticalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_13">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <stylestrategy>PreferAntialias</stylestrategy>
+            </font>
+           </property>
+           <property name="title">
+            <string>log</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_13">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QTextBrowser" name="textBrowser_log">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+                <stylestrategy>PreferAntialias</stylestrategy>
+               </font>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -934,12 +945,12 @@
                     <item>
                      <widget class="QLabel" name="label_number_3">
                       <property name="text">
-                       <string>wander(sameone) threshold</string>
+                       <string>wander(someone) threshold</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_sameone_threshold">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_someone_threshold">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                         <horstretch>0</horstretch>
@@ -1740,7 +1751,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>tableView_radioHeader</tabstop>
   <tabstop>graphicsView_subcarrier</tabstop>
   <tabstop>graphicsView_rssi</tabstop>
  </tabstops>
