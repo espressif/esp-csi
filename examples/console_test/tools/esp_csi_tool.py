@@ -88,10 +88,10 @@ CSI_DATA_COLUMNS_NAMES = ["type", "seq", "timestamp", "taget_seq", "taget", "mac
                           "cwb", "smoothing", "not_sounding", "aggregation", "stbc", "fec_coding","sgi", "noise_floor", 
                           "ampdu_cnt", "channel_primary", "channel_secondary", "local_timestamp", "ant", "sig_len", 
                           "rx_state", "len", "first_word_invalid", "data"]
-CSI_DATA_TARGETS = ["unknown", "train", "none", "sameone", "static", "move", "front",
+CSI_DATA_TARGETS = ["unknown", "train", "none", "someone", "static", "move", "front",
                     "after", "left", "right", "go", "jump", "sit down", "stand up", "climb up", "wave", "applause"]
 RADAR_DATA_COLUMNS_NAMES = ["type", "seq", "timestamp", "waveform_wander", "waveform_wander_threshold",
-                            "sameone_status", "waveform_jitter", "waveform_jitter_threshold", "move_status"]
+                            "someone_status", "waveform_jitter", "waveform_jitter_threshold", "move_status"]
 
 g_csi_phase_array = np.zeros(
     [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.int32)
@@ -116,10 +116,10 @@ g_current_time = QDateTime.currentDateTime()
 
 RADAR_DATA_INDEX = 100  # buffer size
 
-ROOM_STATUS_NAMES = ['oneone', 'sameone']
+ROOM_STATUS_NAMES = ['none', 'someone']
 HUMAN_STATUS_NAMES = ['static', 'move']
 RADAR_WAVEFORM_NAMES = ["wander", "jitter"]
-RADAR_targetS_NAMES = ["sameone", "move"]
+RADAR_targetS_NAMES = ["someone", "move"]
 RADAR_targetS_LEN = len(RADAR_targetS_NAMES)
 g_radar_eigenvalue_color = [(0, 0, 255), (0, 255, 0)]
 g_radar_eigenvalue_threshold_color = [(255, 255, 0), (255, 0, 255)]
@@ -355,9 +355,9 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             0, 0, QStandardItem('none static'))
         self.model_evaluate_statistics.setItem(1, 0, QStandardItem('none move'))
         self.model_evaluate_statistics.setItem(
-            2, 0, QStandardItem('sameone static'))
+            2, 0, QStandardItem('someone static'))
         self.model_evaluate_statistics.setItem(
-            3, 0, QStandardItem('sameone move'))
+            3, 0, QStandardItem('someone move'))
 
         self.pushButton_predict_config.released.connect(self.command_predict_config)
         self.pushButton_statistics_config.released.connect(
@@ -596,7 +596,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
                 self.model_radar_data_human.setItem(i, j, item)
 
     def show_wareform_threshold(self):
-        self.doubleSpinBox_predict_sameone_threshold.setValue(
+        self.doubleSpinBox_predict_someone_threshold.setValue(
             g_radar_eigenvalue_threshold_array[-1, 0])
         self.doubleSpinBox_predict_move_threshold.setValue(
             g_radar_eigenvalue_threshold_array[-1, 1])
@@ -723,7 +723,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         self.timer_boot_command.stop()
 
     def command_predict_config(self):
-        command = (f"radar --predict_sameone_threshold {self.doubleSpinBox_predict_sameone_threshold.value()}" +
+        command = (f"radar --predict_someone_threshold {self.doubleSpinBox_predict_someone_threshold.value()}" +
                    f" --predict_move_threshold {self.doubleSpinBox_predict_move_threshold.value()}" +
                    f" --predict_buff_size {self.spinBox_predict_buffer_size.text()}" +
                    f" --predict_outliers_number {self.spinBox_predict_outliers_number.text()}")
