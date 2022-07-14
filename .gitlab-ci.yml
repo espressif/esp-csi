@@ -51,6 +51,11 @@ build_template_cmake: &build_template
     - idf.py build
     - cd ../../../
 
+    - cd examples/get-started/csi_recv_router
+    - idf.py set-target esp32-c3
+    - idf.py build
+    - cd ../../../
+
 push_master_to_github:
   stage: deploy
   only:
