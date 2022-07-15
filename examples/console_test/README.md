@@ -1,4 +1,4 @@
-# CSI Test Example
+# CSI Test Example [[中文]](./README_cn.md)
 ----------------------
 ## Introduction
 
