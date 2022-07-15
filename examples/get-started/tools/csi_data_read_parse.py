@@ -40,6 +40,7 @@ import pyqtgraph as pq
 import threading
 import time
 
+# Reduce displayed waveforms to avoid display freezes
 CSI_VAID_SUBCARRIER_INTERVAL = 3
 
 # Remove invalid subcarriers
@@ -53,6 +54,7 @@ csi_vaid_subcarrier_index += [i for i in range(6, 32, CSI_VAID_SUBCARRIER_INTERV
 csi_vaid_subcarrier_color += [(i * color_step, 0, 0) for i in range(1,  26 // CSI_VAID_SUBCARRIER_INTERVAL + 2)]
 csi_vaid_subcarrier_index += [i for i in range(33, 59, CSI_VAID_SUBCARRIER_INTERVAL)]    # 26  green
 csi_vaid_subcarrier_color += [(0, i * color_step, 0) for i in range(1,  26 // CSI_VAID_SUBCARRIER_INTERVAL + 2)]
+CSI_DATA_LLFT_COLUMNS = len(csi_vaid_subcarrier_index)
 
 # HT-LFT: 56 + 56
 csi_vaid_subcarrier_index += [i for i in range(66, 94, CSI_VAID_SUBCARRIER_INTERVAL)]    # 28  blue
@@ -83,8 +85,7 @@ class csi_data_graphical_window(QWidget):
         self.csi_phase_array = np.abs(csi_data_array)
         self.curve_list = []
 
-        print(f"csi_vaid_subcarrier_color, len: {len(csi_vaid_subcarrier_color)}, {csi_vaid_subcarrier_color}")
-        print(CSI_DATA_COLUMNS)
+        # print(f"csi_vaid_subcarrier_color, len: {len(csi_vaid_subcarrier_color)}, {csi_vaid_subcarrier_color}")
 
         for i in range(CSI_DATA_COLUMNS):
             curve = self.plotWidget_ted.plot(
@@ -135,7 +136,7 @@ def csi_data_read_parse(port: str, csv_writer):
             print(f"data is not incomplete")
             continue
 
-        if len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
+        if len(csi_raw_data) != 128 and len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
             print(f"element number is not equal: {len(csi_raw_data)}")
             continue
 
@@ -144,7 +145,12 @@ def csi_data_read_parse(port: str, csv_writer):
         # Rotate data to the left
         csi_data_array[:-1] = csi_data_array[1:]
 
-        for i in range(CSI_DATA_COLUMNS):
+        if len(csi_raw_data) == 128:
+            csi_vaid_subcarrier_len = CSI_DATA_LLFT_COLUMNS
+        else:
+            csi_vaid_subcarrier_len = CSI_DATA_COLUMNS
+
+        for i in range(csi_vaid_subcarrier_len):
             csi_data_array[-1][i] = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2],
                                             csi_raw_data[csi_vaid_subcarrier_index[i] * 2 - 1])
 

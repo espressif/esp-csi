@@ -398,6 +398,10 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         self.splitter_status_record.setStretchFactor(0, 10)
         self.splitter_status_record.setStretchFactor(1, 1)
 
+        self.splitter_raw_data.setStretchFactor(0, 1)
+        self.splitter_raw_data.setStretchFactor(1, 8)
+        self.splitter_raw_data.setStretchFactor(2, 2)
+
         self.textBrowser_log.setStyleSheet("background:black")
 
         self.timer_boot_command = QTimer()
