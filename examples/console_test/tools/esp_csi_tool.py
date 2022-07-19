@@ -747,6 +747,8 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.pushButton_router_connect.setStyleSheet("color: black")
             command = "ping --abort"
             self.serial_queue_write.put(command)
+            command = "wifi_config --disconnect"
+            self.serial_queue_write.put(command)
 
         with open("./config/gui_config.json", "r") as file:
             gui_config = json.load(file)

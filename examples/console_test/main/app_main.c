@@ -38,10 +38,9 @@
 
 #include "mbedtls/base64.h"
 
-// #define RECV_ESPNOW_CSI
+#define RECV_ESPNOW_CSI
 #define CONFIG_LESS_INTERFERENCE_CHANNEL    11
 #define RADER_EVALUATE_SERVER_PORT          3232
-
 
 static led_strip_t *g_strip_handle    = NULL;
 static xQueueHandle g_csi_info_queue  = NULL;
@@ -513,9 +512,12 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
 
         extern esp_err_t rader_evaluate_server(uint32_t port);
         rader_evaluate_server(RADER_EVALUATE_SERVER_PORT);
+
+#ifdef RECV_ESPNOW_CSI
+        ESP_ERROR_CHECK(esp_wifi_set_promiscuous(false));
+#endif
     }
 }
-
 
 void app_main(void)
 {

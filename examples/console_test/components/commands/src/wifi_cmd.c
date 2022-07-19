@@ -63,7 +63,7 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
             ESP_LOGI(TAG, "sta disconnect, s_reconnect...");
             esp_wifi_connect();
         } else {
-            ESP_LOGI(TAG, "sta disconnect");
+            // ESP_LOGI(TAG, "sta disconnect");
         }
 
         xEventGroupClearBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
@@ -263,6 +263,7 @@ static struct {
     struct arg_str *ssid;
     struct arg_str *bssid;
     struct arg_str *password;
+    struct arg_lit *disconnect;
     struct arg_int *tx_power;
     struct arg_lit *info;
     struct arg_int *rate;
@@ -285,6 +286,12 @@ static int wifi_config_func(int argc, char **argv)
         s_wifi_event_group = xEventGroupCreate();
         ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
         ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
+    }
+
+    if (wifi_config_args.disconnect->count) {
+        s_reconnect = false;
+        esp_wifi_disconnect();
+        return ESP_OK;
     }
 
     esp_err_t ret = ESP_OK;
@@ -418,6 +425,8 @@ static int wifi_config_func(int argc, char **argv)
         ESP_ERROR_CHECK(esp_wifi_set_protocol(ESP_IF_WIFI_STA, wifi_config_args.protocol->ival[0]));
     }
 
+
+
     return ret;
 }
 
@@ -429,6 +438,7 @@ void cmd_register_wifi_config()
     wifi_config_args.ssid     = arg_str0("s", "ssid", "<ssid>", "SSID of router");
     wifi_config_args.password = arg_str0("p", "password", "<password>", "Password of router");
     wifi_config_args.bssid    = arg_str0("b", "bssid", "<bssid (xx:xx:xx:xx:xx:xx)>", "BSSID of router");
+    wifi_config_args.disconnect = arg_lit0("d", "disconnect", "Disconnect the router");
     wifi_config_args.channel  = arg_int0("c", "channel", "<channel (1 ~ 14)>", "Set primary channel");
     wifi_config_args.channel_second = arg_int0("c", "channel_second", "<channel_second (0, 1, 2)>", "Set second channel");
     wifi_config_args.country_code = arg_str0("C", "country_code", "<country_code ('CN', 'JP, 'US')>", "Set the current country code");
@@ -437,7 +447,7 @@ void cmd_register_wifi_config()
     wifi_config_args.bandwidth = arg_int0("w", "bandwidth", "<bandwidth(1: HT20, 2: HT40)>", "Set the bandwidth of ESP32 specified interface");
     wifi_config_args.protocol = arg_int0("P", "protocol", "<bgn(1,3,7)>", "Set protocol type of specified interface");
     wifi_config_args.info     = arg_lit0("i", "info", "Get Wi-Fi configuration information");
-    wifi_config_args.end      = arg_end(9);
+    wifi_config_args.end      = arg_end(10);
 
     const esp_console_cmd_t cmd = {
         .command = "wifi_config",
