@@ -28,7 +28,6 @@ extern "C"
 
 /**
   * @brief Wi-Fi Radar data type
-  *
   */
 typedef struct {
     float waveform_jitter;
@@ -72,6 +71,14 @@ typedef struct {
     wifi_csi_filtered_cb_t wifi_csi_filtered_cb;         /**< Register the callback function of Wi-Fi CSI data */
     void *wifi_csi_cb_ctx;                 /**< Context argument, passed to callback function of Wi-Fi CSI */
     wifi_promiscuous_cb_t wifi_sniffer_cb; /**< The RX callback function in the promiscuous mode */
+
+    /**< Algorithm configuration */
+    struct {
+        UBaseType_t csi_handle_priority;
+        UBaseType_t csi_combine_priority;
+        uint16_t csi_recv_interval;
+        uint16_t csi_handle_time;
+    };
 } wifi_radar_config_t;
 
 /**
@@ -139,6 +146,14 @@ esp_err_t esp_radar_train_start(void);
 
 esp_err_t esp_radar_train_remove(void);
 
+/**
+ * @brief It stops the calibration process and returns the wander and jitter thresholds
+ *
+ * @param wander_threshold The threshold for the wander state.
+ * @param jitter_threshold The threshold of the correlation coefficient of the static state.
+ *
+ * @return The wander and jitter thresholds.
+ */
 esp_err_t esp_radar_train_stop(float *wander_threshold, float *jitter_threshold);
 
 #ifdef __cplusplus
