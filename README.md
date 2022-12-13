@@ -2,6 +2,12 @@
 
 The main purpose of this project is to show the use of ESP-WIFI-CSI. The human body detection algorithm is still being optimized. You can get more accurate results through machine learning, neural network and other algorithms based on the original CSI data.
 
+## Supported versions and chips
+
+| ESP-CSI | Dependent ESP-IDF |           Target            |    Support State     |
+| :-----: | :---------------: | :-------------------------: | :------------------: |
+| master  |   release/v4.4    | ESP32 / ESP32-S2 / ESP32-C3 | Periodic maintenance |
+
 ## 1 Introduction
 
 ### 1.1 Introduction to CSI
