@@ -11,8 +11,6 @@ variables:
 
 before_script:
   - cd $IDF_PATH
-  - git checkout release/v4.4
-  - git pull
   - git submodule update --init --recursive
   - ./install.sh
   - . ./export.sh
