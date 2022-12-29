@@ -18,7 +18,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JIRA_PASS: ${{ secrets.JIRA_PASS }}
-          JIRA_PROJECT: AEGH
-          JIRA_COMPONENT: EspCsi
+          JIRA_PROJECT: ${{ secrets.JIRA_PROJECT }}
+          JIRA_COMPONENT: ${{ secrets.JIRA_COMPONENT }}
           JIRA_URL: ${{ secrets.JIRA_URL }}
           JIRA_USER: ${{ secrets.JIRA_USER }}
