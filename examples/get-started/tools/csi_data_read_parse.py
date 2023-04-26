@@ -133,7 +133,7 @@ def csi_data_read_parse(port: str, csv_writer):
         try:
             csi_raw_data = json.loads(csi_data[-1])
         except json.JSONDecodeError:
-            print(f"data is not incomplete")
+            print(f"data is incomplete")
             continue
 
         if len(csi_raw_data) != 128 and len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
