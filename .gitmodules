@@ -1,4 +1,4 @@
-[submodule "examples/connect_qcloud/components/esp_qcloud"]
-	path = examples/connect_qcloud/components/esp_qcloud
-	url = https://github.com/espressif/esp-qcloud.git
 
+[submodule "examples/connect_rainmaker/components/esp-rainmaker"]
+	path = examples/connect_rainmaker/components/esp-rainmaker
+	url = https://github.com/espressif/esp-rainmaker.git
