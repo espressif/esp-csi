@@ -96,20 +96,18 @@ static void wifi_csi_init()
 static esp_err_t wifi_ping_router_start()
 {
     static esp_ping_handle_t ping_handle = NULL;
-    esp_ping_config_t ping_config        = {
-        .count           = 0,
-        .interval_ms     = 1000 / CONFIG_SEND_FREQUENCY,
-        .timeout_ms      = 1000,
-        .data_size       = 1,
-        .tos             = 0,
-        .task_stack_size = 4096,
-        .task_prio       = 0,
-    };
+
+    esp_ping_config_t ping_config = ESP_PING_DEFAULT_CONFIG();
+    ping_config.count             = 0;
+    ping_config.interval_ms       = 1000 / CONFIG_SEND_FREQUENCY;
+    ping_config.task_stack_size   = 3072;
+    ping_config.data_size         = 1;
 
     esp_netif_ip_info_t local_ip;
     esp_netif_get_ip_info(esp_netif_get_handle_from_ifkey("WIFI_STA_DEF"), &local_ip);
     ESP_LOGI(TAG, "got ip:" IPSTR ", gw: " IPSTR, IP2STR(&local_ip.ip), IP2STR(&local_ip.gw));
-    inet_addr_to_ip4addr(ip_2_ip4(&ping_config.target_addr), (struct in_addr *)&local_ip.gw);
+    ping_config.target_addr.u_addr.ip4.addr = ip4_addr_get_u32(&local_ip.gw);
+    ping_config.target_addr.type = ESP_IPADDR_TYPE_V4;
 
     esp_ping_callbacks_t cbs = { 0 };
     esp_ping_new_session(&ping_config, &cbs, &ping_handle);

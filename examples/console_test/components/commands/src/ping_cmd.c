@@ -100,15 +100,11 @@ static struct {
 
 static int wifi_cmd_ping(int argc, char **argv)
 {
-    esp_ping_config_t config = {
-        .count       = 0,
-        .interval_ms = 10,
-        .timeout_ms  = 1000,
-        .data_size   = 1,
-        .tos         = 0,
-        .task_stack_size = 4096,
-        .task_prio = 0,
-    };
+    esp_ping_config_t config = ESP_PING_DEFAULT_CONFIG();
+    config.count           = 0;
+    config.data_size       = 1;
+    config.interval_ms     = 10;
+    config.task_stack_size = 3072;
 
     if (arg_parse(argc, argv, (void **)&ping_args) != ESP_OK) {
         arg_print_errors(stderr, ping_args.end, argv[0]);
@@ -176,9 +172,11 @@ static int wifi_cmd_ping(int argc, char **argv)
         if (res->ai_family == AF_INET) {
             struct in_addr addr4 = ((struct sockaddr_in *)(res->ai_addr))->sin_addr;
             inet_addr_to_ip4addr(ip_2_ip4(&target_addr), &addr4);
+            target_addr.type = IPADDR_TYPE_V4;
         } else {
             struct in6_addr addr6 = ((struct sockaddr_in6 *)(res->ai_addr))->sin6_addr;
             inet6_addr_to_ip6addr(ip_2_ip6(&target_addr), &addr6);
+            target_addr.type = IPADDR_TYPE_V6;
         }
 
         freeaddrinfo(res);
