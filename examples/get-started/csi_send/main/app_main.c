@@ -89,6 +89,6 @@ void app_main()
             ESP_LOGW(TAG, "<%s> ESP-NOW send error", esp_err_to_name(ret));
         }
 
-        vTaskDelay(pdMS_TO_TICKS(1000 / CONFIG_SEND_FREQUENCY));
+        usleep(1000 * 1000 / CONFIG_SEND_FREQUENCY);
     }
 }
