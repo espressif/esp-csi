@@ -28,6 +28,7 @@
 #include <iot_button.h>
 
 #include "esp_radar.h"
+#include "esp_ping.h"
 
 #ifdef CONFIG_IDF_TARGET_ESP32C3
 #define BUTTON_GPIO                                GPIO_NUM_8
@@ -88,10 +89,11 @@ static esp_err_t ping_router_start(uint32_t interval_ms)
      */
     esp_netif_ip_info_t local_ip;
     esp_netif_get_ip_info(esp_netif_get_handle_from_ifkey("WIFI_STA_DEF"), &local_ip);
-    ESP_LOGI(TAG, "got ip:" IPSTR ", gw: " IPSTR, IP2STR(&local_ip.ip), IP2STR(&local_ip.gw));
+    ESP_LOGI(TAG, "Ping: got ip:" IPSTR ", gw: " IPSTR, IP2STR(&local_ip.ip), IP2STR(&local_ip.gw));
     config.target_addr.u_addr.ip4.addr = ip4_addr_get_u32(&local_ip.gw);
     config.target_addr.type = ESP_IPADDR_TYPE_V4;
 
+//   esp_ping_get_target(PING_TARGET_IP_ADDRESS, &config.target_addr, sizeof(ip_addr_t));
     esp_ping_callbacks_t cbs = { 0 };
     esp_ping_new_session(&config, &cbs, &ping_handle);
     esp_ping_start(ping_handle);
@@ -234,25 +236,25 @@ static void radar_cb(const wifi_radar_info_t *info, void *ctx)
 
 static esp_err_t radar_start()
 {
-    ESP_ERROR_CHECK(esp_wifi_set_promiscuous(true));
+    esp_radar_init();
 
-    wifi_radar_config_t radar_config = {
-        .wifi_radar_cb = radar_cb,
-    };
+    wifi_radar_config_t radar_config = WIFI_RADAR_CONFIG_DEFAULT();
+    radar_config.csi_config.lltf_en = true;
+    radar_config.csi_config.htltf_en = false;
+    radar_config.csi_config.stbc_htltf2_en = false;
+    radar_config.wifi_radar_cb = radar_cb;
 
     wifi_ap_record_t ap_info = {0x0};
-
     esp_wifi_sta_get_ap_info(&ap_info);
     memcpy(radar_config.filter_mac, ap_info.bssid, sizeof(ap_info.bssid));
-
-    esp_radar_init();
     esp_radar_set_config(&radar_config);
+
     esp_radar_start();
 
     return ESP_OK;
 }
 
-static void auto_calibrate_timercb(void *timer)
+static void auto_calibrate_timercb(TimerHandle_t timer)
 {
     g_auto_calibrate_timerleft -= AUTO_CALIBRATE_RAPORT_INTERVAL;
 
@@ -339,7 +341,7 @@ void app_main()
     nvs_get_blob(g_nvs_handle, "detect_config", &g_detect_config, &detect_config_size);
 
     /* Reduced output log */
-    esp_log_level_set("esp_radar", ESP_LOG_WARN);
+    // esp_log_level_set("esp_radar", ESP_LOG_WARN);
     esp_log_level_set("RADAR_DADA", ESP_LOG_WARN);
 
     /* Initialize Wi-Fi. Note that, this should be called before esp_rmaker_node_init() */

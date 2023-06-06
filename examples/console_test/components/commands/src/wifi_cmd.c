@@ -20,6 +20,8 @@
 #include "argtable3/argtable3.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
+
+#include "esp_mac.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "esp_err.h"
@@ -122,7 +124,7 @@ static int wifi_cmd_sta(int argc, char **argv)
         s_reconnect = false;
         xEventGroupClearBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
         ESP_ERROR_CHECK(esp_wifi_disconnect());
-        xEventGroupWaitBits(s_wifi_event_group, WIFI_DISCONNECTED_BIT, false, true, portTICK_RATE_MS);
+        xEventGroupWaitBits(s_wifi_event_group, WIFI_DISCONNECTED_BIT, false, true, portMAX_DELAY);
     }
 
     s_reconnect = true;
@@ -325,7 +327,7 @@ static int wifi_config_func(int argc, char **argv)
             s_reconnect = false;
             xEventGroupClearBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
             ESP_ERROR_CHECK(esp_wifi_disconnect());
-            xEventGroupWaitBits(s_wifi_event_group, WIFI_DISCONNECTED_BIT, false, true, portTICK_RATE_MS);
+            xEventGroupWaitBits(s_wifi_event_group, WIFI_DISCONNECTED_BIT, false, true, portMAX_DELAY);
         }
 
         s_reconnect = true;

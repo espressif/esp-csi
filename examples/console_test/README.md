@@ -1,4 +1,5 @@
-# esp-csi console_test
+# esp-csi console_test [[中文]](./README_cn.md)
+----------
 ## 1 Introduction
 This example provides a test platform for Wi-Fi CSI, which includes functions such as data display, data acquisition and data analysis, which can help you quickly understand Wi-Fi CSI.
 + **Display**：you can quickly understand the impact of different antennas, human movement and equipment placement on Wi-Fi signals by viewing the real-time data such as Wi-Fi RF noise bottom, CSI, RSSI and noise floor of RF.
@@ -10,14 +11,15 @@ This example provides a test platform for Wi-Fi CSI, which includes functions su
 This example provides two working modes of `esp32-s3 development board` and `router` as Wi-Fi CSI contracting equipment. Using `esp32-s3 development board` as contracting equipment has better adjustment effect on contracting rate, RF size and channel. In both modes, `esp32-s3 development board` is used as the receiving device for Wi-Fi CSI.
 
 ### 2.2 Compiler Environment
-The esp-idf version of the current project is [ESP-IDF Release v4.4.1](https://github.com/espressif/esp-idf/releases/tag/v4.4.1)
+The esp-idf version of the current project is [ESP-IDF Release v5.0.2](https://github.com/espressif/esp-idf/releases/tag/v5.0.2)
 ```bash
 cd esp-idf
-git checkout v4.4.1
+git checkout v5.0.2
 git submodule update --init --recursive
 ./install.sh
 . ./export.sh
 ```
+> Note: Since esp-idf v5.0.0 or above supports destination address filtering, the effect will be better, so it is recommended to use v5.0.0 or above
 
 ## 3 Starting program
 ### 3.1 Send Wi-Fi CSI

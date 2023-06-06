@@ -242,7 +242,7 @@ CLEAN_UP:
 }
 
 
-esp_err_t rader_evaluate_server(uint32_t port)
+esp_err_t radar_evaluate_server(uint32_t port)
 {
     if (!g_tcp_server_task_handle) {
         xTaskCreate(tcp_server_task, "tcp_server", 4 * 1024, (void *)port, 0, &g_tcp_server_task_handle);

@@ -13,7 +13,6 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
-#include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_err.h"
@@ -32,6 +31,7 @@
 #include "esp_radar.h"
 #include "csi_commands.h"
 
+#include "esp_mac.h"
 #include "esp_ota_ops.h"
 #include "esp_netif.h"
 #include "esp_chip_info.h"
@@ -40,14 +40,14 @@
 
 #define RECV_ESPNOW_CSI
 #define CONFIG_LESS_INTERFERENCE_CHANNEL    11
-#define RADER_EVALUATE_SERVER_PORT          3232
+#define RADAR_EVALUATE_SERVER_PORT          3232
 
-static led_strip_t *g_strip_handle    = NULL;
-static xQueueHandle g_csi_info_queue  = NULL;
+static led_strip_t *g_strip_handle       = NULL;
+static QueueHandle_t g_csi_info_queue    = NULL;
+static const char *TAG                   = "app_main";
 
-static const char *TAG  = "app_main";
 
-esp_err_t led_init()
+static esp_err_t led_init()
 {
 #ifdef CONFIG_IDF_TARGET_ESP32C3
 #define CONFIG_LED_STRIP_GPIO        GPIO_NUM_8
@@ -70,7 +70,7 @@ esp_err_t led_init()
     return ESP_OK;
 }
 
-esp_err_t led_set(uint8_t red, uint8_t green, uint8_t blue)
+static esp_err_t led_set(uint8_t red, uint8_t green, uint8_t blue)
 {
     g_strip_handle->set_pixel(g_strip_handle, 0, red, green, blue);
     g_strip_handle->refresh(g_strip_handle, 100);
@@ -115,7 +115,7 @@ void print_device_info()
            esp_log_timestamp(), app_desc->date, app_desc->time, chip_name,
            chip_info.revision, app_desc->version, app_desc->idf_ver,
            heap_caps_get_total_size(MALLOC_CAP_DEFAULT), esp_get_free_heap_size(),
-           ap_info.ssid, IP2STR(&local_ip.ip), RADER_EVALUATE_SERVER_PORT);
+           ap_info.ssid, IP2STR(&local_ip.ip), RADAR_EVALUATE_SERVER_PORT);
 }
 
 static void wifi_init(void)
@@ -175,8 +175,8 @@ static struct console_input_config {
     char csi_output_type[16];
     char csi_output_format[16];
 } g_console_input_config = {
-    .predict_someone_threshold = 0.001,
-    .predict_move_threshold    = 0.001,
+    .predict_someone_threshold = 0.002,
+    .predict_move_threshold    = 0.002,
     .predict_buff_size         = 5,
     .predict_outliers_number   = 2,
     .train_start               = false,
@@ -187,7 +187,7 @@ static struct console_input_config {
 
 static TimerHandle_t g_collect_timer_handele = NULL;
 
-static void collect_timercb(void *timer)
+static void collect_timercb(TimerHandle_t timer)
 {
     g_console_input_config.collect_number--;
 
@@ -278,11 +278,11 @@ static int wifi_cmd_radar(int argc, char **argv)
     }
 
     if (radar_args.csi_start->count) {
-        esp_radar_csi_start();
+        esp_radar_start();
     }
 
     if (radar_args.csi_stop->count) {
-        esp_radar_csi_stop();
+        esp_radar_stop();
     }
 
     return ESP_OK;
@@ -499,19 +499,25 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
         wifi_radar_config_t radar_config = {0};
         wifi_ap_record_t ap_info;
 
-        esp_wifi_sta_get_ap_info(&ap_info);
         esp_radar_get_config(&radar_config);
+
+        radar_config.csi_config.lltf_en = true;
+        radar_config.csi_config.htltf_en = false;
+        radar_config.csi_config.stbc_htltf2_en = false;
+        esp_wifi_sta_get_ap_info(&ap_info);
         memcpy(radar_config.filter_mac, ap_info.bssid, sizeof(ap_info.bssid));
+        ESP_ERROR_CHECK(esp_wifi_get_mac(ESP_IF_WIFI_STA, radar_config.filter_dmac));
+
         esp_radar_set_config(&radar_config);
 
         print_device_info();
 
         esp_err_t ret   = ESP_OK;
-        const char *ping = "ping";
+        const char *ping = "ping -i 10";
         ESP_ERROR_CHECK(esp_console_run(ping, &ret));
 
-        extern esp_err_t rader_evaluate_server(uint32_t port);
-        rader_evaluate_server(RADER_EVALUATE_SERVER_PORT);
+        extern esp_err_t radar_evaluate_server(uint32_t port);
+        radar_evaluate_server(RADAR_EVALUATE_SERVER_PORT);
 
 #ifdef RECV_ESPNOW_CSI
         ESP_ERROR_CHECK(esp_wifi_set_promiscuous(false));
@@ -527,9 +533,9 @@ void app_main(void)
     led_init();
 
     /**
-     * @brief Turn off the radar module printing information
+     * @brief Turn on the radar module printing information
      */
-    // esp_log_level_set(ESP_LOG_WARN, "esp_radar");
+    // esp_log_level_set("esp_radar", ESP_LOG_DEBUG);
 
     /**
      * @brief Register serial command
@@ -543,7 +549,11 @@ void app_main(void)
 #if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S2
     /**< Fix serial port garbled code due to high baud rate */
     uart_ll_set_sclk(UART_LL_GET_HW(CONFIG_ESP_CONSOLE_UART_NUM), UART_SCLK_APB);
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
+    uart_ll_set_baudrate(UART_LL_GET_HW(CONFIG_ESP_CONSOLE_UART_NUM), CONFIG_ESP_CONSOLE_UART_BAUDRATE, CONFIG_ESP_CONSOLE_UART_BAUDRATE);
+#else
     uart_ll_set_baudrate(UART_LL_GET_HW(CONFIG_ESP_CONSOLE_UART_NUM), CONFIG_ESP_CONSOLE_UART_BAUDRATE);
+#endif
 #endif
 
     cmd_register_system();
@@ -556,14 +566,15 @@ void app_main(void)
     /**
      * @brief Initialize Wi-Fi Radar
      */
-    wifi_radar_config_t radar_config = {
-        .wifi_radar_cb        = wifi_radar_cb,
-        // .wifi_csi_filtered_cb = wifi_csi_raw_cb,
-        .filter_mac           = {0x1a, 0x00, 0x00, 0x00, 0x00, 0x00},
-    };
+
     wifi_init();
     esp_radar_init();
+
+    wifi_radar_config_t radar_config = WIFI_RADAR_CONFIG_DEFAULT();
+    radar_config.wifi_radar_cb = wifi_radar_cb;
+    memcpy(radar_config.filter_mac, "\x1a\x00\x00\x00\x00\x00", 6);
     esp_radar_set_config(&radar_config);
+
     esp_radar_start();
 
     /**

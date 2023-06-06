@@ -81,3 +81,8 @@ docs/docusaurus/website/node_modules
 
 # clangd
 .cache/
+
+# IDF package manager
+**/managed_components/
+**/*.lock
+**/.vscode
