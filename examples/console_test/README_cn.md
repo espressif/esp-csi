@@ -1,5 +1,5 @@
-# esp-csi console_test
----
+# esp-csi console_test [[English]](./README.md)
+----------
 ## 1 简介
 console_test 是一款 Wi-Fi CSI 的测试平台，它包含了对 Wi-Fi CSI 的数据采集、数据显示、数据分析等功能，帮助我们更好的了解和应用 Wi-Fi CSI
 + **显示**：通过查看 Wi-Fi 射频底噪、CSI、RSSI 及射频底噪等实时数据，可以快速了解不同天线、人体运动和设备摆放对 Wi-Fi 信号的影响。
@@ -12,14 +12,15 @@ console_test 是一款 Wi-Fi CSI 的测试平台，它包含了对 Wi-Fi CSI 的
 本例提供了 `esp32-s3 开发板` 和 `路由器` 两种设备模式作为 Wi-Fi CSI 发送设备。 其中使用 `esp32-s3 开发板` 作为发送设备，对发送频率、射频大小、信道的调整效果更好。两种模式下都用 esp32-s3 作为 Wi-Fi CSI 的接收设备。
 
 ### 2.2 编译环境
-使用的 esp-idf 版本为 [ESP-IDF Release v4.4.1](https://github.com/espressif/esp-idf/releases/tag/v4.4.1)
+使用的 esp-idf 版本为 [ESP-IDF Release v5.0.2](https://github.com/espressif/esp-idf/releases/tag/v5.0.2)
 ```bash
 cd esp-idf
-git checkout v4.4.1
+git checkout v5.0.2
 git submodule update --init --recursive
 ./install.sh
 . ./export.sh
 ```
+> 注： 由于 esp-idf v5.0.0 以上的版本支持目的地址过滤，其效果会更好，因此建议使用 v5.0.0 以上的版本
 
 ## 3 程序启动
 ### 3.1 发送 Wi-Fi CSI

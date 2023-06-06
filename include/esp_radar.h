@@ -46,6 +46,7 @@ typedef struct {
     int8_t valid_data[0];
 } wifi_csi_filtered_info_t;
 
+
 /**
   * @brief The RX callback function of Wi-Fi radar data.
   *
@@ -65,12 +66,12 @@ typedef void (*wifi_csi_filtered_cb_t)(const wifi_csi_filtered_info_t *info, voi
   */
 typedef struct {
     uint8_t filter_mac[6];                 /**< Get the mac of the specified device, no filtering: [0xff:0xff:0xff:0xff:0xff:0xff] */
+    uint8_t filter_dmac[6];                /**< Get the destination mac of the specified device, no filtering: [0xff:0xff:0xff:0xff:0xff:0xff] */
     uint16_t filter_len;                   /**< source MAC address of the CSI data, no filtering: 0 */
     wifi_radar_cb_t wifi_radar_cb;         /**< Register the callback function of Wi-Fi radar data */
     void *wifi_radar_cb_ctx;               /**< Context argument, passed to callback function of Wi-Fi radar */
-    wifi_csi_filtered_cb_t wifi_csi_filtered_cb;         /**< Register the callback function of Wi-Fi CSI data */
+    wifi_csi_filtered_cb_t wifi_csi_filtered_cb; /**< Register the callback function of Wi-Fi CSI data */
     void *wifi_csi_cb_ctx;                 /**< Context argument, passed to callback function of Wi-Fi CSI */
-    wifi_promiscuous_cb_t wifi_sniffer_cb; /**< The RX callback function in the promiscuous mode */
 
     /**< Algorithm configuration */
     struct {
@@ -79,8 +80,36 @@ typedef struct {
         uint16_t csi_recv_interval;
         uint16_t csi_handle_time;
     };
+
+    /**< Channel state information(CSI) configuration type */
+    wifi_csi_config_t csi_config;
 } wifi_radar_config_t;
 
+/**
+  * @brief Wi-Fi radar default configuration
+  */
+#define WIFI_RADAR_CONFIG_DEFAULT() { \
+    .filter_mac = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff}, \
+    .filter_dmac = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff}, \
+    .wifi_radar_cb = NULL, \
+    .wifi_radar_cb_ctx = NULL, \
+    .wifi_csi_filtered_cb = NULL, \
+    .wifi_csi_cb_ctx = NULL, \
+    .csi_handle_priority = configMAX_PRIORITIES, \
+    .csi_combine_priority = configMAX_PRIORITIES, \
+    .csi_recv_interval    = 10, \
+    .csi_handle_time      = 250, \
+    .csi_config = { \
+        .lltf_en           = true, \
+        .htltf_en          = true, \
+        .stbc_htltf2_en    = true, \
+        .ltf_merge_en      = true, \
+        .channel_filter_en = true, \
+        .manu_scale        = true, \
+        .shift             = true, \
+    } \
+}
+  
 /**
   * @brief Set Wi-Fi radar configuration
   *
@@ -138,9 +167,6 @@ esp_err_t esp_radar_init(void);
   *    - ESP_FAIL
   */
 esp_err_t esp_radar_deinit(void);
-
-esp_err_t esp_radar_csi_start();
-esp_err_t esp_radar_csi_stop();
 
 esp_err_t esp_radar_train_start(void);
 

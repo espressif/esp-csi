@@ -6,7 +6,7 @@ The main purpose of this project is to show the use of ESP-WIFI-CSI. The human b
 
 | ESP-CSI | Dependent ESP-IDF |           Target            |    Support State     |
 | :-----: | :---------------: | :-------------------------: | :------------------: |
-| master  |   release/v4.4    | ESP32 / ESP32-S2 / ESP32-C3 | Periodic maintenance |
+| master  |   release/v4.4 / release/v5.0    | ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3 | Periodic maintenance |
 
 ## 1 Introduction
 

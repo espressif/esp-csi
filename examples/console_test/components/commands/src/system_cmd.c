@@ -14,14 +14,16 @@
 
 #include "esp_log.h"
 
+#include <string.h>
 #include <sys/param.h>
 #include "argtable3/argtable3.h"
 #include "mbedtls/base64.h"
 
 #include "esp_system.h"
-#include "esp_spi_flash.h"
 #include "esp_partition.h"
 #include "esp_console.h"
+#include "esp_chip_info.h"
+
 
 static const char *TAG = "system_cmd";
 
@@ -38,12 +40,11 @@ static int version_func(int argc, char **argv)
     ESP_LOGI(TAG, "free heap        : %d Bytes", esp_get_free_heap_size());
     ESP_LOGI(TAG, "CPU cores        : %d", chip_info.cores);
     ESP_LOGI(TAG, "silicon revision : %d", chip_info.revision);
-    ESP_LOGI(TAG, "feature          : %s%s%s%s%d%s",
+    ESP_LOGI(TAG, "feature          : %s%s%s%s",
              chip_info.features & CHIP_FEATURE_WIFI_BGN ? "/802.11bgn" : "",
              chip_info.features & CHIP_FEATURE_BLE ? "/BLE" : "",
              chip_info.features & CHIP_FEATURE_BT ? "/BT" : "",
-             chip_info.features & CHIP_FEATURE_EMB_FLASH ? "/Embedded-Flash:" : "/External-Flash:",
-             spi_flash_get_chip_size() / (1024 * 1024), " MB");
+             chip_info.features & CHIP_FEATURE_EMB_FLASH ? "/Embedded-Flash:" : "/External-Flash:");
 
     return ESP_OK;
 }
@@ -204,10 +205,60 @@ static void register_heap()
 }
 
 
+
+static struct {
+    struct arg_str *tag;
+    struct arg_str *level;
+    struct arg_end *end;
+} log_args;
+
+/**
+ * @brief  A function which implements log command.
+ */
+static int log_func(int argc, char **argv)
+{
+    const char *level_str[6] = {"NONE", "ERR", "WARN", "INFO", "DEBUG", "VER"};
+
+    if (arg_parse(argc, argv, (void **)&log_args) != ESP_OK) {
+        arg_print_errors(stderr, log_args.end, argv[0]);
+        return ESP_FAIL;
+    }
+
+    for (int log_level = 0; log_args.level->count && log_level < sizeof(level_str) / sizeof(char *); ++log_level) {
+        if (!strncasecmp(level_str[log_level], log_args.level->sval[0], sizeof(level_str[log_level]) - 1)) {
+            const char *tag = log_args.tag->count ? log_args.tag->sval[0] : "*";
+            esp_log_level_set(tag, log_level);
+        }
+    }
+
+    return ESP_OK;
+}
+
+/**
+ * @brief  Register log command.
+ */
+static void register_log()
+{
+    log_args.tag   = arg_str0("t", "tag", "<tag>", "Tag of the log entries to enable, '*' resets log level for all tags to the given value");
+    log_args.level = arg_str0("l", "level", "<level>", "Selects log level to enable (NONE, ERR, WARN, INFO, DEBUG, VER)");
+    log_args.end   = arg_end(2);
+
+    const esp_console_cmd_t cmd = {
+        .command = "log",
+        .help = "Set log level for given tag",
+        .hint = NULL,
+        .func = &log_func,
+        .argtable = &log_args,
+    };
+
+    ESP_ERROR_CHECK(esp_console_cmd_register(&cmd));
+}
+
 void cmd_register_system(void)
 {
     register_version();
     register_heap();
     register_restart();
     register_reset();
+    register_log();
 }

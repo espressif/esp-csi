@@ -12,12 +12,10 @@ endif(DEFINED ENV{RMAKER_PATH})
 set(CSI_PATH ${CMAKE_CURRENT_LIST_DIR}/../..)
 
 set(EXTRA_COMPONENT_DIRS ${CSI_PATH}
-                         ${RMAKER_PATH}/components/esp-insights/components 
                          ${RMAKER_PATH}/components
-                         ${RMAKER_PATH}/components/esp-rainmaker/components
-                         ${RMAKER_PATH}/examples/common/app_reset
-                         ${RMAKER_PATH}/examples/common/app_wifi
-                         ${RMAKER_PATH}/examples/common/app_insights
+                         ${RMAKER_PATH}/components/esp-insights/components
+                         ${RMAKER_PATH}/components/rmaker_common
+                         ${RMAKER_PATH}/examples/common/
                          )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)

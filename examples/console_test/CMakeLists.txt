@@ -15,12 +15,10 @@ else()
     set(CSI_PATH ${CMAKE_CURRENT_LIST_DIR}/../..)
 endif()
 
-set(EXTRA_COMPONENT_DIRS ${CSI_PATH} $ENV{IDF_PATH}/examples/system/console/components
+set(EXTRA_COMPONENT_DIRS ${CSI_PATH} 
                          $ENV{IDF_PATH}/examples/system/console/advanced/components
-                         $ENV{IDF_PATH}/examples/peripherals/rmt/led_strip/components
-                         $ENV{IDF_PATH}/examples/common_components/led_strip
-                         )
-
+                          $ENV{IDF_PATH}/components/tinyusb/tinyusb/hw/bsp/esp32s3/components/led_strip
+)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 string(REGEX REPLACE ".*/\(.*\)" "\\1" CURDIR ${CMAKE_CURRENT_SOURCE_DIR})
