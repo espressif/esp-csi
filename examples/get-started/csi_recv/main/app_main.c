@@ -47,7 +47,7 @@ static void wifi_init()
 
 static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
 {
-    if (!info || !info->buf || !info->mac) {
+    if (!info || !info->buf) {
         ESP_LOGW(TAG, "<%s> wifi_csi_cb", esp_err_to_name(ESP_ERR_INVALID_ARG));
         return;
     }
@@ -56,7 +56,7 @@ static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
         return;
     }
 
-    static uint32_t s_count = 0;
+    static int s_count = 0;
     const wifi_pkt_rx_ctrl_t *rx_ctrl = &info->rx_ctrl;
 
     if (!s_count) {

@@ -5,55 +5,69 @@ stages:
 variables:
   BATCH_BUILD: "1"
   V: "0"
-  MAKEFLAGS: "-j5 --no-keep-going"
-  ESPNOW_PATH: "$CI_PROJECT_DIR"
+  MAKEFLAGS: "-j8 --no-keep-going"
   IDF_CI_BUILD: "1"
 
 before_script:
-  - cd $IDF_PATH
-  - git submodule update --init --recursive
-  - ./install.sh
-  - . ./export.sh
-  - cd -
+  # add gitlab ssh key
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
+  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - git submodule update --init --recursive
 
-build_template_cmake: &build_template
+.build_all_examples_script: &build_all_examples_script
+  - for EXAMPLE in $EXAMPLES; do
+  - cd $CI_PROJECT_DIR/examples/$EXAMPLE
+  - echo Building $EXAMPLE
+  - if [[ "$EXAMPLE" == "console_test" ]]; then
+  - for TARGET in $TARGETS; do
+  - cd $CI_PROJECT_DIR/examples/$EXAMPLE
+  - idf.py fullclean
+  - idf.py set-target $TARGET
+  - idf.py build
+  - done
+  - else
+  - idf.py fullclean
+  - idf.py build
+  - fi
+  - echo Build Complete for $EXAMPLE
+  - done
+
+.build_template:
   stage: build
-  image: espressif/idf:release-v4.4
   tags:
     - build
   variables:
-    ARTIFACTS_NAME: "default"
-    DEFAULT_CONFIG: ""
-    BATCH_BUILD: "1"
-    V: "0"
+    EXAMPLES: "console_test connect_rainmaker get-started/csi_send get-started/csi_recv get-started/csi_recv_router"
   script:
-    - cd examples/console_test
-    - idf.py set-target esp32
-    - idf.py build
-    - idf.py set-target esp32s3
-    - idf.py build
-    - cd ../../
+    - *build_all_examples_script
 
-    - cd examples/connect_rainmaker
-    - idf.py set-target esp32s3
-    - idf.py build
-    - cd ../../
+build_idf_v4.4:
+  extends: .build_template
+  image: espressif/idf:release-v4.4
+  variables:
+    TARGETS: "esp32 esp32s3 esp32c3"
 
-    - cd examples/get-started/csi_send
-    - idf.py set-target esp32-c3
-    - idf.py build
-    - cd ../../../
+build_idf_v5.0:
+  extends: .build_template
+  image: espressif/idf:release-v5.0
+  variables:
+    TARGETS: "esp32 esp32s3 esp32c3"
 
-    - cd examples/get-started/csi_recv
-    - idf.py set-target esp32-c3
-    - idf.py build
-    - cd ../../../
+build_idf_v5.1:
+  extends: .build_template
+  image: espressif/idf:release-v5.1
+  variables:
+    TARGETS: "esp32 esp32s3 esp32c3"
 
-    - cd examples/get-started/csi_recv_router
-    - idf.py set-target esp32-c3
-    - idf.py build
-    - cd ../../../
+build_idf_master:
+  extends: .build_template
+  image: espressif/idf:latest
+  variables:
+    TARGETS: "esp32 esp32s3 esp32c3"
 
 push_master_to_github:
   stage: deploy

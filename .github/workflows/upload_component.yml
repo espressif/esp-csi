@@ -1,0 +1,19 @@
+name: Push components to Espressif Component Service
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  upload_components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Upload components to component service
+        uses: espressif/upload-components-ci-action@v1
+        with:
+          name: esp-csi
+          namespace: "espressif"
+          api_token: ${{ secrets.IDF_COMPONENT_API_TOKEN }}
