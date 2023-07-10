@@ -17,7 +17,6 @@ endif()
 
 set(EXTRA_COMPONENT_DIRS ${CSI_PATH} 
                          $ENV{IDF_PATH}/examples/system/console/advanced/components
-                          $ENV{IDF_PATH}/components/tinyusb/tinyusb/hw/bsp/esp32s3/components/led_strip
 )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)

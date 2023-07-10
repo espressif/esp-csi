@@ -26,7 +26,8 @@
 #include "driver/gpio.h"
 #include "driver/rmt.h"
 #include "hal/uart_ll.h"
-#include "led_strip.h"
+#include <ws2812_led.h>
+
 
 #include "esp_radar.h"
 #include "csi_commands.h"
@@ -42,40 +43,8 @@
 #define CONFIG_LESS_INTERFERENCE_CHANNEL    11
 #define RADAR_EVALUATE_SERVER_PORT          3232
 
-static led_strip_t *g_strip_handle       = NULL;
 static QueueHandle_t g_csi_info_queue    = NULL;
 static const char *TAG                   = "app_main";
-
-
-static esp_err_t led_init()
-{
-#ifdef CONFIG_IDF_TARGET_ESP32C3
-#define CONFIG_LED_STRIP_GPIO        GPIO_NUM_8
-#elif CONFIG_IDF_TARGET_ESP32S3
-#define CONFIG_LED_STRIP_GPIO        GPIO_NUM_48
-#else
-#define CONFIG_LED_STRIP_GPIO        GPIO_NUM_18
-#endif
-
-    rmt_config_t config = RMT_DEFAULT_CONFIG_TX(CONFIG_LED_STRIP_GPIO, RMT_CHANNEL_0);
-    // set counter clock to 40MHz
-    config.clk_div = 2;
-    ESP_ERROR_CHECK(rmt_config(&config));
-    ESP_ERROR_CHECK(rmt_driver_install(config.channel, 0, 0));
-    led_strip_config_t strip_config = LED_STRIP_DEFAULT_CONFIG(1, (led_strip_dev_t)config.channel);
-    g_strip_handle = led_strip_new_rmt_ws2812(&strip_config);
-    g_strip_handle->set_pixel(g_strip_handle, 0, 255, 255, 255);
-    ESP_ERROR_CHECK(g_strip_handle->refresh(g_strip_handle, 100));
-
-    return ESP_OK;
-}
-
-static esp_err_t led_set(uint8_t red, uint8_t green, uint8_t blue)
-{
-    g_strip_handle->set_pixel(g_strip_handle, 0, red, green, blue);
-    g_strip_handle->refresh(g_strip_handle, 100);
-    return ESP_OK;
-}
 
 void print_device_info()
 {
@@ -461,9 +430,9 @@ static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
         static bool led_status = false;
 
         if (led_status) {
-            led_set(0, 0, 0);
+            ws2812_led_set_rgb(0, 0, 0);
         } else {
-            led_set(255, 255, 0);
+            ws2812_led_set_rgb(255, 255, 0);
         }
 
         led_status = !led_status;
@@ -473,20 +442,20 @@ static void wifi_radar_cb(const wifi_radar_info_t *info, void *ctx)
 
     if (room_status) {
         if (human_status) {
-            led_set(0, 255, 0);
+            ws2812_led_set_rgb(0, 255, 0);
             ESP_LOGI(TAG, "Someone moved");
             s_last_move_time = esp_log_timestamp();
         } else if (esp_log_timestamp() - s_last_move_time > 3 * 1000) {
-            led_set(0, 0, 255);
+            ws2812_led_set_rgb(0, 0, 255);
             ESP_LOGI(TAG, "Someone");
         }
 
         s_last_someone_time = esp_log_timestamp();
     } else if (esp_log_timestamp() - s_last_someone_time > 3 * 1000) {
         if (human_status) {
-            led_set(255, 0, 0);
+            ws2812_led_set_rgb(255, 0, 0);
         } else {
-            led_set(255, 255, 255);
+            ws2812_led_set_rgb(255, 255, 255);
         }
     }
 }
@@ -530,7 +499,8 @@ void app_main(void)
     /**
      * @brief Install ws2812 driver, Used to display the status of the device
      */
-    led_init();
+    ws2812_led_init();
+    ws2812_led_clear();
 
     /**
      * @brief Turn on the radar module printing information
