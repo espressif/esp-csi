@@ -16,7 +16,6 @@ before_script:
   - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
   - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-  - git submodule update --init --recursive
 
 .build_all_examples_script: &build_all_examples_script
   - for EXAMPLE in $EXAMPLES; do
@@ -41,7 +40,7 @@ before_script:
   tags:
     - build
   variables:
-    EXAMPLES: "console_test connect_rainmaker get-started/csi_send get-started/csi_recv get-started/csi_recv_router"
+    EXAMPLES: "esp-radar/console_test esp-radar/connect_rainmaker get-started/csi_send get-started/csi_recv get-started/csi_recv_router"
   script:
     - *build_all_examples_script
 
