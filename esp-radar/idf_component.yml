@@ -1,6 +1,6 @@
 version: "0.1.0"
 description: This package provides algorithmic functionality for ESP-CSI human movement and presence detection for easy integration into products.
-url: https://github.com/espressif/esp-csi/esp-radar
+url: https://github.com/espressif/esp-csi/tree/master/esp-radar
 issues: https://github.com/espressif/esp-csi/issues
 targets:
   - esp32
