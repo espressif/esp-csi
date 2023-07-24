@@ -4,7 +4,7 @@ dependencies:
 
   esp-radar:
     version: "0.*"
-    override_path: "../../../../esp-radar"
+    override_path: "../../../../components/esp-radar"
 
   espressif/ws2812_led:
     path: components/ws2812_led

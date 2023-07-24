@@ -4,7 +4,7 @@ dependencies:
 
   esp-radar:
     version: "0.*"
-    override_path: "../../../../esp-radar"
+    override_path: "../../../../components/esp-radar"
 
   espressif/rmaker_common: "1.4.*"
   espressif/json_generator: ^1

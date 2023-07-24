@@ -10,10 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-
+        with:
+          submodules: 'recursive'
       - name: Upload components to component service
         uses: espressif/upload-components-ci-action@v1
         with:
-          name: esp-radar
+          directories: >
+            components/esp-radar
           namespace: "espressif"
           api_token: ${{ secrets.IDF_COMPONENT_API_TOKEN }}
