@@ -24,8 +24,8 @@ Then the example will be downloaded in current folder, you can check into it for
 
 > You can use this command to download other examples. Or you can download examples from esp-radar repository: 
 
- - [connect_rainmaker](https://github.com/espressif/esp-radar/tree/master/examples/connect_rainmaker): Adding Wi-Fi CSI Functionality in ESP RainMaker
- - [console_test](https://github.com/espressif/esp-radar/tree/master/examples/console_test): This example provides a test platform for Wi-Fi CSI, which includes functions such as data display, data acquisition and data analysis, which can help you quickly understand Wi-Fi CSI
+ - [connect_rainmaker](https://github.com/espressif/esp-csi/tree/master/examples/esp-radar/connect_rainmaker): Adding Wi-Fi CSI Functionality in ESP RainMaker
+ - [console_test](https://github.com/espressif/esp-csi/tree/master/examples/esp-radar/console_test): This example provides a test platform for Wi-Fi CSI, which includes functions such as data display, data acquisition and data analysis, which can help you quickly understand Wi-Fi CSI
 
 ### Q&A
 Q1. I encountered the following problems when using the package manager
