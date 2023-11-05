@@ -1,4 +1,0 @@
-
-[submodule "examples/connect_rainmaker/components/esp-rainmaker"]
-	path = examples/connect_rainmaker/components/esp-rainmaker
-	url = https://github.com/espressif/esp-rainmaker.git

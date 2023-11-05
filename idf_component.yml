@@ -1,7 +1,0 @@
-version: "0.1.0"
-description: This package provides enhanced ESP-CSI functions which will be easy to integrate into product.
-url: https://github.com/espressif/esp-csi
-issues: https://github.com/espressif/esp-csi/issues
-dependencies:
-  idf: ">=4.4.1"
-  cmake_utilities: "0.*"

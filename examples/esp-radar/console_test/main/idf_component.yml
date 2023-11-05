@@ -1,0 +1,12 @@
+## IDF Component Manager Manifest File
+dependencies:
+  idf: ">=4.4.1"
+
+  esp-radar:
+    version: "0.*"
+    override_path: "../../../../components/esp-radar"
+
+  espressif/ws2812_led:
+    path: components/ws2812_led
+    git: https://github.com/espressif/esp-rainmaker.git
+    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
