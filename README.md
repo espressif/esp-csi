@@ -51,7 +51,7 @@ Use CSI's high sensitivity to environmental changes to recognize human movements
 
 ## 3 Getting Started
 
-The Getting Started project can be found in the [examples/console_test](./examples/console_test) directory. It will help you build a human activity detection application. See: [README](./examples/console_test/README.md).
+The Getting Started project can be found in the [examples/console_test](./examples/esp-radar/console_test) directory. It will help you build a human activity detection application. See: [README](./examples/esp-radar/console_test/README.md).
 
 
 ## 4 How to get CSI
