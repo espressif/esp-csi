@@ -738,7 +738,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.pushButton_router_connect.setText("disconnect")
             self.pushButton_router_connect.setStyleSheet("color: red")
 
-            command = "wifi_config --ssid " + self.lineEdit_router_ssid.text()
+            command = "wifi_config --ssid " + ("\"%s\"" % self.lineEdit_router_ssid.text())
             if len(self.lineEdit_router_password.text()) >= 8:
                 command += " --password " + self.lineEdit_router_password.text()
             self.serial_queue_write.put(command)
