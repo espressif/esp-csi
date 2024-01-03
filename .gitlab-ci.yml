@@ -62,11 +62,11 @@ build_idf_v5.1:
   variables:
     TARGETS: "esp32 esp32s3 esp32c3"
 
-build_idf_master:
-  extends: .build_template
-  image: espressif/idf:latest
-  variables:
-    TARGETS: "esp32 esp32s3 esp32c3"
+# build_idf_master:
+#   extends: .build_template
+#   image: espressif/idf:latest
+#   variables:
+#     TARGETS: "esp32 esp32s3 esp32c3"
 
 push_master_to_github:
   stage: deploy
@@ -78,6 +78,7 @@ push_master_to_github:
   variables:
     GIT_STRATEGY: clone
     GITHUB_PUSH_REFS: refs/remotes/origin/release refs/remotes/origin/master
+    CI_BUILD_REF: $CI_COMMIT_REF  # Add this line to pass CI_BUILD_REF
   before_script:
     - echo "skip default before_script"
   script:
@@ -95,4 +96,11 @@ push_master_to_github:
     #
     # NB: In gitlab 9.x, CI_BUILD_REF was deprecated. New name is CI_COMMIT_REF. If below command suddenly
     # generates bash syntax errors, this is probably why.
-    - eval $(git for-each-ref --shell bash --format 'if [ $CI_BUILD_REF == %(objectname) ]; then git checkout -B %(refname:strip=3); git push --follow-tags github %(refname:strip=3); fi;' $GITHUB_PUSH_REFS)
+    - |
+      if [ -n "${CI_COMMIT_TAG}" ]; then
+        # for tags
+        git push github "${CI_COMMIT_TAG}"
+      else
+        # for branches
+        git push github "${CI_COMMIT_SHA}:refs/heads/${CI_COMMIT_REF_NAME}"
+      fi
