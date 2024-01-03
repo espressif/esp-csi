@@ -78,6 +78,7 @@ push_master_to_github:
   variables:
     GIT_STRATEGY: clone
     GITHUB_PUSH_REFS: refs/remotes/origin/release refs/remotes/origin/master
+    CI_BUILD_REF: $CI_COMMIT_REF  # Add this line to pass CI_BUILD_REF
   before_script:
     - echo "skip default before_script"
   script:
