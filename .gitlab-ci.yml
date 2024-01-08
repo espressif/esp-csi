@@ -64,7 +64,7 @@ build_idf_v5.1:
 
 build_idf_master:
   extends: .build_template
-  image: espressif/idf:latest
+  image: espressif/idf:release-v5.2
   variables:
     TARGETS: "esp32 esp32s3 esp32c3"
 
