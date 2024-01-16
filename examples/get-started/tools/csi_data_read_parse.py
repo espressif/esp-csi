@@ -151,8 +151,8 @@ def csi_data_read_parse(port: str, csv_writer):
             csi_vaid_subcarrier_len = CSI_DATA_COLUMNS
 
         for i in range(csi_vaid_subcarrier_len):
-            csi_data_array[-1][i] = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2],
-                                            csi_raw_data[csi_vaid_subcarrier_index[i] * 2 - 1])
+            csi_data_array[-1][i] = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2 + 1],
+                                            csi_raw_data[csi_vaid_subcarrier_index[i] * 2])
 
     ser.close()
     return

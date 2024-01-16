@@ -992,8 +992,8 @@ def csi_data_handle(self, data):
 
     csi_raw_data = data['data']
     for i in range(CSI_DATA_COLUMNS):
-        data_complex = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2],
-                               csi_raw_data[csi_vaid_subcarrier_index[i] * 2 - 1])
+        data_complex = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2 + 1],
+                               csi_raw_data[csi_vaid_subcarrier_index[i] * 2])
         g_csi_phase_array[-1][i] = np.abs(data_complex)
 
     g_rssi_array[-1] = data['rssi']
