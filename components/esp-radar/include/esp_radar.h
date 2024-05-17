@@ -26,6 +26,24 @@ extern "C"
 {
 #endif
 
+#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#define WIFI_CSI_PHY_GAIN_ENABLE          1
+#endif
+
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 2, 1)
+#define WIFI_CSI_SEND_NULL_DATA_ENABLE    1
+#endif
+
+/**
+ * @brief 
+ *      phase     = atan2(imaginary, real)
+ *      amplitude = sqrt(imaginary^2 + real^2)
+ */
+typedef struct {
+    int8_t imaginary;
+    int8_t real;
+} wifi_csi_data_t;
+
 /**
  * @brief Wi-Fi Radar data type
  */
@@ -40,6 +58,11 @@ typedef struct {
 typedef struct {
     wifi_pkt_rx_ctrl_t rx_ctrl;     /**< received packet radio metadata header of the CSI data */
     uint8_t mac[6];                 /**< source MAC address of the CSI data */
+    uint8_t dmac[6];                /**< destination MAC address of the CSI data */
+    uint8_t agc_gain;               /**< AGC (Automatic Gain Control) gain to automatically adjust the gain of a signal to 
+                                         maintain a constant output power or signal quality */
+    int8_t fft_gain;               /**< FFT (Fast Fourier Transform) gain typically refers to the gain control applied 
+                                         during the signal processing stage when performing Fourier Transform on the signal */
     uint16_t raw_len;               /**< length of the CSI data */
     int8_t *raw_data;               /**< pointer to the CSI data，Unfiltered contains invalid subcarriers*/
     int16_t valid_len;              /**< length of the CSI data after filtering */
@@ -48,7 +71,6 @@ typedef struct {
     uint8_t valid_stbc_ht_lft_len;  /**< length of the STBC-HT-LTF data after filtering */
     int8_t valid_data[0];           /**< pointer to the CSI data after filtering */
 } wifi_csi_filtered_info_t;
-
 
 /**
   * @brief The RX callback function of Wi-Fi radar data.
@@ -79,6 +101,8 @@ typedef struct {
     wifi_csi_filtered_cb_t wifi_csi_filtered_cb; /**< Register the callback function of Wi-Fi CSI data */
     void *wifi_csi_cb_ctx;                 /**< Context argument, passed to callback function of Wi-Fi CSI */
 
+    bool wifi_radar_compensate_en;         /**< Whether to enable CSI compensation */
+
     /**< Algorithm configuration */
     struct {
         UBaseType_t csi_handle_priority;  /**< The priority of the task that handles the CSI data */
@@ -99,20 +123,21 @@ typedef struct {
     .filter_dmac = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff}, \
     .wifi_radar_cb = NULL, \
     .wifi_radar_cb_ctx = NULL, \
+    .wifi_radar_compensate_en = true, \
     .wifi_csi_filtered_cb = NULL, \
     .wifi_csi_cb_ctx = NULL, \
-    .csi_handle_priority = configMAX_PRIORITIES, \
-    .csi_combine_priority = configMAX_PRIORITIES, \
+    .csi_handle_priority  = configMAX_PRIORITIES - 1, \
+    .csi_combine_priority = configMAX_PRIORITIES - 1, \
     .csi_recv_interval    = 10, \
     .csi_handle_time      = 250, \
     .csi_config = { \
         .lltf_en           = true, \
-        .htltf_en          = true, \
-        .stbc_htltf2_en    = true, \
-        .ltf_merge_en      = true, \
-        .channel_filter_en = true, \
+        .htltf_en          = false, \
+        .stbc_htltf2_en    = false, \
+        .ltf_merge_en      = false, \
+        .channel_filter_en = false, \
         .manu_scale        = true, \
-        .shift             = true, \
+        .shift             = 4, \
     } \
 }
   
@@ -201,6 +226,26 @@ esp_err_t esp_radar_train_remove(void);
  * @return The wander and jitter thresholds.
  */
 esp_err_t esp_radar_train_stop(float *wander_threshold, float *jitter_threshold);
+
+#if WIFI_CSI_PHY_GAIN_ENABLE
+/**
+ * @brief 
+ * 
+ * @param agc_gain 
+ * @param fft_gain 
+ * @return esp_err_t 
+ */
+esp_err_t esp_radar_get_rx_gain(uint8_t* agc_gain, int8_t *fft_gain);
+
+/**
+ * @brief 
+ * 
+ * @param agc_gain 
+ * @param fft_gain 
+ * @return esp_err_t 
+ */
+esp_err_t esp_radar_set_rx_gain(uint8_t agc_gain, int8_t fft_gain);
+#endif
 
 #ifdef __cplusplus
 }

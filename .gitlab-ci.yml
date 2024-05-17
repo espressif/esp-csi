@@ -40,15 +40,9 @@ before_script:
   tags:
     - build
   variables:
-    EXAMPLES: "esp-radar/console_test esp-radar/connect_rainmaker get-started/csi_send get-started/csi_recv get-started/csi_recv_router"
+    EXAMPLES: "esp-radar/console_test get-started/csi_send get-started/csi_recv get-started/csi_recv_router"
   script:
     - *build_all_examples_script
-
-build_idf_v4.4:
-  extends: .build_template
-  image: espressif/idf:release-v4.4
-  variables:
-    TARGETS: "esp32 esp32s3 esp32c3"
 
 build_idf_v5.0:
   extends: .build_template
@@ -61,6 +55,14 @@ build_idf_v5.1:
   image: espressif/idf:release-v5.1
   variables:
     TARGETS: "esp32 esp32s3 esp32c3"
+
+
+build_idf_v5.2:
+  extends: .build_template
+  image: espressif/idf:release-v5.2
+  variables:
+    TARGETS: "esp32 esp32s3 esp32c3"
+
 
 # build_idf_master:
 #   extends: .build_template

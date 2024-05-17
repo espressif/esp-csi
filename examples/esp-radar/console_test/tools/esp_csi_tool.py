@@ -82,16 +82,17 @@ DEVICE_INFO_COLUMNS_NAMES = ["type", "timestamp", "compile_time", "chip_name", "
                              "app_revision", "idf_revision", "total_heap", "free_heap", "router_ssid", "ip", "port"]
 g_device_info_series = None
 
-CSI_DATA_INDEX = 100  # buffer size
+CSI_DATA_INDEX = 500  # buffer size
 CSI_DATA_COLUMNS = len(csi_vaid_subcarrier_index)
 CSI_DATA_COLUMNS_NAMES = ["type", "seq", "timestamp", "taget_seq", "taget", "mac", "rssi", "rate", "sig_mode", "mcs",
                           "cwb", "smoothing", "not_sounding", "aggregation", "stbc", "fec_coding","sgi", "noise_floor", 
                           "ampdu_cnt", "channel_primary", "channel_secondary", "local_timestamp", "ant", "sig_len", 
-                          "rx_state", "len", "first_word_invalid", "data"]
+                          "rx_state", "agc_gain", "fft_gain", "len", "first_word_invalid", "data"]
 CSI_DATA_TARGETS = ["unknown", "train", "none", "someone", "static", "move", "front",
                     "after", "left", "right", "go", "jump", "sit down", "stand up", "climb up", "wave", "applause"]
-RADAR_DATA_COLUMNS_NAMES = ["type", "seq", "timestamp", "waveform_wander", "waveform_wander_threshold",
-                            "someone_status", "waveform_jitter", "waveform_jitter_threshold", "move_status"]
+RADAR_DATA_COLUMNS_NAMES = ["type", "seq", "timestamp",
+                            "waveform_wander", "wander_average", "waveform_wander_threshold", "someone_status", 
+                            "waveform_jitter", "jitter_midean", "waveform_jitter_threshold", "move_status"]
 
 g_csi_phase_array = np.zeros(
     [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.int32)
@@ -406,7 +407,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
 
         self.timer_boot_command = QTimer()
         self.timer_boot_command.timeout.connect(self.command_boot)
-        self.timer_boot_command.setInterval(2000)
+        self.timer_boot_command.setInterval(3000)
         self.timer_boot_command.start()
 
         self.timer_curve_subcarrier = QTimer()
@@ -599,12 +600,6 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
                 item = QStandardItem(data_str)
                 self.model_radar_data_human.setItem(i, j, item)
 
-    def show_wareform_threshold(self):
-        self.doubleSpinBox_predict_someone_threshold.setValue(
-            g_radar_eigenvalue_threshold_array[-1, 0])
-        self.doubleSpinBox_predict_move_threshold.setValue(
-            g_radar_eigenvalue_threshold_array[-1, 1])
-
     def show_device_info(self, device_info_series):
         # print(device_info_series)
         for i in range(len(device_info_series)):
@@ -727,9 +722,10 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         self.timer_boot_command.stop()
 
     def command_predict_config(self):
-        command = (f"radar --predict_someone_threshold {self.doubleSpinBox_predict_someone_threshold.value()}" +
-                   f" --predict_move_threshold {self.doubleSpinBox_predict_move_threshold.value()}" +
-                   f" --predict_buff_size {self.spinBox_predict_buffer_size.text()}" +
+        command = (f"radar --predict_someone_sensitivity {self.doubleSpinBox_predict_someone_sensitivity.value()}" +
+                   f" --predict_move_sensitivity {self.doubleSpinBox_predict_move_sensitivity.value()}")
+        self.serial_queue_write.put(command)
+        command = (f"radar --predict_buff_size {self.spinBox_predict_buffer_size.text()}" +
                    f" --predict_outliers_number {self.spinBox_predict_outliers_number.text()}")
         self.serial_queue_write.put(command)
 
@@ -992,8 +988,8 @@ def csi_data_handle(self, data):
 
     csi_raw_data = data['data']
     for i in range(CSI_DATA_COLUMNS):
-        data_complex = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2 + 1],
-                               csi_raw_data[csi_vaid_subcarrier_index[i] * 2])
+        data_complex = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2],
+                               csi_raw_data[csi_vaid_subcarrier_index[i] * 2 - 1])
         g_csi_phase_array[-1][i] = np.abs(data_complex)
 
     g_rssi_array[-1] = data['rssi']
@@ -1024,18 +1020,18 @@ def radar_data_handle(self, data):
     if g_radar_status_array[-1][0] != g_radar_status_array[-2][0] or g_radar_status_array[-1][1] != g_radar_status_array[-2][1]:
         g_status_record_pd[1:] = g_status_record_pd[:-1]
 
-        g_status_record_pd.loc[0]['start_time'] = current_time_str
-        g_status_record_pd.loc[0]['room'] = ROOM_STATUS_NAMES[g_radar_status_array[-1][0]]
-        g_status_record_pd.loc[0]['human'] = HUMAN_STATUS_NAMES[g_radar_status_array[-1][1]]
+        g_status_record_pd.loc[0, 'start_time'] = current_time_str
+        g_status_record_pd.loc[0, 'room'] = ROOM_STATUS_NAMES[g_radar_status_array[-1][0]]
+        g_status_record_pd.loc[0, 'human'] = HUMAN_STATUS_NAMES[g_radar_status_array[-1][1]]
 
-        if len(g_status_record_pd.loc[1]['start_time']):
-            g_status_record_pd.loc[1]['stop_time'] = current_time_str
+        if len(g_status_record_pd.loc[1, 'start_time']):
+            g_status_record_pd.loc[1, 'stop_time'] = current_time_str
 
-    if len(g_status_record_pd.loc[0]['start_time']):
+    if len(g_status_record_pd.loc[0, 'start_time']):
         temp_time = g_current_time - \
             datetime.strptime(
-                g_status_record_pd.loc[0]['start_time'], '%Y-%m-%d %H:%M:%S.%f')
-        g_status_record_pd.loc[0]['spend_time'] = f"{temp_time}"[:-3]
+                g_status_record_pd.loc[0, 'start_time'], '%Y-%m-%d %H:%M:%S.%f')
+        g_status_record_pd.loc[0, 'spend_time'] = f"{temp_time}"[:-3]
 
     if g_radar_status_array[-1][1]:
         index = len(g_move_record_pd)
@@ -1074,7 +1070,6 @@ def radar_data_handle(self, data):
         except Exception as e:
             print(e)
     return
-
 
 class DataHandleThread(QThread):
     signal_log_msg = pyqtSignal(str)
@@ -1124,7 +1119,6 @@ class DataHandleThread(QThread):
                 pass
 
             QApplication.processEvents()
-
 
 def serial_handle(queue_read, queue_write, port):
     try:
@@ -1315,8 +1309,6 @@ if __name__ == '__main__':
     data_handle_thread.signal_device_info.connect(window.show_device_info)
     data_handle_thread.signal_log_msg.connect(window.show_textBrowser_log)
     data_handle_thread.signal_exit.connect(window.close)
-    data_handle_thread.signal_wareform_threshold.connect(
-        window.show_wareform_threshold)
     data_handle_thread.start()
 
     window.show()
