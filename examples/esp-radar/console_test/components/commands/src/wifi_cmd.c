@@ -301,7 +301,10 @@ static int wifi_config_func(int argc, char **argv)
     esp_wifi_get_config(WIFI_IF_STA, &wifi_config);
     static esp_netif_t *s_netif_sta = NULL;
 
-    if (!s_netif_sta) {
+    wifi_mode_t mode;
+    esp_wifi_get_mode(&mode);
+
+    if (!s_netif_sta && mode != WIFI_MODE_STA) {
         s_netif_sta = esp_netif_create_default_wifi_sta();
     }
 
@@ -460,7 +463,6 @@ void cmd_register_wifi_config()
     };
     ESP_ERROR_CHECK(esp_console_cmd_register(&cmd));
 }
-
 
 static struct {
     struct arg_int *rssi;

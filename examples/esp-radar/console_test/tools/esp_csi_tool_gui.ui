@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1440</width>
-    <height>790</height>
+    <width>1563</width>
+    <height>850</height>
    </rect>
   </property>
   <property name="font">
@@ -536,7 +536,7 @@
               <property name="title">
                <string>info</string>
               </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="5,2">
+              <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="5,0">
                <property name="spacing">
                 <number>0</number>
                </property>
@@ -945,12 +945,12 @@
                     <item>
                      <widget class="QLabel" name="label_number_3">
                       <property name="text">
-                       <string>wander(someone) threshold</string>
+                       <string>someone sensitivity</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_someone_threshold">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_someone_sensitivity">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                         <horstretch>0</horstretch>
@@ -958,28 +958,31 @@
                        </sizepolicy>
                       </property>
                       <property name="decimals">
-                       <number>5</number>
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>0.010000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>1.000000000000000</double>
                       </property>
                       <property name="singleStep">
-                       <double>0.000100000000000</double>
+                       <double>0.010000000000000</double>
                       </property>
                       <property name="value">
-                       <double>0.001000000000000</double>
+                       <double>0.200000000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item>
                      <widget class="QLabel" name="label_number_5">
                       <property name="text">
-                       <string>jitter(move) threshold</string>
+                       <string>move sensitivity</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_move_threshold">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_predict_move_sensitivity">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                         <horstretch>0</horstretch>
@@ -987,16 +990,19 @@
                        </sizepolicy>
                       </property>
                       <property name="decimals">
-                       <number>5</number>
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>0.010000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>1.000000000000000</double>
                       </property>
                       <property name="singleStep">
-                       <double>0.000100000000000</double>
+                       <double>0.010000000000000</double>
                       </property>
                       <property name="value">
-                       <double>0.001000000000000</double>
+                       <double>0.200000000000000</double>
                       </property>
                      </widget>
                     </item>
