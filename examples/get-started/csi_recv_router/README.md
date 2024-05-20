@@ -17,7 +17,7 @@ Before project configuration and build, be sure to set the correct chip target u
 ```
 idf.py menuconfig
 ```
-Open the project configuration menu (`idf.py menuconfig`) to configure Wi-Fi or Ethernet. See "Establishing Wi-Fi or Ethernet Connection" section in [examples/protocols/README.md](../../README.md) for more details.
+Open the project configuration menu (`idf.py menuconfig`) to configure Wi-Fi or Ethernet. See "Establishing Wi-Fi or Ethernet Connection" section in [examples/protocols/README.md](https://github.com/espressif/esp-idf/tree/master/examples/protocols#establishing-wi-fi-or-ethernet-connection) for more details.
 
 ### Build and Flash
 

@@ -31,7 +31,7 @@ In order to ensure the perception effect of CSI, please do your best to meet the
     idf.py flash -b 921600 -p /dev/ttyUSB1
     ```
 
-2. Run `csi_data_read_parse.py` in `csi_recv` for data analysis, Please close `idf.py monitor` before running
+2. Run `csi_data_read_parse.py` in `csi_recv` for data analysis. Please close `idf.py monitor` before running
 
     ```shell
     cd esp-csi-gitlab/examples/get-started/tools
