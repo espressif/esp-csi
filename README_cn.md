@@ -1,19 +1,21 @@
-# ESP-CSI [[中文]](./README_cn.md)
+# ESP-CSI [[English]](./README.md)
 
 The main purpose of this project is to show the use of ESP-WIFI-CSI. The human body detection algorithm is still being optimized. You can get more accurate results through machine learning, neural network and other algorithms based on the original CSI data.
 
 ## 1 Introduction
 
-### 1.1 Introduction to CSI
+### 1.1 CSI 简介
 
 Channel state information (CSI) includes specific indicators such as carrier signal strength, amplitude, phase, and signal delay. These indicators reveal the signal scattering, reflection, and power attenuation phenomena that occur with the carrier as the transmission distance changes. It can be used to measure the channel status of the wireless network in Wi-Fi communication. By analyzing and studying the changes in CSI, we can conversely speculate on the changes in the physical environment that cause the changes in the channel state, that is, to achieve non-contact intelligent sensing. CSI is extremely sensitive to environmental changes. In addition to perceiving environmental changes caused by large movements such as walking and running of people or animals, it can also capture subtle movements caused by small movements such as breathing and chewing of people or animals in a static environment.
 
-### 1.2 Utilization of Subcarriers for CSI
-CSI (Channel State Information) can extract channel information through subcarriers due to the utilization of techniques like Orthogonal Frequency Division Multiplexing (OFDM) and Orthogonal Frequency Division Multiplexing Multiple Input Multiple Output (OFDM-MIMO).
-OFDM divides the spectrum into multiple orthogonal subcarriers, allowing independent data transmission across each subcarrier. This orthogonality minimizes interference between subcarriers, enhancing spectrum efficiency and interference resilience.
-In OFDM-MIMO systems, multiple antennas simultaneously transmit different data streams. These streams undergo channel propagation effects such as multipath fading before reaching the receiver. As each subcarrier experiences different channel effects, exploiting the characteristics of these subcarriers allows extraction of channel information. By analyzing the differences between transmitted and received signals across various subcarriers, including their amplitude and phase shifts, CSI can be derived.
-Thus, CSI's ability to extract channel information through subcarriers stems from the properties of OFDM and MIMO technologies, leveraging signal variations across multiple subcarriers and antennas to infer channel state information.
-To learn more about the principle of OFDM, the underlying technology of WiFi transport, please read this chapter:
+### 1.2 CSI 子载波的利用
+CSI通过子载波获取信道信息的能力源于正交频分复用（Orthogonal Frequency Division Multiplexing，OFDM）和正交频分复用多输入多输出（Orthogonal Frequency Division Multiplexing Multiple Input Multiple Output，OFDM-MIMO）等技术。
+
+OFDM技术将整个频谱划分为多个相互正交的子载波，每个子载波之间相互独立传输数据。这些子载波在频率域上彼此正交，这意味着它们之间的干扰较小。通过在不同的子载波上发送数据，OFDM技术能够提高频谱利用率和抗干扰能力。
+
+在OFDM-MIMO系统中，多个天线同时发送不同的数据流，这些数据流经过信道传输到接收端，并受到多径传播、衰落等信道效应的影响。由于信道会对不同的子载波产生不同的影响，因此可以利用这些子载波上的信号特性来获取信道信息。通过观察发送的信号与接收的信号之间的差异，可以推断出信道的状态信息，包括信道的衰落、相位偏移等。
+
+因此，CSI能够通过子载波获取信道信息是基于OFDM技术和MIMO技术的特性，利用多个子载波和多个天线之间的信号差异来推断信道状态信息。
 
 ### 1.3 The relationship between CSI and RSSI
 
