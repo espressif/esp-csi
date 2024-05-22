@@ -27,7 +27,7 @@
 5. 校准完成后，有人移动的阈值会显示在 `move_threshold` 中，此时检测到有人移动 move_status 会变为 true
 
 ### 设备
-- [x] ESP32-S3-Saola-1
+- [x] ESP32-S3-DevKitC-1
 - [x] ESP32-C3-DevKitC
 
 ### 设备操作

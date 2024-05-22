@@ -28,7 +28,7 @@ Follow the ESP RainMaker documentation [Getting Started](https://rainmaker.espre
 5. After calibration, the threshold value for movement detection will be displayed in `move_threshold`, and `move_status` will become true when movement is detected.
 
 ### Device
-- [x] ESP32-S3-Saola-1
+- [x] ESP32-S3-DevKitC-1
 - [x] ESP32-C3-DevKitC
 
 ### Device Operation
