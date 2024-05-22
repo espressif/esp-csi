@@ -22,7 +22,7 @@ In summary, Wi-Fi CSI provides more detailed and fine-grained information about 
 
 ### 1.3 Advantages of CSI
 
-CSI is a physical layer characteristic.Compared with other indicators, CSI amplitude shows some advantages:
+CSI is a physical layer characteristic. Compared with other indicators, CSI amplitude shows some advantages:
 
 1. **Anti-interference:** CSI amplitude is essentially the attenuation coefficient of a set of channels. As long as the channel itself does not change, it is quite robust to interference from power adaptors and other jumpers.
 2. **More fine-grained:** CSI does not use synthetic values ​​(such as RSSI) to measure the channel, but decomposes the entire channel measurement into sub-carriers, and estimates the frequency response of each sub-carrier, so as to determine the channel in the frequency domain. Make a more fine-grained description.
@@ -51,7 +51,7 @@ Use CSI's high sensitivity to environmental changes to recognize human movements
 
 ## 3 Getting Started
 
-The Getting Started project can be found in the [examples/console_test](./examples/esp-radar/console_test) directory. It will help you build a human activity detection application. See: [README](./examples/esp-radar/console_test/README.md).
+The Getting Started project can be found in the [examples/esp-radar/console_test](./examples/esp-radar/console_test) directory. It will help you build a human activity detection application. See: [README](./examples/esp-radar/console_test/README.md).
 
 
 ## 4 How to get CSI

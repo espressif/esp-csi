@@ -208,7 +208,7 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>ssid </string>
+                  <string>SSID </string>
                  </property>
                 </widget>
                </item>
@@ -234,7 +234,7 @@
                <item>
                 <widget class="QCheckBox" name="checkBox_router_auto_connect">
                  <property name="text">
-                  <string>atuto connect</string>
+                  <string>auto connect</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>

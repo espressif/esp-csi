@@ -23,7 +23,7 @@ git submodule update --init --recursive
 
 ## 3 Starting program
 ### 3.1 Send Wi-Fi CSI
-+ **Use esp32-s3 to send CSI**：Burn project  `csi_send` to esp32-s3 development board
++ **Use esp32-s3 to send CSI**：Burn project `csi_send` to esp32-s3 development board
   
     ```bash
     cd esp-csi/examples/get-started/csi_send
@@ -40,8 +40,8 @@ git submodule update --init --recursive
     idf.py flash -b 921600 -p /dev/ttyUSB1
     ```
 
-### 3.3 Start up `esp-csi-tool` ,Open the CSI visualization interface
-+ Run `esp_csi_tool.py` in `csi_recv` for data analysis, Please close `idf.py monitor` before running
+### 3.3 Start up `esp-csi-tool`. Open the CSI visualization interface
++ Run `esp_csi_tool.py` in `csi_recv` for data analysis. Please close `idf.py monitor` before running. Please use UART port instead of USB Serial/JTAG port.
     ```bash
     cd esp-csi/examples/console_test/tools
     # Install python related dependencies
@@ -59,7 +59,7 @@ The top left is the configuration router connection information window. Use the 
 
 ![connection window](./docs/_static/4.1_connect_windows.png)
 
-+ **ssid**：router account
++ **SSID**：router account
 + **password**：router password
 + **auto connect**：If checked, the next time you turn it on, it will automatically connect to the last connected router.
 + **connect / disconnect**：connect/disconnect button
@@ -86,7 +86,7 @@ This window is used to calibrate the room status threshold and display room stat
 
 + **delay**：start calibration delay time, no one is required in the room during calibration, and people can leave the room within the delay time after starting calibration.
 + **duration**：calibration process duration.
-+ **add**：if checked, the recalibrated threshold will be accumulated on the basis of the current threshold.
++ **add**：if checked, the recalibrated threshold will be accumulated based on the current threshold.
 + **start**：start calibration button.
 + **wander(someone) threshold**：the threshold for judging room presence/absence will be set automatically after calibration, or can be set manually by the user.
 + **jitter(move) threshold**：the threshold for judging the move/static of people will be set automatically after calibration, or it can be set manually by the user.
@@ -115,8 +115,8 @@ The meaning of each parameter in the table is as follows:
 This window is used to collect CSI data when people perform different actions. The collected data will be stored under the path of `esp-csi/examples/console_test/tools/data`, and the collected data can be used for machine learning or neural network.
 ![collect window](./docs/_static/4.8_collect_windows.png)
 
-+ **target**：Select the  motor behaviors to collect
-+ **delay**：Select the delay time of collection, that is how long to delay to start collection after clicking the `start` button
++ **target**：Select the motor behaviors to collect
++ **delay**：Select the delay time of collection, which is how long to wait after clicking the `start` button
 + **duration**：The duration of collecting an action
 + **number**：Collection times
 + **clean**：Click to clear all collected data
@@ -142,7 +142,7 @@ After the connection is successful, you will see the router status information i
 The purpose of calibration is to let the device know the CSI information when there is no one in the room, and to obtain the threshold of personnel movement. If the current version does not calibrate, only personnel movement detection can be performed. The longer the calibration time, the lower the probability of false touches.
 ![calibration threshold](./docs/_static/5.2_calibration_threshold.png)
 
-+ Set the delay time of `delay`, here is 10 seconds for example (ie 00:00:10), so that people can leave the room.
++ Set the delay time of `delay`, here is 10 seconds for example (i.e. 00:00:10), so that people can leave the room.
 + Set the duration of `duration` calibration, here is 10 seconds as an example.
 + Click `start` and select `yes`, the person leaves the room within 10 seconds (`delay` time), ensure that there is no one in the room within 10 seconds during the calibration period (`duration` calibration duration), and return to the room after the calibration.
 + ( option ) to manually adjust the room status threshold and the person status threshold based on the calibration results.
@@ -156,7 +156,7 @@ After the calibration is completed, the room status will be displayed in the roo
 + ( option ) In the room status waveform window, click the horizontal line in front of `wander` to hide its waveform, which is convenient for observing other waveforms. Similarly, other waveforms can also be hidden by the following method.
 + ( option ) Check `display table` to view the indoor status and people status information table.
 
-### 5.4 Observer movement times and time
+### 5.4 Observer movement times and the time
 In these observation windows, the number of people's movements per minute will be displayed in a histogram according to our settings. The time information of each movement is recorded in the table on the right.
 ![observe people move_data](./docs/_static/5.4_observe_people_move_data_en.png)
 
@@ -173,7 +173,7 @@ In these observation windows, the number of people's movements per minute will b
 + In `number`, set the number of times to be collected, here is 1 collection as an example.
 + Click `start`, the system will start collecting data after the delay time, and the personnel will complete the corresponding action within the set time.
 
-After the collection is over, it will stop automatically. We can see the data we collected under the path of `esp-csi/examples/console_test/tools/data`.
+After the collection is over, it will stop automatically. We can see the data we collected under the path of `esp-csi/examples/esp-radar/console_test/tools/data`.
 ![save csi_data](./docs/_static/5.5_save_csi_data_en.png)
 
 ### 5.6 Use collected data to identify actions and evaluate accuracy

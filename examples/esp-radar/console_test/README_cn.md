@@ -40,7 +40,7 @@ git submodule update --init --recursive
     idf.py flash -b 921600 -p /dev/ttyUSB1
     ```
 
-### 3.3 启动 `esp-csi-tool` 工具，打开 CSI 实时可视化工具
+### 3.3 启动 `esp-csi-tool` 工具，打开 CSI 实时可视化工具，请使用 UART 口而不是 USB Serial/JTAG 口
 + 运行 `csi_recv` 中的 `esp_csi_tool.py` 进行数据分析，运行前请关闭 `idf.py` 监控
     ```bash
     cd esp-csi/examples/console_test/tools
@@ -175,7 +175,7 @@ git submodule update --init --recursive
 + 在 `number` 中设置要采集的次数，这里采集 1 次为例
 + 点击 `start`，经过延迟时间后系统将开始采集数据，人员在设置时间内完成对应动作 
 
-采集结束后会自动停止，我们在 `esp-csi/examples/console_test/tools/data` 路径下可以看到我们采集的数据
+采集结束后会自动停止，我们在 `esp-csi/examples/esp-radar/console_test/tools/data` 路径下可以看到我们采集的数据
 ![CSI数据存放路径](./docs/_static/5.5_save_csi_data.png)
 
 ### 5.6 利用采集的数据识别动作，并评估准确率
