@@ -1,107 +1,88 @@
 # ESP-CSI [[English]](./README.md)
 
-The main purpose of this project is to show the use of ESP-WIFI-CSI. The human body detection algorithm is still being optimized. You can get more accurate results through machine learning, neural network and other algorithms based on the original CSI data.
+本项目的主要目的是展示 ESP-WIFI-CSI 的使用。本项目提供了 CSI 数据的获取方法、处理算法和应用案例。人体检测算法仍在优化中。基于原始 CSI 数据，用户可利用机器学习、神经网络等算法来实现更精确的结果。
 
-## 1 Introduction
+## CSI 介绍
 
-### 1.1 CSI 简介
+信道状态信息（CSI, Channel State Information）是描述无线信道特性的重要参数，包括信号的幅度、相位、信号延迟等指标。在 Wi-Fi 通信中，CSI 用于测量无线网络的信道状态。通过分析和研究 CSI 的变化，可以推断引起信道状态变化的物理环境变化，实现非接触式智能传感。CSI 对环境变化非常敏感。它不仅能感知人或动物的行走、奔跑等大动作引起的变化，还能捕捉静态环境中人或动物的细微动作，如呼吸、咀嚼等。这些能力使得  CSI 在智能环境监测、人体活动监测、无线定位等应用中具有广泛的应用前景。
 
-Channel state information (CSI) includes specific indicators such as carrier signal strength, amplitude, phase, and signal delay. These indicators reveal the signal scattering, reflection, and power attenuation phenomena that occur with the carrier as the transmission distance changes. It can be used to measure the channel status of the wireless network in Wi-Fi communication. By analyzing and studying the changes in CSI, we can conversely speculate on the changes in the physical environment that cause the changes in the channel state, that is, to achieve non-contact intelligent sensing. CSI is extremely sensitive to environmental changes. In addition to perceiving environmental changes caused by large movements such as walking and running of people or animals, it can also capture subtle movements caused by small movements such as breathing and chewing of people or animals in a static environment.
+## 基础知识
 
-### 1.2 CSI 子载波的利用
-CSI通过子载波获取信道信息的能力源于正交频分复用（Orthogonal Frequency Division Multiplexing，OFDM）和正交频分复用多输入多输出（Orthogonal Frequency Division Multiplexing Multiple Input Multiple Output，OFDM-MIMO）等技术。
+为了更好地理解 CSI 技术，我们提供了一些相关的基础知识文档（近期更新会逐步更新）：
 
-OFDM技术将整个频谱划分为多个相互正交的子载波，每个子载波之间相互独立传输数据。这些子载波在频率域上彼此正交，这意味着它们之间的干扰较小。通过在不同的子载波上发送数据，OFDM技术能够提高频谱利用率和抗干扰能力。
+- [信号处理基础](docs/zh_CN/Signal-Processing-Fundamentals.md)
+- [OFDM介绍](docs/zh_CN/OFDM-introduction.md)
+- [无线信道基础](docs/zh_CN/Wireless-Channel-Fundamentals.md)
+- [无线测距与定位技术介绍](docs/zh_CN/Introduction-to-Wireless-Location.md)
+- [无线通信指标CSI与RSSI](docs/zh_CN/Wireless-indicators-CSI-and-RSSI.md)
+- [CSI的应用与案例分析](docs/zh_CN/CSI-Applications.md)
 
-在OFDM-MIMO系统中，多个天线同时发送不同的数据流，这些数据流经过信道传输到接收端，并受到多径传播、衰落等信道效应的影响。由于信道会对不同的子载波产生不同的影响，因此可以利用这些子载波上的信号特性来获取信道信息。通过观察发送的信号与接收的信号之间的差异，可以推断出信道的状态信息，包括信道的衰落、相位偏移等。
+## Espressif CSI 优势
 
-因此，CSI能够通过子载波获取信道信息是基于OFDM技术和MIMO技术的特性，利用多个子载波和多个天线之间的信号差异来推断信道状态信息。
+- **全系列支持:** 所有的 ESP32 系列均支持 CSI，ESP32 / ESP32-S2 / ESP32-C3 / ESP32-S3 / ESP32-C6
+- **强大的生态:** Espressif 是 Wi-Fi MCU 领域的全球领导者，将 CSI 与现有物联网设备完美结合
+- **更多信息:** ESP32 提供丰富的信道信息，包括 RSSI、RF 噪声本底、接收时间和天线的 'rx_ctrl' 字段
+- **蓝牙辅助:** ESP32 也支持 BLE，例如，它可以扫描周围的设备来辅助检测
+- **强大的处理能力:** ESP32 的 CPU 是双核 240MHz，支持 AI 指令集，能够运行机器学习和神经网络
+- **OTA 升级:** 现有项目可通过软件 OTA 升级 CSI 新功能，无需增加额外的硬件成本
 
-### 1.3 The relationship between CSI and RSSI
+## 例程介绍
 
-1. **Level of detail:** CSI provides more detailed information about the wireless channel, including amplitude, phase, and frequency response. RSSI, on the other hand, only provides a general measurement of signal strength.
+### [get-started](./examples/get-started)
 
-2. **Applications:** Wi-Fi CSI is particularly useful for advanced applications that require fine-grained analysis of the wireless channel, such as indoor localization, gesture recognition, and activity detection. RSSI is commonly used for basic tasks like signal strength estimation and basic proximity-based applications.
+帮助用户快速上手 CSI 功能，通过基础示例展示 CSI 数据的获取与初步分析，详情查看 [README](./examples/get-started/README.md)
 
-3. **Accuracy:** CSI can offer higher accuracy in certain applications compared to RSSI. It allows for more precise localization and tracking, as well as better differentiation between different actions or gestures.
+- csi_recv 演示了 ESP32 作为接收端示例
+- csi_send 演示了 ESP32 作为发送端示例
+- csi_recv_router 演示了路由器作为发送端示例，ESP32 通过 Ping 触发路由器发送 CSI 报文
+- tools 提供辅助 CSI 数据分析的脚本，csi_data_read_parse.py
 
-4. **Hardware support:** Both CSI and RSSI can be obtained from standard Wi-Fi receivers, but CSI requires more advanced hardware capabilities to capture and process the detailed channel information. RSSI, being a simpler measurement, can be obtained with most Wi-Fi receivers.
+### [esp-radar](./examples/esp-radar)
 
-In summary, Wi-Fi CSI provides more detailed and fine-grained information about the wireless channel, while RSSI is a simpler measurement of signal strength. CSI enables more advanced applications but requires more sophisticated hardware and analysis techniques.
+提供了利用 CSI 数据实现的示例一些应用，RainMaker 云端上报和人体活动检测
 
-### 1.4 Advantages of CSI
+- [connect_rainmaker](./examples/esp-radar/connect_rainmaker) 演示了将 CSI 数据捕获并上传到 Espressif 的 RainMaker 云平台
+- [console_test](./examples/esp-radar/console_test) 演示一个交互式控制台，允许动态配置和捕获 CSI 数据，并提供了人体活动检测的算法应用
 
-CSI is a physical layer characteristic. Compared with other indicators, CSI amplitude shows some advantages:
+## 如何获取CSI
 
-1. **Anti-interference:** CSI amplitude is essentially the attenuation coefficient of a set of channels. As long as the channel itself does not change, it is quite robust to interference from power adaptors and other jumpers.
-2. **More fine-grained:** CSI does not use synthetic values ​​(such as RSSI) to measure the channel, but decomposes the entire channel measurement into sub-carriers, and estimates the frequency response of each sub-carrier, so as to determine the channel in the frequency domain. Make a more fine-grained description.
-
-### 1.5 Espressif CSI Advantage
-
-1. **All ESP32 series support CSI:** ESP32 / ESP32-S2 / ESP32-C3 / ESP32-S3 / ESP32-C6.
-2. **Powerful ecology:** Espressif is a global leader in the field of Wi-Fi MCUs, combining CSI with existing IOT equipment.
-3. **More information:** Such as RSSI, RF noise floor, reception time and antenna `rx_ctrl` field.
-4. **Bluetooth Assist:** ESP32 also supports BLE, for example, it can scan surrounding devices to assist detection.
-5. **Powerful processing capability:** ESP32 CPU handles dual-core, 240MHz, AI instructions. Can run machine learning and neural networks.
-
-## 2 CSI Application
-
-### 2.1 Intruder detection
-
-Select high-sensitivity sub-carrier combinations and signals from non-line-of-sight path directions in different multipath propagation environments, thereby enhancing the sensitivity of passive person detection and expanding the detection range. This method can form "no blind spot" intruder detection in security applications. The multipath propagation characteristics of wireless signals indoors make wireless perception have natural advantages in sensing range and directionality.
-
-### 2.2 Positioning and ranging
-
-You can learn from the RSSI method and use CSI as a more informative fingerprint (including information on signal amplitude and phase on multiple subcarriers), or rely on a frequency selective attenuation model for more accurate ranging.
-
-### 2.3 Human activity detection and recognition
-
-Use CSI's high sensitivity to environmental changes to recognize human movements, gestures, breathing and other small movements and daily activities.
-
-## 3 Getting Started
-
-The Getting Started project can be found in the [examples/esp-radar/console_test](./examples/esp-radar/console_test) directory. It will help you build a human activity detection application. See: [README](./examples/esp-radar/console_test/README.md).
-
-
-## 4 How to get CSI
-
-### 4.1 Get router CSI
+### 获取路由器 CSI
 
 <img src="docs/_static/get_router_csi.png" width="550">
 
-- **How ​​to implement:** ESP32 sends a Ping packet to the router, and receives the CSI information carried in the Ping Replay returned by the router.
-- **Advantage:** Only one ESP32 plus router can be completed.
-- **Disadvantages:** Depends on the router, such as the location of the router, the supported Wi-Fi protocol, etc.
-- **Applicable scenario:** There is only one ESP32 in the environment, and there is a router in the detection environment.
+- **实现方法：** ESP32向路由器发送Ping包，并接收路由器返回的Ping回应中的CSI信息。
+- **优点：** 只需一个ESP32和路由器即可完成。
+- **缺点：** 依赖于路由器的条件，如路由器的位置、支持的Wi-Fi协议等。
+- **适用场景：** 环境中只有一个ESP32，并且检测环境中有路由器。
 
-### 4.2 Get CSI between devices
+### 获取设备之间的 CSI
 
 <img src="docs/_static/get_device_csi.png" width="550">
 
-- **How ​​to implement:** ESP32 A and B both send Ping packets to the router, and ESP32 A receives the CSI information carried in the Ping Replay returned by ESP32 B, which is a supplement to the first detection scenario.
-- **Advantage:** Does not depend on the location of the router, and is not affected by other devices connected under the router.
-- **Disadvantage:** Depends on the Wi-Fi protocol supported by the router, environment.
-- **Applicable scenario:** There must be more than two ESP32s in the environment.
+- **实现方法：** ESP32 A 和 B 都向路由器发送Ping包，ESP32 A 接收 ESP32 B 返回的 Ping 回应中的 CSI 信息，这是对第一种检测场景的补充
+- **优点：** 不依赖于路由器的位置，也不受其他连接到路由器设备的影响
+- **缺点：** 依赖于路由器支持的 Wi-Fi 协议和环境
+- **适用场景：** 环境中必须有两个或以上的 ESP32
 
-### 4.3 Get CSI specific devices
+### 获取特定设备的 CSI
 
 <img src="docs/_static/get_broadcast_csi.png" width="550">
 
-- **How ​​to implement:** The packet sending device continuously switches channels to send out packets. ESP32 A, B, and C all obtain the CSI information carried in the broadcast packet of the packet sending device. This method has the highest detection accuracy and reliability.
-- **Advantages:** The completion is not affected by the router, and the detection accuracy is high. When there are multiple devices in the environment, only one packet sending device will cause little interference to the network environment.
-- **Disadvantages:** In addition to the ordinary ESP32, it is also necessary to add a special package issuing equipment, the cost is the same and higher.
-- **Applicable scenarios:** Suitable for scenarios that require high accuracy and multi-device cluster positioning.
+- **实现方法：** 数据包发送设备不断切换信道发送数据包，ESP32 A、B 和 C 都获取数据包发送设备广播数据包中的CSI信息，这种方法的检测精度和可靠性最高
+- **优点：** 不受路由器影响，检测精度高。当环境中有多个设备时，只有一个数据包发送设备会对网络环境造成很小的干扰
+- **缺点：** 除了普通的ESP32，还需要额外的专用数据包发送设备，成本相对较高
+- **适用场景：** 适用于需要高精度和多设备集群定位的场景
 
-## 5 Note
+## 注意事项
 
-1. The effect of external IPEX antenna is better than PCB antenna, PCB antenna has directivity.
-2. Test in an unmanned environment. Avoid the influence of other people's activities on test results.
+1. 外置 IPEX 天线效果优于 PCB 天线，PCB 天线具有方向性。
+2. 测试应在无人环境中进行，避免他人活动对测试结果的影响。
 
-## 6 Related resources
+## 相关资源
 
 - [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/index.html) is the documentation for the Espressif IoT development framework.
 - [ESP-WIFI-CSI Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/wifi.html#wi-fi-channel-state-information) is the use of ESP-WIFI-CSI Description.
-- If you find a bug or have a feature request, you can submit it on [Issues](https://github.com/espressif/esp-csi/issues) on GitHub. Please check to see if your question already exists in the existing Issues before submitting it.
+- 如果您发现 BUG 或有 feature 请求, 可以在 GitHub [Issues](https://github.com/espressif/esp-csi/issues)上提交。在提交之前，请检查您的问题是否已存在于现有问题中
 
 ## Reference
 
