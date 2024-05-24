@@ -1,6 +1,6 @@
 # ESP-CSI [[English]](./README.md)
 
-本项目的主要目的是展示 ESP-WIFI-CSI 的使用。本项目提供了 CSI 数据的获取方法、处理算法和应用案例。人体检测算法仍在优化中。基于原始 CSI 数据，用户可利用机器学习、神经网络等算法来实现更精确的结果。
+本项目的主要目的是展示 ESP-WIFI-CSI 的使用。本项目提供了 CSI 数据的获取方法、处理算法和应用案例。人体检测算法仍在优化中。基于原始 CSI 数据，用户可利用机器学习、神经网络等算法来得到更精确的结果。
 
 ## CSI 介绍
 
@@ -10,12 +10,12 @@
 
 为了更好地理解 CSI 技术，我们提供了一些相关的基础知识文档（近期更新会逐步更新）：
 
-- [信号处理基础](docs/zh_CN/Signal-Processing-Fundamentals.md)
-- [OFDM介绍](docs/zh_CN/OFDM-introduction.md)
-- [无线信道基础](docs/zh_CN/Wireless-Channel-Fundamentals.md)
-- [无线测距与定位技术介绍](docs/zh_CN/Introduction-to-Wireless-Location.md)
-- [无线通信指标CSI与RSSI](docs/zh_CN/Wireless-indicators-CSI-and-RSSI.md)
-- [CSI的应用与案例分析](docs/zh_CN/CSI-Applications.md)
+- [信号处理基础](./docs/zh_CN/Signal-Processing-Fundamentals.md)
+- [OFDM介绍](./docs/zh_CN/OFDM-introduction.md)
+- [无线信道基础](./docs/docs/zh_CN/Wireless-Channel-Fundamentals.md)
+- [无线测距与定位技术介绍](./docs/zh_CN/Introduction-to-Wireless-Location.md)
+- [无线通信指标CSI与RSSI](./docs/zh_CN/Wireless-indicators-CSI-and-RSSI.md)
+- [CSI的应用与案例分析](./docs/zh_CN/CSI-Applications.md)
 
 ## Espressif CSI 优势
 
@@ -32,14 +32,14 @@
 
 帮助用户快速上手 CSI 功能，通过基础示例展示 CSI 数据的获取与初步分析，详情查看 [README](./examples/get-started/README.md)
 
-- csi_recv 演示了 ESP32 作为接收端示例
-- csi_send 演示了 ESP32 作为发送端示例
-- csi_recv_router 演示了路由器作为发送端示例，ESP32 通过 Ping 触发路由器发送 CSI 报文
-- tools 提供辅助 CSI 数据分析的脚本，csi_data_read_parse.py
+- [csi_recv](./examples/get-started/csi_recv) 演示了 ESP32 作为接收端示例
+- [csi_send](./examples/get-started/csi_send) 演示了 ESP32 作为发送端示例
+- [csi_recv_router](./examples/get-started/csi_recv_router) 演示了路由器作为发送端示例，ESP32 通过 Ping 触发路由器发送 CSI 报文
+- [tools](./examples/get-started/tools) 提供辅助 CSI 数据分析的脚本 csi_data_read_parse.py
 
 ### [esp-radar](./examples/esp-radar)
 
-提供了利用 CSI 数据实现的示例一些应用，RainMaker 云端上报和人体活动检测
+提供了利用 CSI 数据实现的一些应用，包括 RainMaker 云端上报和人体活动检测
 
 - [connect_rainmaker](./examples/esp-radar/connect_rainmaker) 演示了将 CSI 数据捕获并上传到 Espressif 的 RainMaker 云平台
 - [console_test](./examples/esp-radar/console_test) 演示一个交互式控制台，允许动态配置和捕获 CSI 数据，并提供了人体活动检测的算法应用
@@ -50,16 +50,16 @@
 
 <img src="docs/_static/get_router_csi.png" width="550">
 
-- **实现方法：** ESP32向路由器发送Ping包，并接收路由器返回的Ping回应中的CSI信息。
-- **优点：** 只需一个ESP32和路由器即可完成。
-- **缺点：** 依赖于路由器的条件，如路由器的位置、支持的Wi-Fi协议等。
-- **适用场景：** 环境中只有一个ESP32，并且检测环境中有路由器。
+- **实现方法：** ESP32 向路由器发送 Ping 包，并接收路由器返回的 Ping 回应中的 CSI 信息。
+- **优点：** 只需一个 ESP32 和路由器即可完成。
+- **缺点：** 依赖于路由器的条件，如路由器的位置、支持的 Wi-Fi 协议等。
+- **适用场景：** 环境中只有一个 ESP32，并且检测环境中有路由器。
 
 ### 获取设备之间的 CSI
 
 <img src="docs/_static/get_device_csi.png" width="550">
 
-- **实现方法：** ESP32 A 和 B 都向路由器发送Ping包，ESP32 A 接收 ESP32 B 返回的 Ping 回应中的 CSI 信息，这是对第一种检测场景的补充
+- **实现方法：** ESP32 A 和 B 都向路由器发送 Ping 包，ESP32 A 接收 ESP32 B 返回的 Ping 回应中的 CSI 信息，这是对第一种检测场景的补充
 - **优点：** 不依赖于路由器的位置，也不受其他连接到路由器设备的影响
 - **缺点：** 依赖于路由器支持的 Wi-Fi 协议和环境
 - **适用场景：** 环境中必须有两个或以上的 ESP32
@@ -68,9 +68,9 @@
 
 <img src="docs/_static/get_broadcast_csi.png" width="550">
 
-- **实现方法：** 数据包发送设备不断切换信道发送数据包，ESP32 A、B 和 C 都获取数据包发送设备广播数据包中的CSI信息，这种方法的检测精度和可靠性最高
+- **实现方法：** 数据包发送设备不断切换信道发送数据包，ESP32 A、B 和 C 都获取数据包发送设备广播数据包中的 CSI 信息，这种方法的检测精度和可靠性最高
 - **优点：** 不受路由器影响，检测精度高。当环境中有多个设备时，只有一个数据包发送设备会对网络环境造成很小的干扰
-- **缺点：** 除了普通的ESP32，还需要额外的专用数据包发送设备，成本相对较高
+- **缺点：** 除了普通的 ESP32，还需要额外的专用数据包发送设备，成本相对较高
 - **适用场景：** 适用于需要高精度和多设备集群定位的场景
 
 ## 注意事项

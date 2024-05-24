@@ -1,67 +1,48 @@
 # ESP-CSI [[中文]](./README_cn.md)
 
-The main purpose of this project is to show the use of ESP-WIFI-CSI. The human body detection algorithm is still being optimized. You can get more accurate results through machine learning, neural network and other algorithms based on the original CSI data.
+## Introduction to CSI
 
-## 1 Introduction
+Channel State Information (CSI) is an important parameter that describes the characteristics of a wireless channel, including indicators such as signal amplitude, phase, and signal delay. In Wi-Fi communication, CSI is used to measure the state of the wireless network channel. By analyzing and studying changes in CSI, one can infer physical environmental changes that cause channel state changes, achieving non-contact intelligent sensing. CSI is very sensitive to environmental changes. It can sense not only large movements such as people or animals walking and running but also subtle actions in a static environment, such as breathing and chewing. These capabilities make CSI widely applicable in smart environment monitoring, human activity monitoring, wireless positioning, and other applications.
 
-### 1.1 Introduction to CSI
+## Basic Knowledge
 
-Channel state information (CSI) includes specific indicators such as carrier signal strength, amplitude, phase, and signal delay. These indicators reveal the signal scattering, reflection, and power attenuation phenomena that occur with the carrier as the transmission distance changes. It can be used to measure the channel status of the wireless network in Wi-Fi communication. By analyzing and studying the changes in CSI, we can conversely speculate on the changes in the physical environment that cause the changes in the channel state, that is, to achieve non-contact intelligent sensing. CSI is extremely sensitive to environmental changes. In addition to perceiving environmental changes caused by large movements such as walking and running of people or animals, it can also capture subtle movements caused by small movements such as breathing and chewing of people or animals in a static environment.
+To better understand CSI technology, we provide some related basic knowledge documents (to be updated gradually):
 
-### 1.2 Utilization of Subcarriers for CSI
-CSI (Channel State Information) can extract channel information through subcarriers due to the utilization of techniques like Orthogonal Frequency Division Multiplexing (OFDM) and Orthogonal Frequency Division Multiplexing Multiple Input Multiple Output (OFDM-MIMO).
-OFDM divides the spectrum into multiple orthogonal subcarriers, allowing independent data transmission across each subcarrier. This orthogonality minimizes interference between subcarriers, enhancing spectrum efficiency and interference resilience.
-In OFDM-MIMO systems, multiple antennas simultaneously transmit different data streams. These streams undergo channel propagation effects such as multipath fading before reaching the receiver. As each subcarrier experiences different channel effects, exploiting the characteristics of these subcarriers allows extraction of channel information. By analyzing the differences between transmitted and received signals across various subcarriers, including their amplitude and phase shifts, CSI can be derived.
-Thus, CSI's ability to extract channel information through subcarriers stems from the properties of OFDM and MIMO technologies, leveraging signal variations across multiple subcarriers and antennas to infer channel state information.
-To learn more about the principle of OFDM, the underlying technology of WiFi transport, please read this chapter:
+- [Signal Processing Fundamentals](./docs/en/Signal-Processing-Fundamentals.md)
+- [OFDM Introduction](./docs/en/OFDM-introduction.md)
+- [Wireless Channel Fundamentals](./docs/en/Wireless-Channel-Fundamentals.md)
+- [Introduction to Wireless Location](./docs/en/Introduction-to-Wireless-Location.md)
+- [Wireless Indicators CSI and RSSI](./docs/en/Wireless-indicators-CSI-and-RSSI.md)
+- [CSI Applications](./docs/en/CSI-Applications.md)
 
-### 1.3 The relationship between CSI and RSSI
+## Advantages of Espressif CSI
 
-1. **Level of detail:** CSI provides more detailed information about the wireless channel, including amplitude, phase, and frequency response. RSSI, on the other hand, only provides a general measurement of signal strength.
+- **Full series support:** All ESP32 series support CSI, including ESP32 / ESP32-S2 / ESP32-C3 / ESP32-S3 / ESP32-C6.
+- **Strong ecosystem:** Espressif is a global leader in the Wi-Fi MCU field, perfectly integrating CSI with existing IoT devices.
+- **More information:** ESP32 provides rich channel information, including RSSI, RF noise floor, reception time, and the 'rx_ctrl' field of the antenna.
+- **Bluetooth assistance:** ESP32 also supports BLE, for example, it can scan surrounding devices to assist detection.
+- **Powerful processing capability:** The ESP32 CPU is dual-core 240MHz, supporting AI instruction sets, capable of running machine learning and neural networks.
+- **OTA upgrade:** Existing projects can upgrade to new CSI features through software OTA without additional hardware costs.
 
-2. **Applications:** Wi-Fi CSI is particularly useful for advanced applications that require fine-grained analysis of the wireless channel, such as indoor localization, gesture recognition, and activity detection. RSSI is commonly used for basic tasks like signal strength estimation and basic proximity-based applications.
+## Example Introduction
 
-3. **Accuracy:** CSI can offer higher accuracy in certain applications compared to RSSI. It allows for more precise localization and tracking, as well as better differentiation between different actions or gestures.
+### [get-started](./examples/get-started)
 
-4. **Hardware support:** Both CSI and RSSI can be obtained from standard Wi-Fi receivers, but CSI requires more advanced hardware capabilities to capture and process the detailed channel information. RSSI, being a simpler measurement, can be obtained with most Wi-Fi receivers.
+Helps users quickly get started with CSI functionality, demonstrating the acquisition and initial analysis of CSI data through basic examples. For details, see [README](./examples/get-started/README.md).
 
-In summary, Wi-Fi CSI provides more detailed and fine-grained information about the wireless channel, while RSSI is a simpler measurement of signal strength. CSI enables more advanced applications but requires more sophisticated hardware and analysis techniques.
+- [csi_recv](./examples/get-started/csi_recv) demonstrates the ESP32 as a receiver example.
+- [csi_send](./examples/get-started/csi_send) demonstrates the ESP32 as a sender example.
+- [csi_recv_router](./examples/get-started/csi_recv_router) demonstrates using a router as the sender, with the ESP32 triggering the router to send CSI packets via Ping.
+- [tools](./examples/get-started/tools) provides scripts for assisting CSI data analysis, such as csi_data_read_parse.py.
 
-### 1.4 Advantages of CSI
+### [esp-radar](./examples/esp-radar)
 
-CSI is a physical layer characteristic. Compared with other indicators, CSI amplitude shows some advantages:
+Provides some applications using CSI data, including RainMaker cloud reporting and human activity detection.
 
-1. **Anti-interference:** CSI amplitude is essentially the attenuation coefficient of a set of channels. As long as the channel itself does not change, it is quite robust to interference from power adaptors and other jumpers.
-2. **More fine-grained:** CSI does not use synthetic values ​​(such as RSSI) to measure the channel, but decomposes the entire channel measurement into sub-carriers, and estimates the frequency response of each sub-carrier, so as to determine the channel in the frequency domain. Make a more fine-grained description.
+- [connect_rainmaker](./examples/esp-radar/connect_rainmaker) demonstrates capturing CSI data and uploading it to Espressif's RainMaker cloud platform.
+- [console_test](./examples/esp-radar/console_test) demonstrates an interactive console that allows dynamic configuration and capture of CSI data, with applications for human activity detection algorithms.
 
-### 1.5 Espressif CSI Advantage
-
-1. **All ESP32 series support CSI:** ESP32 / ESP32-S2 / ESP32-C3 / ESP32-S3 / ESP32-C6.
-2. **Powerful ecology:** Espressif is a global leader in the field of Wi-Fi MCUs, combining CSI with existing IOT equipment.
-3. **More information:** Such as RSSI, RF noise floor, reception time and antenna `rx_ctrl` field.
-4. **Bluetooth Assist:** ESP32 also supports BLE, for example, it can scan surrounding devices to assist detection.
-5. **Powerful processing capability:** ESP32 CPU handles dual-core, 240MHz, AI instructions. Can run machine learning and neural networks.
-
-## 2 CSI Application
-
-### 2.1 Intruder detection
-
-Select high-sensitivity sub-carrier combinations and signals from non-line-of-sight path directions in different multipath propagation environments, thereby enhancing the sensitivity of passive person detection and expanding the detection range. This method can form "no blind spot" intruder detection in security applications. The multipath propagation characteristics of wireless signals indoors make wireless perception have natural advantages in sensing range and directionality.
-
-### 2.2 Positioning and ranging
-
-You can learn from the RSSI method and use CSI as a more informative fingerprint (including information on signal amplitude and phase on multiple subcarriers), or rely on a frequency selective attenuation model for more accurate ranging.
-
-### 2.3 Human activity detection and recognition
-
-Use CSI's high sensitivity to environmental changes to recognize human movements, gestures, breathing and other small movements and daily activities.
-
-## 3 Getting Started
-
-The Getting Started project can be found in the [examples/esp-radar/console_test](./examples/esp-radar/console_test) directory. It will help you build a human activity detection application. See: [README](./examples/esp-radar/console_test/README.md).
-
-
-## 4 How to get CSI
+## How to get CSI
 
 ### 4.1 Get router CSI
 
