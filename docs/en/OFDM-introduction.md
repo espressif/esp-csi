@@ -17,9 +17,9 @@ To prove their orthogonality over one period, consider the inner product of thes
 $\int_{0}^{T} \sin(\omega_1 t) \sin(\omega_2 t) \, dt$
 
 Using trigonometric identities, we can simplify this integral. Using the identity:
-$\sin(A) \sin(B) = \frac{1}{2}[\cos(A-B) - \cos(A+B)]$
+$$\sin(A) \sin(B) = \frac{1}{2}[\cos(A-B) - \cos(A+B)]$$
 we can expand the integral into the difference of two cosine functions:
-$\int_{0}^{T} \sin(\omega_1 t) \sin(\omega_2 t) \, dt = \frac{1}{2} \int_{0}^{T} [\cos((\omega_1 - \omega_2) t) - \cos((\omega_1 + \omega_2) t)] \, dt$
+$$\int_{0}^{T} \sin(\omega_1 t) \sin(\omega_2 t) \, dt = \frac{1}{2} \int_{0}^{T} [\cos((\omega_1 - \omega_2) t) - \cos((\omega_1 + \omega_2) t)] \, dt$$
 
 Since $\omega_1$ and $\omega_2$ are different frequencies, both $(\omega_1 - \omega_2)$ and $(\omega_1 + \omega_2)$ are non-zero. Therefore, the integrals of these cosine functions over one period are zero. This means that $\sin(\omega_1 t)$ and $\sin(\omega_2 t)$ have an inner product of zero over one period, i.e., they are orthogonal over one period.
 
