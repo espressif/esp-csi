@@ -124,13 +124,6 @@ git submodule update --init --recursive
 + **clean**：点击后将清除所采集的所有数据
 + **start**：开始采集按钮
 
-### 4.9 模型评估窗口
-此窗口用于对所采用的阈值的优劣性进行评估，根据发送的采样结果数据，对室内状态、人员状态检测结果进行准确率评估
-![模型评估窗](./docs/_static/4.9_model_evaluate_windows.png)
-
-+ **open folder**：打开采样结果的数据文件
-+ **send**：发送文件，发送后模型将对动作进行识别，并评估识别准确率
-
 ## 5 操作流程
 这里以连接路由器为例，介绍了可视化系界面使用的操作流程
 ### 5.1 连接路由器 
@@ -178,16 +171,7 @@ git submodule update --init --recursive
 采集结束后会自动停止，我们在 `esp-csi/examples/esp-radar/console_test/tools/data` 路径下可以看到我们采集的数据
 ![CSI数据存放路径](./docs/_static/5.5_save_csi_data.png)
 
-### 5.6 利用采集的数据识别动作，并评估准确率
-采集实时 CSI 信息，并通过发送的数据对动作进行实时识别，并显示准确率，以此来评估设置的阈值优劣性，如果准确率较低，可再次调整阈值
-![选择采集的数据](./docs/_static/5.6_select_collected_data.png)
-![模型评估](./docs/_static/5.6_model_evaluation.png)
-
-+ 点击 `open folder`，选择采集的数据文件
-+ 点击 `send` 后选择 `yes`
-+ 点击 `csi start`
-
-### 5.7 窗口放大与缩小
-![窗口放大与缩小](./docs/_static/5.7_zoom_in_and_out_windows.png)
+### 5.6 窗口放大与缩小
+![窗口放大与缩小](./docs/_static/5.6_zoom_in_and_out_windows.png)
 + 通过选择勾选界面右上角 `Raw data` 与 `Radar model`，可单独显示 “数据显示界面” 和 “数据模型界面”
 + 鼠标选中不同窗口间的临界线，通过拖拽可放大/缩小各窗口

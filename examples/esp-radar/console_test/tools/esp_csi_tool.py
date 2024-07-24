@@ -249,8 +249,6 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             else:
                 self.checkBox_router_auto_connect.setChecked(False)
 
-            self.QWidget_evaluate_info.hide()
-
         self.curve_subcarrier_range = np.array([10, 20])
         self.graphicsView_subcarrier.setYRange(
             self.curve_subcarrier_range[0], self.curve_subcarrier_range[1])
@@ -349,9 +347,6 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             len(evaluate_STATISTICS_COLUMNS_NAMES), 3)
         self.model_evaluate_statistics.setHorizontalHeaderLabels(
             evaluate_STATISTICS_COLUMNS_NAMES)
-        self.tableView_evaluate_statistics.setModel(self.model_evaluate_statistics)
-        self.tableView_evaluate_statistics.horizontalHeader(
-        ).setSectionResizeMode(QHeaderView.ResizeToContents)
         self.model_evaluate_statistics.setItem(
             0, 0, QStandardItem('none static'))
         self.model_evaluate_statistics.setItem(1, 0, QStandardItem('none move'))
@@ -385,13 +380,6 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         self.checkBox_radar_model.released.connect(self.checkBox_radar_model_show)
         self.checkBox_display_eigenvalues_table.released.connect(
             self.checkBox_display_eigenvalues_table_show)
-
-        self.pushButton_evaluate_open_folder.released.connect(
-            self.pushButton_evaluate_open_folde_show)
-        self.pushButton_evaluate_start.released.connect(
-            self.pushButton_evaluate_start_show)
-        self.pushButton_evaluate_csi_start.released.connect(
-            self.pushButton_evaluate_csi_start_show)
 
         self.splitter_eigenvalues.setStretchFactor(0, 8)
         self.splitter_eigenvalues.setStretchFactor(1, 1)
@@ -900,67 +888,6 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
             self.timeEdit_train_duration.setTime(self.train_duration)
             self.pushButton_train_start.setText("start")
             self.pushButton_train_start.setStyleSheet("color: black")
-
-    def pushButton_evaluate_csi_start_show(self):
-        if self.pushButton_evaluate_csi_start.text() == "csi stop":
-            self.pushButton_evaluate_csi_start.setText("csi start")
-            self.pushButton_evaluate_csi_start.setStyleSheet("color: black")
-
-            command = "radar --csi_stop"
-            self.serial_queue_write.put(command)
-        else:
-            self.pushButton_evaluate_csi_start.setText("csi stop")
-            self.pushButton_evaluate_csi_start.setStyleSheet("color: red")
-
-            command = "radar --csi_start"
-            self.serial_queue_write.put(command)
-
-    def pushButton_evaluate_start_show(self):
-        print(f"{self.lineEdit_evaluate_open_folder.text()}")
-
-        if len(self.lineEdit_evaluate_open_folder.text()) == 0:
-            err = QErrorMessage(self)
-            err.setWindowTitle('Folder not selected')
-            err.showMessage("Please select the folder to be verified")
-            err.show()
-            return
-
-        message = QMessageBox.information(
-            self, 'Info', "Please make sure the device and PC are connected to the same router",
-            QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
-        if message == QMessageBox.Cancel:
-            return
-
-        # self.checkBox_statistics_auto_update.setChecked(False)
-
-        folder_path = self.lineEdit_evaluate_open_folder.text()
-
-        if self.pushButton_evaluate_csi_start.text() == 'csi stop':
-            self.pushButton_evaluate_csi_start_show()
-
-        self.QWidget_evaluate_info.show()
-        self.timer_evaluate_statistics.start()
-
-        g_radar_data_room_pd.iloc[:, :] = 0
-        g_radar_data_human_pd.iloc[:, :] = 0
-        g_move_record_pd.iloc[:, :] = 0
-        g_status_record_pd.iloc[:, :] = ''
-        g_radar_eigenvalue_array[:, :] = 0
-        g_radar_eigenvalue_threshold_array[:, :] = 0
-        g_radar_status_array[:, :] = 0
-        g_evaluate_statistics_array[:, :] = 0
-
-        evaluate_data_send_process = Process(
-            target=evaluate_data_send, args=(self.serial_queue_write, folder_path))
-        evaluate_data_send_process.start()
-
-    def pushButton_evaluate_open_folde_show(self):
-        try:
-            self.folder_path = QFileDialog.getExistingDirectory(
-                None, 'select evaluate folder', os.getcwd())
-            self.lineEdit_evaluate_open_folder.setText(self.folder_path)
-        except Exception as e:
-            print(e)
 
     def comboBox_command_show(self):
         self.lineEdit_command.setText(self.comboBox_command.currentText())

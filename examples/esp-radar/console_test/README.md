@@ -122,13 +122,6 @@ This window is used to collect CSI data when people perform different actions. T
 + **clean**：Click to clear all collected data
 + **start**：start collecting button
 
-### 4.9 Model evaluation window
-This window is used to evaluate the pros and cons of the adopted thresholds, and to evaluate the accuracy of the room state and people state detection results according to the sent sampling result data.
-![model_evaluate window](./docs/_static/4.9_model_evaluate_windows.png)
-
-+ **open folder**：Open the data file of the collecting results.
-+ **send**：Send the file, the model will recognize the action after sending, and evaluate the recognition accuracy.
-
 ## 5 Operating procedures
 Here, taking connecting the router as an example, the operation flow of the visualization system interface is introduced.
 ### 5.1 connect router
@@ -176,16 +169,7 @@ In these observation windows, the number of people's movements per minute will b
 After the collection is over, it will stop automatically. We can see the data we collected under the path of `esp-csi/examples/esp-radar/console_test/tools/data`.
 ![save csi_data](./docs/_static/5.5_save_csi_data_en.png)
 
-### 5.6 Use collected data to identify actions and evaluate accuracy
-Collect real-time CSI information, identify the action in real time through the sent data, and display the accuracy rate to evaluate the pros and cons of the set threshold. If the accuracy rate is low, the threshold can be adjusted again.
-![select collected_data](./docs/_static/5.6_select_collected_data_en.png)
-![model evaluation](./docs/_static/5.6_model_evaluation_en.png)
-
-+ Click `open folder` to select the collected data file
-+ Click `send` and select `yes`
-+ Click on `csi start`
-
-### 5.7 Window zoom in and out
-![zoom in_and_out window](./docs/_static/5.7_zoom_in_and_out_windows_en.png)
+### 5.6 Window zoom in and out
+![zoom in_and_out window](./docs/_static/5.6_zoom_in_and_out_windows_en.png)
 + By selecting `Raw data` and `Radar model` in the upper right corner of the interface, the `Raw data` interface and `Radar model` interface can be displayed separately.
 + Select the critical line between different windows with the mouse, and drag and drop to zoom in/out of each window.
