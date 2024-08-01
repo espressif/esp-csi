@@ -103,7 +103,7 @@ class csi_data_graphical_window(QWidget):
             self.curve_list[i].setData(self.csi_amplitude_array[:, i])
 
 
-def csi_data_read_parse(port: str, csv_writer):
+def csi_data_read_parse(port: str, csv_writer, log_file_fd):
     ser = serial.Serial(port=port, baudrate=921600,
                         bytesize=8, parity='N', stopbits=1)
     if ser.isOpen():
@@ -121,6 +121,9 @@ def csi_data_read_parse(port: str, csv_writer):
         index = strings.find('CSI_DATA')
 
         if index == -1:
+            # Save serial output other than CSI data
+            log_file_fd.write(strings + '\n')
+            log_file_fd.flush()
             continue
 
         csv_reader = csv.reader(StringIO(strings))
@@ -128,16 +131,27 @@ def csi_data_read_parse(port: str, csv_writer):
 
         if len(csi_data) != len(DATA_COLUMNS_NAMES):
             print("element number is not equal")
+            log_file_fd.write("element number is not equal\n")
+            log_file_fd.write(strings + '\n')
+            log_file_fd.flush()
             continue
 
         try:
             csi_raw_data = json.loads(csi_data[-1])
         except json.JSONDecodeError:
-            print(f"data is incomplete")
+            print("data is incomplete")
+            log_file_fd.write("data is incomplete\n")
+            log_file_fd.write(strings + '\n')
+            log_file_fd.flush()
             continue
 
+        # Reference on the length of CSI data and usable subcarriers
+        # https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/wifi.html#wi-fi-channel-state-information
         if len(csi_raw_data) != 128 and len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
             print(f"element number is not equal: {len(csi_raw_data)}")
+            log_file_fd.write(f"element number is not equal: {len(csi_raw_data)}\n")
+            log_file_fd.write(strings + '\n')
+            log_file_fd.flush()
             continue
 
         csv_writer.writerow(csi_data)
@@ -159,19 +173,21 @@ def csi_data_read_parse(port: str, csv_writer):
 
 
 class SubThread (QThread):
-    def __init__(self, serial_port, save_file_name):
+    def __init__(self, serial_port, save_file_name, log_file_name):
         super().__init__()
         self.serial_port = serial_port
 
         save_file_fd = open(save_file_name, 'w')
+        self.log_file_fd = open(log_file_name, 'w')
         self.csv_writer = csv.writer(save_file_fd)
         self.csv_writer.writerow(DATA_COLUMNS_NAMES)
 
     def run(self):
-        csi_data_read_parse(self.serial_port, self.csv_writer)
+        csi_data_read_parse(self.serial_port, self.csv_writer, self.log_file_fd)
 
     def __del__(self):
         self.wait()
+        self.log_file_fd.close()
 
 
 if __name__ == '__main__':
@@ -185,14 +201,17 @@ if __name__ == '__main__':
                         help="Serial port number of csv_recv device")
     parser.add_argument('-s', '--store', dest='store_file', action='store', default='./csi_data.csv',
                         help="Save the data printed by the serial port to a file")
+    parser.add_argument('-l', '--log', dest="log_file", action="store", default="./csi_data_log.txt",
+                        help="Save other serial data the bad CSI data to a log file")
 
     args = parser.parse_args()
     serial_port = args.port
     file_name = args.store_file
+    log_file_name = args.log_file
 
     app = QApplication(sys.argv)
 
-    subthread = SubThread(serial_port, file_name)
+    subthread = SubThread(serial_port, file_name, log_file_name)
     subthread.start()
 
     window = csi_data_graphical_window()
