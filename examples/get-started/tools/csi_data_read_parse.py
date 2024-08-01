@@ -82,14 +82,14 @@ class csi_data_graphical_window(QWidget):
         self.plotWidget_ted.setYRange(-20, 100)
         self.plotWidget_ted.addLegend()
 
-        self.csi_phase_array = np.abs(csi_data_array)
+        self.csi_amplitude_array = np.abs(csi_data_array)
         self.curve_list = []
 
         # print(f"csi_vaid_subcarrier_color, len: {len(csi_vaid_subcarrier_color)}, {csi_vaid_subcarrier_color}")
 
         for i in range(CSI_DATA_COLUMNS):
             curve = self.plotWidget_ted.plot(
-                self.csi_phase_array[:, i], name=str(i), pen=csi_vaid_subcarrier_color[i])
+                self.csi_amplitude_array[:, i], name=str(i), pen=csi_vaid_subcarrier_color[i])
             self.curve_list.append(curve)
 
         self.timer = pq.QtCore.QTimer()
@@ -97,10 +97,10 @@ class csi_data_graphical_window(QWidget):
         self.timer.start(100)
 
     def update_data(self):
-        self.csi_phase_array = np.abs(csi_data_array)
+        self.csi_amplitude_array = np.abs(csi_data_array)
 
         for i in range(CSI_DATA_COLUMNS):
-            self.curve_list[i].setData(self.csi_phase_array[:, i])
+            self.curve_list[i].setData(self.csi_amplitude_array[:, i])
 
 
 def csi_data_read_parse(port: str, csv_writer):
