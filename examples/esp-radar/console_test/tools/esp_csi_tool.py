@@ -94,7 +94,7 @@ RADAR_DATA_COLUMNS_NAMES = ["type", "seq", "timestamp",
                             "waveform_wander", "wander_average", "waveform_wander_threshold", "someone_status", 
                             "waveform_jitter", "jitter_midean", "waveform_jitter_threshold", "move_status"]
 
-g_csi_phase_array = np.zeros(
+g_csi_amplitude_array = np.zeros(
     [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.int32)
 g_rssi_array = np.zeros(CSI_DATA_INDEX, dtype=np.int8)
 g_radio_header_pd = pd.DataFrame(np.zeros([10, len(
@@ -259,7 +259,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
 
         for i in range(CSI_DATA_COLUMNS):
             curve = self.graphicsView_subcarrier.plot(
-                g_csi_phase_array[:, i], name=str(i), pen=csi_vaid_subcarrier_color[i])
+                g_csi_amplitude_array[:, i], name=str(i), pen=csi_vaid_subcarrier_color[i])
             self.curve_subcarrier.append(curve)
 
         self.curve_rssi = self.graphicsView_rssi.plot(
@@ -525,10 +525,10 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
         b, a = signal.butter(8, wn, 'lowpass')
 
         if self.wave_filtering_flag:
-            self.median_filtering(g_csi_phase_array)
-            csi_filtfilt_data = signal.filtfilt(b, a, g_csi_phase_array.T).T
+            self.median_filtering(g_csi_amplitude_array)
+            csi_filtfilt_data = signal.filtfilt(b, a, g_csi_amplitude_array.T).T
         else:
-            csi_filtfilt_data = g_csi_phase_array
+            csi_filtfilt_data = g_csi_amplitude_array
 
         if self.curve_subcarrier_range[0] > csi_filtfilt_data.min() or self.curve_subcarrier_range[1] < csi_filtfilt_data.max():
             if csi_filtfilt_data.min() > 0 and self.curve_subcarrier_range[0] > csi_filtfilt_data.min():
@@ -909,7 +909,7 @@ class DataGraphicalWindow(QMainWindow, Ui_MainWindow):
 
 def csi_data_handle(self, data):
     # Rotate data
-    g_csi_phase_array[:-1] = g_csi_phase_array[1:]
+    g_csi_amplitude_array[:-1] = g_csi_amplitude_array[1:]
     g_rssi_array[:-1] = g_rssi_array[1:]
     g_radio_header_pd.iloc[1:] = g_radio_header_pd.iloc[:-1]
 
@@ -917,7 +917,7 @@ def csi_data_handle(self, data):
     for i in range(CSI_DATA_COLUMNS):
         data_complex = complex(csi_raw_data[csi_vaid_subcarrier_index[i] * 2],
                                csi_raw_data[csi_vaid_subcarrier_index[i] * 2 - 1])
-        g_csi_phase_array[-1][i] = np.abs(data_complex)
+        g_csi_amplitude_array[-1][i] = np.abs(data_complex)
 
     g_rssi_array[-1] = data['rssi']
     g_radio_header_pd.loc[0] = data[1:len(CSI_DATA_COLUMNS_NAMES)-1]
