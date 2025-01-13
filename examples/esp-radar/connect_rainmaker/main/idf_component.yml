@@ -1,40 +1,37 @@
 ## IDF Component Manager Manifest File
 dependencies:
-  idf: ">=4.4.1"
+  idf: '>=4.4.1'
 
   esp-radar:
-    version: "0.*"
-    override_path: "../../../../components/esp-radar"
+    version: 0.*
+    override_path: ../../../../components/esp-radar
 
-  espressif/rmaker_common: "1.4.*"
+  espressif/rmaker_common: 1.4.*
   espressif/json_generator: ^1
   espressif/json_parser: =1.0.0
   espressif/esp_rainmaker:
     path: components/esp_rainmaker
     git: https://github.com/espressif/esp-rainmaker.git
-    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
-  espressif/esp_schedule:
-    path: components/esp_schedule
-    git: https://github.com/espressif/esp-rainmaker.git
-    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
+    version: ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb
   espressif/ws2812_led:
     path: components/ws2812_led
     git: https://github.com/espressif/esp-rainmaker.git
-    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
+    version: ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb
   espressif/qrcode:
     path: components/qrcode
     git: https://github.com/espressif/esp-rainmaker.git
-    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
+    version: ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb
   espressif/gpio_button:
     path: components/gpio_button
     git: https://github.com/espressif/esp-rainmaker.git
-    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
+    version: ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb
   espressif/app_wifi:
     path: examples/common/app_wifi
     git: https://github.com/espressif/esp-rainmaker.git
-    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
+    version: ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb
   espressif/app_reset:
     path: examples/common/app_reset
     git: https://github.com/espressif/esp-rainmaker.git
-    version: "ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb"
-  
+    version: ff0dd329020a52ae8cf2fb4f6800d9f8e9cc9eeb
+  espressif/esp_schedule: 
+    version: ^1.2.0
