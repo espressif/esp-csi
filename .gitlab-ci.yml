@@ -54,27 +54,27 @@ build_idf_v5.1:
   extends: .build_template
   image: espressif/idf:release-v5.1
   variables:
-    TARGETS: "esp32 esp32s3 esp32c3 esp32c6"
+    TARGETS: "esp32 esp32s3 esp32c3"
 
 
 build_idf_v5.2:
   extends: .build_template
   image: espressif/idf:release-v5.2
   variables:
-    TARGETS: "esp32 esp32s3 esp32c3 esp32c6"
+    TARGETS: "esp32 esp32s3 esp32c3"
 
 build_idf_v5.3:
   extends: .build_template
   image: espressif/idf:release-v5.3
   variables:
-    TARGETS: "esp32 esp32s3 esp32c3 esp32c6"
+    TARGETS: "esp32 esp32s3 esp32c3"
 
 build_idf_v5.4:
   extends: .build_template
   image: espressif/idf:release-v5.4
   variables:
     TARGETS: "esp32 esp32s3 esp32c3 esp32c6"
-    
+
 build_idf_master:
   extends: .build_template
   image: espressif/idf:latest
