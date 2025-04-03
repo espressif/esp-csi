@@ -57,7 +57,7 @@ Provides some applications using CSI data, including RainMaker cloud reporting a
 
 <img src="docs/_static/get_device_csi.png" width="550">
 
-- **How ​​to implement:** ESP32 A and B both send Ping packets to the router, and ESP32 A receives the CSI information carried in the Ping Replay returned by ESP32 B, which is a supplement to the first detection scenario.
+- **How ​​to implement:** ESP32 A and B both send Ping packets to the router, and ESP32 A receives the CSI information carried in the Ping sent by ESP32 B, which is a supplement to the first detection scenario.
 - **Advantage:** Does not depend on the location of the router, and is not affected by other devices connected under the router.
 - **Disadvantage:** Depends on the Wi-Fi protocol supported by the router, environment.
 - **Applicable scenario:** There must be more than two ESP32s in the environment.
