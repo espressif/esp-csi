@@ -23,19 +23,21 @@
 #define CONFIG_LESS_INTERFERENCE_CHANNEL   11
 #if CONFIG_IDF_TARGET_ESP32C5 || CONFIG_IDF_TARGET_ESP32C6
     #define CONFIG_WIFI_BAND_MODE   WIFI_BAND_MODE_2G_ONLY
-    #define CONFIG_WIFI_2G_BANDWIDTHS           WIFI_BW_HT40
-    #define CONFIG_WIFI_5G_BANDWIDTHS           WIFI_BW_HT40
+    #define CONFIG_WIFI_2G_BANDWIDTHS           WIFI_BW_HT20
+    #define CONFIG_WIFI_5G_BANDWIDTHS           WIFI_BW_HT20
     #define CONFIG_WIFI_2G_PROTOCOL             WIFI_PROTOCOL_11N
     #define CONFIG_WIFI_5G_PROTOCOL             WIFI_PROTOCOL_11N
-    #define CONFIG_ESP_NOW_PHYMODE           WIFI_PHY_MODE_HT40
+    #define CONFIG_ESP_NOW_PHYMODE           WIFI_PHY_MODE_HT20
 #else
     #define CONFIG_WIFI_BANDWIDTH           WIFI_BW_HT40
 #endif
 #define CONFIG_ESP_NOW_RATE             WIFI_PHY_RATE_MCS0_LGI
-#define CONFIG_FORCE_GAIN                   0
-#define CSI_FORCE_LLTF                      0   
+#define CONFIG_FORCE_GAIN                   1
+#if CONFIG_IDF_TARGET_ESP32C5
+    #define CSI_FORCE_LLTF                      0   
+#endif
 #if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3 || CONFIG_IDF_TARGET_ESP32C5 || CONFIG_IDF_TARGET_ESP32C6
-#define CONFIG_GAIN_CONTROL                 1
+    #define CONFIG_GAIN_CONTROL                 1
 #endif
 
 static const uint8_t CONFIG_CSI_SEND_MAC[] = {0x1a, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -115,8 +117,6 @@ static void wifi_init()
     ESP_ERROR_CHECK(esp_wifi_set_bandwidth(ESP_IF_WIFI_STA, CONFIG_WIFI_BANDWIDTH));
     ESP_ERROR_CHECK(esp_wifi_start());
 #endif
-wifi_bandwidth_t bandwidth1;
-    esp_wifi_get_bandwidth(WIFI_IF_STA, &bandwidth1);
 
 #if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32C3 || CONFIG_IDF_TARGET_ESP32S3 
     ESP_ERROR_CHECK(esp_wifi_config_espnow_rate(ESP_IF_WIFI_STA, CONFIG_ESP_NOW_RATE));

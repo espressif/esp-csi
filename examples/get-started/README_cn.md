@@ -33,7 +33,6 @@
     ```
 
 2. 在 `csi_recv` 里运行 `csi_data_read_parse.py` 做数据分析。 在运行前请关闭 `idf.py monitor` 。
-> esp32-c5 和 esp32-c6 由于射频硬件的升级，需要使用 `csi_data_read_parse_c5.py` 和 `csi_data_read_parse_c6.py` 做数据分析
 
     ```shell
     cd esp-csi-gitlab/examples/get-started/tools

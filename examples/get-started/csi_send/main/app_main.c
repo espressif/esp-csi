@@ -23,19 +23,17 @@
 
 #if CONFIG_IDF_TARGET_ESP32C5 || CONFIG_IDF_TARGET_ESP32C6
     #define CONFIG_WIFI_BAND_MODE   WIFI_BAND_MODE_2G_ONLY
-    #define CONFIG_WIFI_2G_BANDWIDTHS           WIFI_BW_HT40
-    #define CONFIG_WIFI_5G_BANDWIDTHS           WIFI_BW_HT40
+    #define CONFIG_WIFI_2G_BANDWIDTHS           WIFI_BW_HT20
+    #define CONFIG_WIFI_5G_BANDWIDTHS           WIFI_BW_HT20
     #define CONFIG_WIFI_2G_PROTOCOL             WIFI_PROTOCOL_11N
     #define CONFIG_WIFI_5G_PROTOCOL             WIFI_PROTOCOL_11N
+    #define CONFIG_ESP_NOW_PHYMODE           WIFI_PHY_MODE_HT20
 #else
     #define CONFIG_WIFI_BANDWIDTH           WIFI_BW_HT40
 #endif
 
-#if CONFIG_IDF_TARGET_ESP32C5 || CONFIG_IDF_TARGET_ESP32C6
-    #define CONFIG_ESP_NOW_PHYMODE           WIFI_PHY_MODE_HT40
-#endif
 #define CONFIG_ESP_NOW_RATE             WIFI_PHY_RATE_MCS0_LGI
-#define CONFIG_SEND_FREQUENCY               10
+#define CONFIG_SEND_FREQUENCY               20
 
 static const uint8_t CONFIG_CSI_SEND_MAC[] = {0x1a, 0x00, 0x00, 0x00, 0x00, 0x00};
 static const char *TAG = "csi_send";
