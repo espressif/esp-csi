@@ -1,4 +1,5 @@
-# Get Started Examples[[中文]](./README_cn.md)
+# Get Started Examples
+[[中文]](./README_cn.md)
 
 This example demonstrates how to obtain CSI data through communication between two espressif chips, and uses a graphical interface to display real-time data of CSI subcarriers
 
@@ -31,7 +32,6 @@ You need to prepare two development boards for espressif chips, one as the sende
     ```
 
 2. Run `csi_data_read_parse.py` in `csi_recv` for data analysis. Please close `idf.py monitor` before running
-> Due to RF hardware upgrades in ESP32-C5 and ESP32-C6, the scripts `csi_data_read_parse_c5.py` and `csi_data_read_parse_c6.py` must be used for data analysis.  
 
     ```shell
     cd esp-csi-gitlab/examples/get-started/tools
