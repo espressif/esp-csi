@@ -1,4 +1,5 @@
-# Get Started Examples[[中文]](./README_cn.md)
+# Get Started Examples
+[[中文]](./README_cn.md)
 
 This example demonstrates how to obtain CSI data through communication between two espressif chips, and uses a graphical interface to display real-time data of CSI subcarriers
 
