@@ -212,7 +212,7 @@ static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
             rx_ctrl->timestamp, rx_ctrl->ant, rx_ctrl->sig_len, rx_ctrl->rx_state);
 
 #endif
-#if CSI_FORCE_LLTF
+#if CONFIG_IDF_TARGET_ESP32C5 && CSI_FORCE_LLTF
     ets_printf(",%d,%d,\"[%d", (info->len-2)/2, info->first_word_invalid, (int16_t)(((int16_t)info->buf[1]) << 12)>>4 | (uint8_t)info->buf[0]);
     for (int i = 2; i < (info->len-2); i+=2) {
         ets_printf(",%d", (int16_t)(((int16_t)info->buf[i+1]) << 12)>>4 | (uint8_t)info->buf[i]);
