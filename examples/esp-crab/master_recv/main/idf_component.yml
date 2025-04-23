@@ -1,0 +1,9 @@
+## IDF Component Manager Manifest File
+dependencies:
+  idf: '>=4.4.1'
+
+  esp-radar:
+    version: '>=0.2.1'
+    override_path: ../../../../components/esp-radar
+
+  espressif/iqmath: ^1.11.0

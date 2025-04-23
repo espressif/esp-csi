@@ -1,0 +1,22 @@
+targets:
+  - esp32c5
+
+tags:
+  - bsp
+
+dependencies:
+  idf: ">=4.4.5"
+  esp_lcd_touch_cst816s: "^1"
+  lvgl/lvgl: "^8"
+  espressif/esp_lcd_gc9a01: ^2.0.1
+  espressif/esp_lcd_touch: ^1.1.2
+  
+  espressif/esp_lvgl_port:
+    version: "^2"
+    public: true
+
+  button:
+    version: ">=2.5"
+    public: true
+  espressif/led_strip: "^2.5.3"
+
