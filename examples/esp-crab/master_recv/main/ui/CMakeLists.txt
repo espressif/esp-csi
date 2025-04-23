@@ -1,0 +1,11 @@
+SET(SOURCES screens/ui_ScreenW.c
+    screens/ui_ScreenWP.c
+    screens/ui_ScreenM.c
+    screens/ui_ScreenS.c
+    ui.c
+    components/ui_comp_hook.c
+    ui_helpers.c
+    ui_events.c
+    images/ui_img_272184077.c)
+
+add_library(ui ${SOURCES})

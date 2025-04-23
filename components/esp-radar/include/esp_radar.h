@@ -26,7 +26,7 @@ extern "C"
 {
 #endif
 
-#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3 || CONFIG_IDF_TARGET_ESP32C5 || CONFIG_IDF_TARGET_ESP32C6
 #define WIFI_CSI_PHY_GAIN_ENABLE          1
 #endif
 
@@ -140,7 +140,7 @@ typedef struct {
         .shift             = 4, \
     } \
 }
-  
+
 /**
   * @brief Set Wi-Fi radar configuration
   *
@@ -229,22 +229,80 @@ esp_err_t esp_radar_train_stop(float *wander_threshold, float *jitter_threshold)
 
 #if WIFI_CSI_PHY_GAIN_ENABLE
 /**
- * @brief 
+ * @brief Retrieve the gain baseline of the receive gain
  * 
  * @param agc_gain 
  * @param fft_gain 
  * @return esp_err_t 
  */
-esp_err_t esp_radar_get_rx_gain(uint8_t* agc_gain, int8_t *fft_gain);
+esp_err_t esp_radar_get_rx_gain_baseline(uint8_t* agc_gain, int8_t *fft_gain);
+
 
 /**
- * @brief 
+ * @brief Force setting the receive gain, but it may lead to packet loss.
  * 
  * @param agc_gain 
  * @param fft_gain 
  * @return esp_err_t 
  */
-esp_err_t esp_radar_set_rx_gain(uint8_t agc_gain, int8_t fft_gain);
+esp_err_t esp_radar_set_rx_force_gain(uint8_t agc_gain, int8_t fft_gain);
+
+/**
+ * @brief To calculate the gain baseline, record the receive gain.
+ * 
+ * @param agc_gain 
+ * @param fft_gain 
+ * @return esp_err_t 
+ */
+esp_err_t esp_radar_record_rx_gain(uint8_t agc_gain, int8_t fft_gain);
+
+/**
+  * @brief  Reset rx gain baseline
+  * @return esp_err_t
+  */
+void esp_radar_reset_rx_gain_baseline(void);
+
+/**
+  * @brief  This function compensates the input data based on the provided AGC gain and FFT gain.
+  *         It adjusts the data by applying compensation calculated from the AGC gain and FFT gain values.
+  *
+  * @param data            Pointer to the data to be compensated.
+  * @param size            Size of the data array.
+  * @param compensate_gain Pointer to store the computed compensation gain.
+  * @param agc_gain        AGC gain value used for compensation.
+  * @param fft_gain        FFT gain value used for compensation.
+  *
+  * @return
+  *    - ESP_OK: Compensation successfully applied.
+  *    - ESP_ERR_INVALID_STATE: Invalid state, compensation cannot be applied.
+  */
+esp_err_t esp_radar_compensate_rx_gain(int8_t *data, uint16_t size, float *compensate_gain, uint8_t agc_gain, int8_t fft_gain);
+
+/**
+  * @brief  Get the gain compensation value based on the provided AGC gain and FFT gain.
+  *
+  * @param compensate_gain Pointer to store the calculated gain compensation value.
+  * @param agc_gain Automatic Gain Control (AGC) gain value used for compensation.
+  * @param fft_gain Fast Fourier Transform (FFT) gain value used for compensation.
+  *
+  * @return
+  *    - ESP_OK: Compensation successfully applied.
+  *    - ESP_ERR_INVALID_STATE: Invalid state, compensation cannot be applied.
+  */
+esp_err_t esp_radar_get_gain_compensation(float *compensate_gain, uint8_t agc_gain, int8_t fft_gain);
+
+/**
+  * @brief  Retrieve the RX gain values from CSI packet information.
+  * 
+  * @param info      Pointer to the wifi_csi_info_t structure.
+  * @param agc_gain Pointer to store the AGC gain value.
+  * @param fft_gain Pointer to store the FFT gain value.
+  *
+  * @return esp_err_t Returns ESP_OK on success, or ESP_ERR_INVALID_ARG if input parameters are invalid.
+  */
+
+esp_err_t esp_radar_get_rx_gain(wifi_csi_info_t *info, uint8_t* agc_gain, int8_t* fft_gain);
+
 #endif
 
 #ifdef __cplusplus
