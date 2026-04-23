@@ -216,15 +216,15 @@ static void uart_send_task(void *pvParameter)
 #endif
 
         for (int i = 0; i < 64; i++) {
-            x_iq[i].real = _IQ16(csi_send_queue_data->buf[2 * i]);
-            x_iq[i].imag = _IQ16(csi_send_queue_data->buf[2 * i + 1]);
+            x_iq[i].imag = _IQ16(csi_send_queue_data->buf[2 * i]);
+            x_iq[i].real = _IQ16(csi_send_queue_data->buf[2 * i + 1]);
         }
         fft_iq(x_iq, 1);
         cir[0] = complex_magnitude_iq(x_iq[0]) * scaling_factor;
         pha[0] = complex_phase_iq(x_iq[0]);
         for (int i = 64; i < 128; i++) {
-            x_iq[i - 64].real = _IQ16(csi_send_queue_data->buf[2 * i]);
-            x_iq[i - 64].imag = _IQ16(csi_send_queue_data->buf[2 * i + 1]);
+            x_iq[i - 64].imag = _IQ16(csi_send_queue_data->buf[2 * i]);
+            x_iq[i - 64].real = _IQ16(csi_send_queue_data->buf[2 * i + 1]);
         }
         fft_iq(x_iq, 1);
         cir[1] = complex_magnitude_iq(x_iq[0]) * scaling_factor;
