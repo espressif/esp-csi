@@ -50,7 +50,7 @@ Using this method, the receiver can independently decode each sub-signal $a$ and
 
 Taking $\sin(\omega_1 t)$ and $\sin(\omega_2 t)$ as examples, we demonstrate the transition from intuitive to abstract. The simple orthogonal model is the foundation of all complex theories.
 
-Next, expand the model of $\sin(t)$ and $\sin(2t)$ to more subcarrier sequences $\{ \sin(2T \Delta f \cdot t), \sin(2T \Delta f \cdot 2t), \sin(2T \Delta f \cdot 3t), \ldots, \sin(2T \Delta f \cdot kt) \} $ (e.g., $k=16, 256, 1024$), where $2\pi$ is a constant, $\Delta f $ is the preselected carrier frequency interval, $T$ is the period, and $k$ is the maximum index of the sequence.
+Next, expand the model of $\sin(t)$ and $\sin(2t)$ to more subcarrier sequences $\{ \sin(2T \Delta f \cdot t), \sin(2T \Delta f \cdot 2t), \sin(2T \Delta f \cdot 3t), \ldots, \sin(2T \Delta f \cdot kt) \}$ (e.g., $k=16, 256, 1024$), where $2\pi$ is a constant, $\Delta f$ is the preselected carrier frequency interval, $T$ is the period, and $k$ is the maximum index of the sequence.
 
 The orthogonality of multiple functions is based on their pairwise orthogonality. If a set of functions $\{f_1(t), f_2(t), ..., f_n(t)\}$ is pairwise orthogonal over an interval, then for any $i \ne j$:
 $\int_{a}^{b} f_{i}(t) f_{j}(t) dt = 0$
