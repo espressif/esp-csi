@@ -1122,15 +1122,16 @@ def serial_handle(queue_read, queue_write, port):
         if not path.exists(folder):
             mkdir(folder)
 
-    data_valid_list = pd.DataFrame(columns=['type', 'columns_names', 'file_name', 'file_fd', 'file_writer'],
-                                   data=[['CSI_DATA', CSI_DATA_COLUMNS_NAMES, 'log/csi_data.csv', None, None],
-                                         ['RADAR_DADA', RADAR_DATA_COLUMNS_NAMES, 'log/radar_data.csv', None, None],
-                                         ['DEVICE_INFO', DEVICE_INFO_COLUMNS_NAMES, 'log/device_info.csv', None, None]])
+    # pandas 3.0 copy-on-write makes DataFrame .iloc row iteration yield copies,
+    # so writing file_fd/file_writer back was lost. use a plain list of dicts.
+    data_valid_list = [
+        {'type': 'CSI_DATA', 'columns_names': CSI_DATA_COLUMNS_NAMES, 'file_name': 'log/csi_data.csv', 'file_fd': None, 'file_writer': None},
+        {'type': 'RADAR_DADA', 'columns_names': RADAR_DATA_COLUMNS_NAMES, 'file_name': 'log/radar_data.csv', 'file_fd': None, 'file_writer': None},
+        {'type': 'DEVICE_INFO', 'columns_names': DEVICE_INFO_COLUMNS_NAMES, 'file_name': 'log/device_info.csv', 'file_fd': None, 'file_writer': None},
+    ]
 
-    for data_valid in data_valid_list.iloc:
-        # print(type(data_valid), data_valid)
-        # print(f"file_name: {data_valid['file_name']}")
-        data_valid['file_fd'] = open(data_valid['file_name'], 'w')
+    for data_valid in data_valid_list:
+        data_valid['file_fd'] = open(data_valid['file_name'], 'w', newline='')
         data_valid['file_writer'] = csv.writer(data_valid['file_fd'])
         data_valid['file_writer'].writerow(data_valid['columns_names'])
 
@@ -1169,7 +1170,7 @@ def serial_handle(queue_read, queue_write, port):
             continue
 
         # print(f"fail: {strings}")
-        for data_valid in data_valid_list.iloc:
+        for data_valid in data_valid_list:
             index = strings.find(data_valid['type'])
             if index >= 0:
                 strings = strings[index:]
@@ -1208,8 +1209,10 @@ def serial_handle(queue_read, queue_write, port):
                         if min_log_start < len(data_field) and min_log_start > 10:
                             data[-1] = data_field[:min_log_start]
 
+                    # pandas 3.0 infers a str dtype for all-string rows; force
+                    # object so the decoded csi list can be assigned to 'data'.
                     data_series = pd.Series(
-                        data, index=data_valid['columns_names'])
+                        data, index=data_valid['columns_names'], dtype=object)
 
                     try:
                         datetime.strptime(
