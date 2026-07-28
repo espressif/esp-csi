@@ -185,7 +185,7 @@ static int wifi_cmd_ap(int argc, char **argv)
     }
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
-    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
 
     ESP_LOGI(TAG, "Starting SoftAP SSID: %s, Password: %s", ssid, password);
 
