@@ -1,0 +1,7 @@
+/.pio/
+/include/board_config.h
+/lib/esp-radar/
+*.exe
+*.obj
+*.pdb
+__pycache__/
