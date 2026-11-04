@@ -16,6 +16,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
+#include "freertos/task.h"
+
 #include "nvs_flash.h"
 
 #include "esp_mac.h"
@@ -134,6 +138,21 @@ static void wifi_esp_now_init(esp_now_peer_info_t peer)
 
 }
 
+/**
+ * Printing a CSI row takes several milliseconds. The CSI callback runs in the Wi-Fi task, and printing there
+ * can crash the Wi-Fi driver, so the callback only copies the data into a queue and csi_data_print_task prints it.
+ */
+typedef struct {
+    wifi_csi_info_t info;   /**< info.buf points to buf below; info.hdr and info.payload are NULL */
+    uint32_t rx_id;
+    float compensate_gain;
+    uint8_t agc_gain;
+    int8_t fft_gain;
+    int8_t buf[];
+} csi_print_data_t;
+
+static QueueHandle_t g_csi_info_queue = NULL;
+
 static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
 {
     if (!info || !info->buf) {
@@ -145,7 +164,6 @@ static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
         return;
     }
 
-    const wifi_pkt_rx_ctrl_t *rx_ctrl = &info->rx_ctrl;
     static int s_count = 0;
     float compensate_gain = 1.0f;
     static uint8_t agc_gain = 0;
@@ -153,7 +171,7 @@ static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
 #if CONFIG_GAIN_CONTROL
     static uint8_t agc_gain_baseline = 0;
     static int8_t fft_gain_baseline = 0;
-    esp_csi_gain_ctrl_get_rx_gain(rx_ctrl, &agc_gain, &fft_gain);
+    esp_csi_gain_ctrl_get_rx_gain(&info->rx_ctrl, &agc_gain, &fft_gain);
     if (s_count < 100) {
         esp_csi_gain_ctrl_record_rx_gain(agc_gain, fft_gain);
     } else if (s_count == 100) {
@@ -164,10 +182,41 @@ static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
 #endif
     }
     esp_csi_gain_ctrl_get_gain_compensation(&compensate_gain, agc_gain, fft_gain);
+#endif
+    s_count++;
+
+    csi_print_data_t *q_data = malloc(sizeof(csi_print_data_t) + info->len);
+    if (!q_data) {
+        return;
+    }
+    q_data->info = *info;
+    q_data->info.buf = q_data->buf;
+    q_data->info.hdr = NULL;
+    q_data->info.payload = NULL;
+    memcpy(q_data->buf, info->buf, info->len);
+    q_data->rx_id = *(uint32_t *)(info->payload + 15);
+    q_data->compensate_gain = compensate_gain;
+    q_data->agc_gain = agc_gain;
+    q_data->fft_gain = fft_gain;
+
+    if (xQueueSend(g_csi_info_queue, &q_data, 0) == pdFALSE) {
+        free(q_data);
+    }
+}
+
+static void csi_print(const csi_print_data_t *q_data)
+{
+    const wifi_csi_info_t *info = &q_data->info;
+    const wifi_pkt_rx_ctrl_t *rx_ctrl = &info->rx_ctrl;
+    static int s_count = 0;
+    float compensate_gain = q_data->compensate_gain;
+    uint8_t agc_gain = q_data->agc_gain;
+    int8_t fft_gain = q_data->fft_gain;
+#if CONFIG_GAIN_CONTROL
     ESP_LOGI(TAG, "compensate_gain %f, agc_gain %d, fft_gain %d", compensate_gain, agc_gain, fft_gain);
 #endif
 
-    uint32_t rx_id = *(uint32_t *)(info->payload + 15);
+    uint32_t rx_id = q_data->rx_id;
 #if CONFIG_IDF_TARGET_ESP32C5 || CONFIG_IDF_TARGET_ESP32C6 || CONFIG_IDF_TARGET_ESP32C61
     if (!s_count) {
         ESP_LOGI(TAG, "================ CSI RECV ================");
@@ -207,6 +256,18 @@ static void wifi_csi_rx_cb(void *ctx, wifi_csi_info_t *info)
 #endif
     ets_printf("]\"\n");
     s_count++;
+}
+
+static void csi_data_print_task(void *arg)
+{
+    csi_print_data_t *q_data = NULL;
+
+    while (xQueueReceive(g_csi_info_queue, &q_data, portMAX_DELAY)) {
+        csi_print(q_data);
+        free(q_data);
+    }
+
+    vTaskDelete(NULL);
 }
 
 static void wifi_csi_init()
@@ -292,6 +353,9 @@ void app_main()
     };
 
     wifi_esp_now_init(peer);
+
+    g_csi_info_queue = xQueueCreate(16, sizeof(csi_print_data_t *));
+    xTaskCreate(csi_data_print_task, "csi_data_print", 4 * 1024, NULL, 0, NULL);
 
     wifi_csi_init();
 }
